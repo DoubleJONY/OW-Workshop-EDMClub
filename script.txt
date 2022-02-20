@@ -9,7 +9,7 @@ variables
 		5: DanceZoneText
 		6: DanceZoneTimer
 		7: HostSpawnVector
-		8: LightManager
+		8: VJPlayer
 		9: stageEntity
 		10: EnableTick
 		11: LevelOfClimax
@@ -132,10 +132,10 @@ rule("글로벌 초기값")
 		Create In-World Text(Global.DJPlayer != Null ? All Players(All Teams) : Null, Custom String("{0} DJ {1}{2}", Ability Icon String(
 			Hero(루시우), Button(Ultimate)), Global.DJPlayer, Custom String(" {0}{1}", Icon String(Heart), Global.DJPlayer.Love)),
 			Global.DJPlayer, 1.400, Do Not Clip, Visible To Position and String, Color(Green), Default Visibility);
-		Create In-World Text(Global.LightManager != Global.DJPlayer ? All Players(All Teams) : Null, Custom String("{0} 조명감독 {1}{2}",
-			Icon String(Dizzy), Global.LightManager, Global.LightManager.Love != 0 ? Custom String(" {0}{1}", Icon String(Heart),
-			Global.LightManager.Love) : Custom String(" ")), Global.LightManager, 1.500, Do Not Clip, Visible To Position and String,
-			Color(Turquoise), Default Visibility);
+		Create In-World Text(Global.VJPlayer != Global.DJPlayer ? All Players(All Teams) : Null, Custom String("{0} VJ {1}{2}",
+			Icon String(Dizzy), Global.VJPlayer, Global.VJPlayer.Love != 0 ? Custom String(" {0}{1}", Icon String(Heart),
+			Global.VJPlayer.Love) : Custom String(" ")), Global.VJPlayer, 1.500, Do Not Clip, Visible To Position and String, Color(
+			Turquoise), Default Visibility);
 		Global.AllowDrawingMode = Workshop Setting Toggle(Custom String("[2]시스템 설정"), Custom String("그림 그리기 모드"), False, 0);
 		Global.AllowScalingMode = Workshop Setting Toggle(Custom String("[3]전역 설정"), Custom String("크기 조절 모드"), False, 0);
 		Global.Map = Random Integer(1, 10);
@@ -158,7 +158,7 @@ rule("글로벌 초기값")
 			Global.Tick % 2 == 0 ? Color(White) : Color(Orange), Color(White), Visible To String and Color, Default Visibility);
 		Create HUD Text(Filtered Array(All Players(All Teams), Current Array Element.HelpHUDOpened), Global.HiddenMap ? Icon String(Club)
 			: Icon String(Spade), Custom String("{0}{1}클럽에 오신것을 환영합니다.", Current Map, Global.HiddenMap ? Custom String(" 에 숨겨진 히든")
-			: Custom String(" ")), Custom String("v6.0 변기클라우드#3523[코드:C3NWZ]"), Right, 1, Color(Blue), Color(Yellow), Color(White),
+			: Custom String(" ")), Custom String("v6.1 변기클라우드#3523[코드:C3NWZ]"), Right, 1, Color(Blue), Color(Yellow), Color(White),
 			Visible To and String, Default Visibility);
 		Create HUD Text(Global.DJPlayer != Null ? Filtered Array(All Players(All Teams), Current Array Element.HelpHUDOpened) : Null,
 			Ability Icon String(Hero(루시우), Button(Ability 2)), Custom String("경기 보이스에 음악을 틀고 있어요"), Custom String(
@@ -227,8 +227,8 @@ rule("글로벌 초기값")
 			"BPM(박자 속도)\r\n조절 : [Down({0})][Up({1})]", Input Binding String(Button(Primary Fire)), Input Binding String(Button(
 			Secondary Fire))), Custom String("조명 : {0} / 레벨 : {1}\r\n비트 : {2} / 4", Global.ModeOfLightEffect, Global.LevelOfClimax,
 			Global.Tick), Top, 61, Color(Yellow), Color(Yellow), Color(White), Visible To and String, Visible Never);
-		Create HUD Text(Filtered Array(Global.LightManager, Current Array Element.DJMenuHUDOpened == True), Icon String(Dizzy),
-			Custom String("조명모드(닫으려면 치유요청(X) 를 누르세요)"), Custom String("{0}\r\n{1}\r\n모르겠으면 그냥 {2} 만 계속 누르세요!", Custom String(
+		Create HUD Text(Filtered Array(Global.VJPlayer, Current Array Element.DJMenuHUDOpened == True), Icon String(Dizzy), Custom String(
+			"조명모드(닫으려면 치유요청(X) 를 누르세요)"), Custom String("{0}\r\n{1}\r\n모르겠으면 그냥 {2} 만 계속 누르세요!", Custom String(
 			"조명레벨(1~3단계) : [Down({0})][Up({1})]", Input Binding String(Button(Ability 2)), Input Binding String(Button(Reload))),
 			Custom String("조명색 : {0}\r\n화려한 조명 : {1}\r\n조명레벨3+전체 궁극기 : {2}", Input Binding String(Button(Melee)), Input Binding String(
 			Button(Ability 1)), Input Binding String(Button(Ultimate))), Input Binding String(Button(Reload))), Top, 62,
@@ -243,13 +243,13 @@ rule("글로벌 초기값")
 			Global.CTFTimer % 60, Global.BPM), Left, 2, Color(Lime Green), Color(Lime Green), Color(White), Visible To and String,
 			Visible Never);
 		Create HUD Text(Filtered Array(All Players(All Teams),
-			Current Array Element == Global.DJPlayer || Current Array Element == Host Player || Current Array Element == Global.LightManager),
+			Current Array Element == Global.DJPlayer || Current Array Element == Host Player || Current Array Element == Global.VJPlayer),
 			Icon String(Club), Custom String("매니저입니다!"), Custom String("방을 재밌게 이끌어주세요!\r\n서버 부하 {0}% / 평균 {1}% / 객체 {2}개", Server Load,
 			Server Load Average, 128 - Entity Count), Left, 3, Color(Orange), Color(Orange), Color(White), Visible To and String,
 			Visible Never);
-		Create HUD Text(Filtered Array(Global.LightManager, Current Array Element.DJMenuHUDOpened == False), Icon String(Dizzy),
-			Custom String("조명감독 입니다! 현재 조명모드 꺼짐"), Custom String("조명모드 시작 : [감정표현(춤권장)]\r\n퍼포먼스 중지 : 길게 {0}  ", Input Binding String(
-			Button(Crouch))), Left, 4, Color(Turquoise), Color(Turquoise), Color(White), Visible To and String, Visible Never);
+		Create HUD Text(Filtered Array(Global.VJPlayer, Current Array Element.DJMenuHUDOpened == False), Icon String(Dizzy), Custom String(
+			"조명감독 입니다! 현재 조명모드 꺼짐"), Custom String("조명모드 시작 : [감정표현(춤권장)]\r\n퍼포먼스 중지 : 길게 {0}  ", Input Binding String(Button(Crouch))),
+			Left, 4, Color(Turquoise), Color(Turquoise), Color(White), Visible To and String, Visible Never);
 		Create HUD Text(Filtered Array(Host Player, Current Array Element.DJMenuHUDOpened == False), Icon String(Radioactive),
 			Custom String("..조금 정신사나운 기능을 해금할 수 있습니다!"), Custom String("{0}\r\n{1}", Custom String("{0}그림 그리기 모드 허용 : 길게 {1} + {2}",
 			Ability Icon String(Hero(메르시), Button(Ability 1)), Input Binding String(Button(Interact)), Input Binding String(Button(
@@ -324,7 +324,7 @@ rule("글로벌 초기값")
 			White), Visible To Values and Color, Default Visibility);
 		Create In-World Text(Host Player.SelectPlayer != Null ? Host Player : Null, Custom String("{0}\r\n{1}\r\n{2}",
 			Global.DJmode ? Custom String("{0}+{1} : DJ 시키기", Input Binding String(Button(Crouch)), Input Binding String(Button(Interact)))
-			: Custom String(""), Global.DJmode ? Custom String("{0}+{1} : 조명감독 시키기", Input Binding String(Button(Crouch)),
+			: Custom String(""), Global.DJmode ? Custom String("{0}+{1} : 조명감독(VJ) 시키기", Input Binding String(Button(Crouch)),
 			Input Binding String(Button(Reload))) : Custom String(""), Custom String("{0}+{1} : 관종 차단하기", Input Binding String(Button(
 			Crouch)), Input Binding String(Button(Melee)))), Host Player.SelectPlayer + Vector(0,
 			1 * Host Player.SelectPlayer.PlayerSize + 1.500, 0), 0.900, Do Not Clip, Visible To Position and String, Color(Orange),
@@ -343,7 +343,8 @@ rule("최초 DJ 설정")
 	{
 		Global.DefaultDjPlayer = Workshop Setting Integer(Custom String("[2]시스템 설정"), Custom String("최초 DJ 설정(0=방장,1~6=1팀,7~12=2팀)"), 0, 0,
 			12, 0);
-		Wait(2, Ignore Condition);
+		disabled Wait(2, Ignore Condition);
+		Wait Until(Has Spawned(Host Player), 60);
 		disabled Global.CheckInList = Array(Custom String("{0}", Players In Slot(0, Team 1)), Custom String("{0}", Players In Slot(1, Team 1)),
 			Custom String("{0}", Players In Slot(2, Team 1)), Custom String("{0}", Players In Slot(3, Team 1)), Custom String("{0}",
 			Players In Slot(4, Team 1)), Custom String("{0}", Players In Slot(5, Team 1)), Custom String("{0}", Players In Slot(0,
@@ -351,7 +352,7 @@ rule("최초 DJ 설정")
 			"{0}", Players In Slot(3, Team 2)), Custom String("{0}", Players In Slot(4, Team 2)), Custom String("{0}", Players In Slot(5,
 			Team 2)));
 		If(Global.DJmode == False);
-			Global.LightManager = Null;
+			Global.VJPlayer = Null;
 			Global.DJPlayer = Null;
 			Abort;
 		End;
@@ -376,7 +377,7 @@ rule("최초 DJ 설정")
 			Wait(1, Ignore Condition);
 			Big Message(All Players(All Teams), Custom String("{1}방장이 관전에서 잠수타고 있어서 {0} 님이 DJ가 되었습니다!{1}", Global.DJPlayer,
 				Ability Icon String(Hero(루시우), Button(Ability 2))));
-			Global.LightManager = Global.DJPlayer;
+			Global.VJPlayer = Global.DJPlayer;
 		End;
 		Global.DJPlayer.Love += 100;
 	}
@@ -411,7 +412,7 @@ rule("개인별 입장 초기값")
 		If(Event Player.Hello != 1);
 			Event Player.cameraZ = 1;
 			Enable Voice Chat(Event Player);
-			Disable Voice Chat(Event Player, True, False, True);
+			Disable Voice Chat(Event Player, True, False, False);
 			Create Icon(Event Player.SelectPlayer != Null ? Event Player : Null, Event Player.SelectPlayer, Arrow: Down,
 				Visible To and Position, Color(Lime Green), False);
 			Create In-World Text(Event Player.SelectPlayer != Null ? Event Player : Null, Custom String("[인사] : 인사하기\r\n[감사] : 하트주기"),
@@ -428,9 +429,9 @@ rule("개인별 입장 초기값")
 			Event Player.CinematicEnabled = False;
 			Set Projectile Speed(Event Player, 10);
 			Create In-World Text(
-				Event Player == Global.LightManager || Event Player == Global.DJPlayer || Event Player == Host Player || Is Dummy Bot(
-				Event Player) ? Null : All Players(All Teams), Custom String("{1}{0}{2}", Event Player, Array Contains(Global.VIPList,
-				Custom String("{0}", Event Player)) ? Custom String("{0}VIP ", Icon String(Moon)) : Hero Icon String(Hero Of(Event Player)),
+				Event Player == Global.VJPlayer || Event Player == Global.DJPlayer || Event Player == Host Player || Is Dummy Bot(Event Player)
+				? Null : All Players(All Teams), Custom String("{1}{0}{2}", Event Player, Array Contains(Global.VIPList, Custom String("{0}",
+				Event Player)) ? Custom String("{0}VIP ", Icon String(Moon)) : Hero Icon String(Hero Of(Event Player)),
 				Event Player.Love != 0 ? Custom String(" {0}{1}", Icon String(Heart), Event Player.Love) : Custom String(" ")), Event Player,
 				1, Do Not Clip, Visible To Position and String, Array Contains(Global.VIPList, Custom String("{0}", Event Player)) ? Color(
 				Rose) : Color(White), Default Visibility);
@@ -645,11 +646,11 @@ rule("방장 입장 대기 세팅")
 		If(Host Player.Hello != 1);
 			If(Global.DJmode == True);
 				If(Slot Of(Host Player) != -1);
-					Global.LightManager = Host Player;
+					Global.VJPlayer = Host Player;
 					Wait Until(Has Spawned(Global.DJPlayer), 99999);
 				End;
 			Else;
-				Global.LightManager = Null;
+				Global.VJPlayer = Null;
 				Global.DJPlayer = Null;
 			End;
 			Wait(0.100, Ignore Condition);
@@ -658,7 +659,7 @@ rule("방장 입장 대기 세팅")
 			End;
 			If(Slot Of(Host Player) != -1);
 				Wait Until(Has Spawned(Host Player), 99999);
-				Create In-World Text(Host Player == Global.DJPlayer || Host Player == Global.LightManager ? Null : All Players(All Teams),
+				Create In-World Text(Host Player == Global.DJPlayer || Host Player == Global.VJPlayer ? Null : All Players(All Teams),
 					Custom String("{0} {1}{2}", Icon String(Flag), Host Player, Host Player.Love != 0 ? Custom String(" {0}{1}", Icon String(
 					Heart), Host Player.Love) : Custom String(" ")), Host Player, 1, Do Not Clip, Visible To Position and String, Color(Red),
 					Default Visibility);
@@ -802,15 +803,15 @@ rule("디오니소스 경고")
 	action
 	{
 		Big Message(Filtered Array(All Players(All Teams),
-			Current Array Element == Global.DJPlayer || Current Array Element == Global.LightManager || Current Array Element == Host Player),
+			Current Array Element == Global.DJPlayer || Current Array Element == Global.VJPlayer || Current Array Element == Host Player),
 			Custom String("{0}{0} 종료 1분전 입니다 {0}{0}", Hero Icon String(Hero(둠피스트))));
 		Wait(1.500, Ignore Condition);
 		Big Message(Filtered Array(All Players(All Teams),
-			Current Array Element == Global.DJPlayer || Current Array Element == Global.LightManager || Current Array Element == Host Player),
+			Current Array Element == Global.DJPlayer || Current Array Element == Global.VJPlayer || Current Array Element == Host Player),
 			Custom String("{0}{0} 종료 1분전 입니다 {0}{0}", Hero Icon String(Hero(둠피스트))));
 		Wait(1.500, Ignore Condition);
 		Big Message(Filtered Array(All Players(All Teams),
-			Current Array Element == Global.DJPlayer || Current Array Element == Global.LightManager || Current Array Element == Host Player),
+			Current Array Element == Global.DJPlayer || Current Array Element == Global.VJPlayer || Current Array Element == Host Player),
 			Custom String("{0}{0} 종료 1분전 입니다 {0}{0}", Hero Icon String(Hero(둠피스트))));
 		Wait(1.500, Ignore Condition);
 	}
@@ -883,7 +884,7 @@ rule("DJ 퍼포먼스 시작")
 	condition
 	{
 		(Is Communicating Any Emote(Event Player) || Is Button Held(Event Player, Button(Ultimate))) == True;
-		Event Player == Global.LightManager;
+		Event Player == Global.VJPlayer;
 		Event Player.DrawingMode == False;
 	}
 
@@ -917,10 +918,10 @@ rule("DJ 퍼포먼스 종료")
 	condition
 	{
 		Is Communicating Any Emote(Event Player) == False;
-		Event Player == Global.LightManager;
-		Is Button Held(Global.LightManager, Button(Crouch)) == True;
-		Is Button Held(Global.LightManager, Button(Interact)) != True;
-		Global.LightManager.DJMenuHUDOpened == False;
+		Event Player == Global.VJPlayer;
+		Is Button Held(Global.VJPlayer, Button(Crouch)) == True;
+		Is Button Held(Global.VJPlayer, Button(Interact)) != True;
+		Global.VJPlayer.DJMenuHUDOpened == False;
 	}
 
 	action
@@ -930,7 +931,7 @@ rule("DJ 퍼포먼스 종료")
 		Destroy Effect(Global.LightEntity);
 		Global.LevelOfClimax = 1;
 		Global.Tick = 1;
-		Small Message(Global.LightManager, Custom String("퍼포먼스 중지"));
+		Small Message(Global.VJPlayer, Custom String("퍼포먼스 중지"));
 		All Players(All Teams).CinematicEnabled = False;
 		Press Button(Global.DJPlayer, Button(Crouch));
 	}
@@ -947,9 +948,9 @@ rule("DJ BOOST UP")
 
 	condition
 	{
-		Event Player == Global.LightManager;
-		Is Button Held(Global.LightManager, Button(Ability 1)) == True;
-		Global.LightManager.DJMenuHUDOpened == True;
+		Event Player == Global.VJPlayer;
+		Is Button Held(Global.VJPlayer, Button(Ability 1)) == True;
+		Global.VJPlayer.DJMenuHUDOpened == True;
 		Global.ServerPanic == False;
 	}
 
@@ -1008,7 +1009,7 @@ rule("DJ Everybody DROP THE BEAT!")
 	condition
 	{
 		Is Button Held(Event Player, Button(Ultimate)) == True;
-		Event Player == Global.LightManager;
+		Event Player == Global.VJPlayer;
 		Event Player.DrawingMode == False;
 	}
 
@@ -1018,9 +1019,9 @@ rule("DJ Everybody DROP THE BEAT!")
 		Destroy Dummy Bot(All Teams, 5);
 		Global.LevelOfClimax = 3;
 		Set Ultimate Charge(All Players(All Teams), 100);
-		If(Global.LightManager.DJMenuHUDOpened == True);
+		If(Global.VJPlayer.DJMenuHUDOpened == True);
 			Press Button(Filtered Array(All Players(All Teams),
-				Current Array Element != Global.LightManager && Current Array Element != Global.DJPlayer), Button(Primary Fire));
+				Current Array Element != Global.VJPlayer && Current Array Element != Global.DJPlayer), Button(Primary Fire));
 		Else;
 			Press Button(All Players(All Teams), Button(Primary Fire));
 		End;
@@ -1028,10 +1029,10 @@ rule("DJ Everybody DROP THE BEAT!")
 		Wait(Global.BPMCalibrate_DefaultIs60 * 2 / Global.BPM, Ignore Condition);
 		Big Message(All Players(All Teams), String("{0}!!!", String("Jump")));
 		Press Button(Filtered Array(All Players(All Teams),
-			Current Array Element != Global.LightManager && Current Array Element != Global.DJPlayer), Button(Ultimate));
+			Current Array Element != Global.VJPlayer && Current Array Element != Global.DJPlayer), Button(Ultimate));
 		Wait(Global.BPMCalibrate_DefaultIs60 / Global.BPM, Ignore Condition);
 		Press Button(Filtered Array(All Players(All Teams),
-			Current Array Element != Global.LightManager && Current Array Element != Global.DJPlayer), Button(Ultimate));
+			Current Array Element != Global.VJPlayer && Current Array Element != Global.DJPlayer), Button(Ultimate));
 		Set Gravity(Global.DJPlayer, 100);
 		Set Status(All Players(All Teams), Null, Burning, Global.BPMCalibrate_DefaultIs60 * 64 / Global.BPM);
 	}
@@ -1136,9 +1137,9 @@ rule("DJ 텐션 레벨 변경 -")
 
 	condition
 	{
-		Event Player == Global.LightManager;
-		Is Button Held(Global.LightManager, Button(Ability 2)) == True;
-		Global.LightManager.DJMenuHUDOpened == True;
+		Event Player == Global.VJPlayer;
+		Is Button Held(Global.VJPlayer, Button(Ability 2)) == True;
+		Global.VJPlayer.DJMenuHUDOpened == True;
 		Event Player.DrawingMode == False;
 	}
 
@@ -1161,9 +1162,9 @@ rule("DJ 텐션 레벨 변경 +")
 
 	condition
 	{
-		Event Player == Global.LightManager;
-		Is Button Held(Global.LightManager, Button(Reload)) == True;
-		Global.LightManager.DJMenuHUDOpened == True;
+		Event Player == Global.VJPlayer;
+		Is Button Held(Global.VJPlayer, Button(Reload)) == True;
+		Global.VJPlayer.DJMenuHUDOpened == True;
 	}
 
 	action
@@ -1188,8 +1189,8 @@ rule("조명 수동 변경")
 
 	condition
 	{
-		Is Button Held(Global.LightManager, Button(Melee)) == True;
-		Global.LightManager.DJMenuHUDOpened == True;
+		Is Button Held(Global.VJPlayer, Button(Melee)) == True;
+		Global.VJPlayer.DJMenuHUDOpened == True;
 	}
 
 	action
@@ -4711,12 +4712,12 @@ rule("시네마틱 카메라")
 		"벽 안뚫기"
 		Start Camera(Event Player, Ray Cast Hit Position(Global.CinematicFocusPlayer, Global.CinematicFocusPlayer + Vector(
 			Event Player.cameraX, Event Player.CinematicY, Event Player.CinematicZ), Null, All Players(All Teams), True),
-			Global.CinematicFocusPlayer, Is Button Held(Global.LightManager, Button(Ability 1)) ? 0 : 20);
+			Global.CinematicFocusPlayer, Is Button Held(Global.VJPlayer, Button(Ability 1)) ? 0 : 20);
 		Chase Player Variable At Rate(Event Player, cameraX, Event Player.cameraX + 8, Event Player.CinematicRate, Destination and Rate);
 		If(Global.LevelOfClimax == 1);
 			Wait(Global.BPMCalibrate_DefaultIs60 * 7.800 / Global.BPM, Ignore Condition);
 		Else If(Global.LevelOfClimax == 2);
-			If(Global.LightManager.DJMenuHUDOpened == True && Is Button Held(Global.LightManager, Button(Ability 1)) == True);
+			If(Global.VJPlayer.DJMenuHUDOpened == True && Is Button Held(Global.VJPlayer, Button(Ability 1)) == True);
 				Global.CinematicFocusPlayer = Random Value In Array(Filtered Array(All Players(All Teams), Has Spawned(Current Array Element)));
 				Wait(Global.BPMCalibrate_DefaultIs60 / Global.BPM, Ignore Condition);
 			Else;
@@ -5062,7 +5063,7 @@ rule("조명감독 주기")
 		Is Button Held(Event Player, Button(Crouch)) == True;
 		Is Button Held(Event Player, Button(Reload)) == True;
 		Has Spawned(Host Player.SelectPlayer) == True;
-		Host Player == Global.LightManager;
+		Host Player == Global.VJPlayer;
 		Event Player.DJMenuHUDOpened == False;
 		Global.DJmode == True;
 		Event Player.DrawingMode == False;
@@ -5078,13 +5079,12 @@ rule("조명감독 주기")
 		While(True);
 			If(Is Button Held(Event Player, Button(Primary Fire)));
 				Host Player.DJMenuHUDOpened = False;
-				Global.LightManager = Host Player.SelectPlayerCache;
+				Global.VJPlayer = Host Player.SelectPlayerCache;
 				Wait(0.100, Ignore Condition);
-				Global.LightManager.DJMenuHUDOpened = False;
-				Big Message(Host Player, Custom String("조명감독 권한을 {0}{1} 님에게 주었습니다.", Hero Icon String(Hero Of(Global.LightManager)),
-					Global.LightManager));
-				Play Effect(All Players(All Teams), Good Explosion, Color(Yellow), Global.LightManager, 1);
-				Big Message(Global.LightManager, Custom String("조명감독 권한을 받았습니다! 왼쪽위 설명을 읽어주세요."));
+				Global.VJPlayer.DJMenuHUDOpened = False;
+				Big Message(Host Player, Custom String("조명감독 권한을 {0}{1} 님에게 주었습니다.", Hero Icon String(Hero Of(Global.VJPlayer)), Global.VJPlayer));
+				Play Effect(All Players(All Teams), Good Explosion, Color(Yellow), Global.VJPlayer, 1);
+				Big Message(Global.VJPlayer, Custom String("조명감독 권한을 받았습니다! 왼쪽위 설명을 읽어주세요."));
 				Break;
 			Else If(Is Button Held(Event Player, Button(Secondary Fire)));
 				Break;
@@ -5110,7 +5110,7 @@ rule("조명감독 뺏기")
 		Event Player == Host Player;
 		Is Button Held(Event Player, Button(Crouch)) == True;
 		Is Button Held(Event Player, Button(Reload)) == True;
-		Host Player != Global.LightManager;
+		Host Player != Global.VJPlayer;
 		Event Player.DJMenuHUDOpened == False;
 		Global.DJmode == True;
 		Event Player.DrawingMode == False;
@@ -5124,12 +5124,12 @@ rule("조명감독 뺏기")
 		Wait(1, Abort When False);
 		Small Message(Host Player, Custom String("1초 후 {2}조명감독 을 뺏어옵니다!", Null, Null, Icon String(Dizzy)));
 		Wait(1, Abort When False);
-		Communicate(Global.LightManager, Need Healing);
+		Communicate(Global.VJPlayer, Need Healing);
 		Big Message(Host Player, Custom String("조명 감독 권한을 뺏어왔습니다."));
-		Big Message(Global.LightManager, Custom String("조명 감독 권한을 뺏겼습니다..."));
-		Global.LightManager.DJMenuHUDOpened = False;
+		Big Message(Global.VJPlayer, Custom String("조명 감독 권한을 뺏겼습니다..."));
+		Global.VJPlayer.DJMenuHUDOpened = False;
 		Wait(0.200, Ignore Condition);
-		Global.LightManager = Host Player;
+		Global.VJPlayer = Host Player;
 		Host Player.DJMenuHUDOpened = False;
 		Wait(1, Ignore Condition);
 	}
@@ -5146,7 +5146,7 @@ rule("조명 모드!")
 
 	condition
 	{
-		Event Player == Global.LightManager;
+		Event Player == Global.VJPlayer;
 		Is Communicating Any Emote(Event Player) == True;
 		Event Player.DJMenuHUDOpened == False;
 		Event Player.DrawingMode == False;
@@ -5166,7 +5166,7 @@ rule("조명 모드!")
 		Disallow Button(Event Player, Button(Ability 2));
 		Wait(0.250, Ignore Condition);
 		Global.DJPlayer.DJMenuHUDOpened = True;
-		Global.LightManager.DJMenuHUDOpened = True;
+		Global.VJPlayer.DJMenuHUDOpened = True;
 		Communicate(Global.DJPlayer, Emote Up);
 		Small Message(Event Player, Custom String("조명모드 시작"));
 	}
@@ -5185,7 +5185,7 @@ rule("조명 모드 닫기")
 	{
 		Event Player.DJMenuHUDOpened == True;
 		Is Communicating(Event Player, Need Healing) == True;
-		Event Player == Global.LightManager;
+		Event Player == Global.VJPlayer;
 		Event Player.DrawingMode == False;
 	}
 
@@ -5373,7 +5373,7 @@ rule("개활지 부스터")
 
 	action
 	{
-		Abort If(Event Player == Global.LightManager && Event Player.DJMenuHUDOpened);
+		Abort If(Event Player == Global.VJPlayer && Event Player.DJMenuHUDOpened);
 		Wait(0.500, Abort When False);
 		Wait(0.100, Abort When False);
 		Play Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Bad Explosion, Color(Red), Event Player,
@@ -5450,7 +5450,7 @@ rule("정원2 제트팩")
 
 	action
 	{
-		Abort If(Event Player == Global.LightManager && Event Player.DJMenuHUDOpened);
+		Abort If(Event Player == Global.VJPlayer && Event Player.DJMenuHUDOpened);
 		Wait(0.200, Abort When False);
 		Wait(0.050, Abort When False);
 		Play Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Bad Explosion, Color(Sky Blue),
@@ -5513,7 +5513,7 @@ rule("부산 메카 제트엔진")
 
 	action
 	{
-		Abort If(Event Player == Global.LightManager && Event Player.DJMenuHUDOpened);
+		Abort If(Event Player == Global.VJPlayer && Event Player.DJMenuHUDOpened);
 		Event Player.DvaBoostSpeed = 100;
 		Play Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Bad Explosion, Color(Red), Event Player,
 			0.100);
@@ -5586,7 +5586,7 @@ rule("인사 받아주는 착한 더미")
 	condition
 	{
 		Is Communicating(Event Player, Hello) == True;
-		disabled (Event Player == Global.DJPlayer || Event Player == Host Player || Event Player == Global.LightManager) == True;
+		disabled (Event Player == Global.DJPlayer || Event Player == Host Player || Event Player == Global.VJPlayer) == True;
 	}
 
 	action
@@ -6075,7 +6075,7 @@ rule("커 져 라")
 
 	action
 	{
-		If(Event Player == Global.LightManager);
+		If(Event Player == Global.VJPlayer);
 			Abort If(Event Player.DJMenuHUDOpened == True);
 		End;
 		Abort If(Event Player.PlayerSize >= 20);
@@ -6124,7 +6124,7 @@ rule("작아져라...")
 
 	action
 	{
-		If(Event Player == Global.LightManager);
+		If(Event Player == Global.VJPlayer);
 			Abort If(Event Player.DJMenuHUDOpened == True);
 		End;
 		Abort If(Event Player.PlayerSize <= 0);
@@ -6227,7 +6227,8 @@ rule("DJ 알바 주기")
 			Ultimate)), Input Binding String(Button(Primary Fire)), Input Binding String(Button(Secondary Fire))),
 			Event Player.SelectPlayerCache, 2, Do Not Clip, Visible To Position and String, Color(Green), Visible Never);
 		While(True);
-			If(Is Button Held(Event Player, Button(Primary Fire)));
+			If(Is Button Held(Event Player, Button(Primary Fire)) && !Is Button Held(Event Player, Button(Crouch)) && !Is Button Held(
+				Event Player, Button(Interact)));
 				Global.DJPlayer = Host Player.SelectPlayerCache;
 				Wait(0.250, Ignore Condition);
 				Big Message(All Players(All Teams), Custom String("{2} Our NEXT DJ! {0} DJ {1}!! {2}", Hero Icon String(Hero Of(Global.DJPlayer)),
@@ -6263,6 +6264,8 @@ rule("DJ 뺏기")
 		Event Player.DJMenuHUDOpened == False;
 		Global.DJmode == True;
 		Event Player.DrawingMode == False;
+		Is Button Held(Event Player, Button(Primary Fire)) == False;
+		Is Button Held(Event Player, Button(Secondary Fire)) == False;
 	}
 
 	action
@@ -6292,7 +6295,7 @@ rule("DJ 조명메뉴 감지")
 	condition
 	{
 		Is Communicating(Global.DJPlayer, Emote Up) == True;
-		Global.LightManager != Global.DJPlayer;
+		Global.VJPlayer != Global.DJPlayer;
 	}
 
 	action
@@ -6793,6 +6796,9 @@ rule("qndldkdlvl")
 		Modify Global Variable(VIPList, Append To Array, Custom String("RESISTANCE"));
 		Modify Global Variable(VIPList, Append To Array, Custom String("나나시무메이"));
 		Modify Global Variable(VIPList, Append To Array, Custom String("몽지몽지몽"));
+		Modify Global Variable(VIPList, Append To Array, Custom String("Nanash1Mume1"));
+		Modify Global Variable(VIPList, Append To Array, Custom String("오로크로니"));
+		Modify Global Variable(VIPList, Append To Array, Custom String("하리보"));
 	}
 }
 
@@ -6826,7 +6832,12 @@ rule("jjin tkrwp")
 
 	action
 	{
-		disabled Disable Voice Chat(Event Player, True, True, True);
+		If(Workshop Setting Toggle(Custom String("[2]시스템 설정"), Custom String("최초 스폰 전엔 경보 참여 금지(트롤방지) 활성화"), False, 0) == True);
+			If(Total Time Elapsed > 30);
+				"트롤이 많을때만 활성화"
+				Disable Voice Chat(Event Player, True, True, True);
+			End;
+		End;
 		If(Array Contains(Global.BlackList, Custom String("{0}", Event Player)));
 			Remove Player(Event Player);
 		End;
@@ -6918,7 +6929,7 @@ rule("슈퍼 회오리~~~")
 		Is Button Held(Event Player, Button(Ability 2)) == True;
 		disabled Global.LevelOfClimax >= 3;
 		Event Player != Global.DJPlayer;
-		Event Player != Global.LightManager;
+		Event Player != Global.VJPlayer;
 		Event Player != Is Dummy Bot(Event Player);
 		Event Player.DrawingMode == False;
 		(Array Contains(Global.VIPList, Custom String("{0}", Event Player)) || Event Player.Love >= 50 || Count Of(Filtered Array(
@@ -7012,7 +7023,7 @@ rule("VIP 춤 조명 장판")
 	{
 		Is Communicating Any Emote(Event Player) == True;
 		Event Player != Global.DJPlayer;
-		Event Player != Global.LightManager;
+		Event Player != Global.VJPlayer;
 		Array Contains(Global.VIPList, Custom String("{0}", Event Player)) == True;
 	}
 
@@ -7045,7 +7056,7 @@ rule("VIP 춤 조명 장판 제거")
 	{
 		Is Communicating Any Emote(Event Player) == False;
 		Event Player != Global.DJPlayer;
-		Event Player != Global.LightManager;
+		Event Player != Global.VJPlayer;
 		Array Contains(Global.VIPList, Custom String("{0}", Event Player)) == True;
 	}
 
@@ -7077,9 +7088,9 @@ rule("누가 나갔나?")
 			Global.DJPlayer = Host Player;
 			Small Message(Host Player, Custom String("DJ 가 나가서 방장인 당신이 다시 DJ가 되었습니다.."));
 		End;
-		If(Global.LightManager == Event Player);
-			Global.LightManager.DJMenuHUDOpened = False;
-			Global.LightManager = Host Player;
+		If(Global.VJPlayer == Event Player);
+			Global.VJPlayer.DJMenuHUDOpened = False;
+			Global.VJPlayer = Host Player;
 			Small Message(Host Player, Custom String("조명감독이 나가서 방장인 당신이 다시 조명감독이 되었습니다.."));
 		End;
 		If(Array Contains(Global.VIPList, Custom String("{0}", Event Player)));
@@ -7380,8 +7391,8 @@ rule("일로 와줭!")
 				-0.500 + Local Player.PlayerSize * -3), Null, All Players(All Teams), False), Local Player + (Eye Position(Local Player)
 				- Local Player) + Facing Direction Of(Local Player) * 20, 100);
 			All Players(All Teams).Camera = True;
-			Small Message(Event Player, Custom String("VIP 어그로 쿨타임은 120초 입니다.", Hero Icon String(Hero Of(Event Player)), Event Player));
-			Wait(120, Ignore Condition);
+			Small Message(Event Player, Custom String("VIP 어그로 쿨타임은 180초 입니다.", Hero Icon String(Hero Of(Event Player)), Event Player));
+			Wait(180, Ignore Condition);
 			Big Message(Event Player, Custom String("VIP 어그로 쿨타임 완료!"));
 		End;
 	}
@@ -7425,12 +7436,12 @@ rule("DJ Mode 변경")
 	{
 		If(Global.DJmode == True);
 			Global.DJPlayer = Null;
-			Global.LightManager = Null;
+			Global.VJPlayer = Null;
 			Global.DJmode = False;
 			Big Message(All Players(All Teams), Custom String("DJ 가 퇴근하였습니다...?"));
 		Else;
 			Global.DJPlayer = Host Player;
-			Global.LightManager = Host Player;
+			Global.VJPlayer = Host Player;
 			Global.DJmode = True;
 			Big Message(All Players(All Teams), Custom String("{0}DJ {1}{2}가 돌아왔습니다!{0}", Ability Icon String(Hero(루시우), Button(Ability 2)),
 				Hero Icon String(Hero Of(Host Player)), Host Player));
