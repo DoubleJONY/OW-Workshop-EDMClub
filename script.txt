@@ -176,7 +176,7 @@ rule("글로벌 초기값")
 			Global.Tick % 2 == 0 ? Color(White) : Color(Orange), Color(White), Visible To String and Color, Default Visibility);
 		Create HUD Text(Filtered Array(All Players(All Teams), Current Array Element.HelpHUDOpened), Global.HiddenMap ? Icon String(Club)
 			: Icon String(Spade), Custom String("{0}{1}클럽에 오신것을 환영합니다.", Current Map, Global.HiddenMap ? Custom String(" 에 숨겨진 히든")
-			: Custom String(" ")), Custom String("v6.4 변기클라우드#3523[코드:C3NWZ]"), Right, 1, Color(Blue), Color(Yellow), Color(White),
+			: Custom String(" ")), Custom String("v6.5 변기클라우드#3523[코드:C3NWZ]"), Right, 1, Color(Blue), Color(Yellow), Color(White),
 			Visible To and String, Default Visibility);
 		Create HUD Text(Global.DJPlayer != Null ? Filtered Array(All Players(All Teams), Current Array Element.HelpHUDOpened) : Null,
 			Ability Icon String(Hero(루시우), Button(Ability 2)), Custom String("경기 보이스에 음악을 틀고 있어요"), Custom String(
@@ -189,12 +189,11 @@ rule("글로벌 초기값")
 			Color(White), Visible To and String, Visible Never);
 		Create HUD Text(Filtered Array(All Players(All Teams),
 			Current Array Element.HelpHUDOpened && !Current Array Element.MAXLightEffect), Ability Icon String(Hero(캐서디), Button(
-			Ability 2)), Custom String("화려한 조명이 감싸지 않아 심심한가요?"), Custom String("시각효과 켜기 > {0} + {1}", Input Binding String(Button(
-			Interact)), Input Binding String(Button(Reload))), Right, 4, Color(Gray), Color(Gray), Color(White), Visible To and String,
-			Visible Never);
+			Ability 2)), Custom String("불 좀 켜줄래? 조명 효과 토글"), Custom String("클럽조명 켜기 > {0} + {1}", Input Binding String(Button(Interact)),
+			Input Binding String(Button(Reload))), Right, 4, Color(Gray), Color(Gray), Color(White), Visible To and String, Visible Never);
 		Create HUD Text(Filtered Array(All Players(All Teams),
 			Current Array Element.HelpHUDOpened && Current Array Element.MAXLightEffect), Ability Icon String(Hero(캐서디), Button(
-			Ability 2)), Custom String("너무 눈이 부셔 아프신가요?"), Custom String("시각효과 줄이기 > {0} + {1}", Input Binding String(Button(Interact)),
+			Ability 2)), Custom String("불 좀 꺼줄래? 조명 효과 토글"), Custom String("다크모드 켜기 > {0} + {1}", Input Binding String(Button(Interact)),
 			Input Binding String(Button(Reload))), Right, 4, Color(Yellow), Color(Yellow), Color(White), Visible To and String,
 			Visible Never);
 		Create HUD Text(Filtered Array(All Players(All Teams), Current Array Element.HelpHUDOpened), Icon String(Eye), Custom String(
@@ -226,8 +225,8 @@ rule("글로벌 초기값")
 			"설명 열기/닫기 > [알겠어요(응답키)]"), Right, 99, Color(White), Color(White), Color(White), Visible To and String, Visible Never);
 		"중앙 화면"
 		Create HUD Text(All Players(All Teams), Null, Null, Custom String(
-			"\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n "), Top, 50, Color(White), Color(White),
-			Color(White), Visible To, Visible Always);
+			"\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n "), Top, 50, Color(White),
+			Color(White), Color(White), Visible To, Visible Always);
 		Create HUD Text(Filtered Array(All Players(All Teams), Current Array Element.isSleep), Custom String("{0}", Ability Icon String(
 			Hero(아나), Button(Ability 1))), Custom String("클럽에서 수면 중.....?"), Custom String("다시 일어나려면 오른쪽 설명을 읽어주세요!"), Top, 51, Color(
 			Blue), Color(Blue), Color(White), Visible To and String, Default Visibility);
@@ -354,8 +353,8 @@ rule("글로벌 초기값")
 			Visible Never);
 		"기타 UI"
 		Create HUD Text(All Players(All Teams), Null, Null, Custom String(
-			"\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n"), Top, 100, Color(White), Color(
-			White), Color(White), Visible To, Visible Always);
+			"\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n"), Top, 100, Color(White), Color(White), Color(
+			White), Visible To, Visible Always);
 		Create HUD Text(All Players(All Teams), Hero Icon String(Hero Of(Local Player)), Custom String("{0}님! {1}", Local Player,
 			Global.TopDescription), Custom String("현재 칭호 : {0}{1}{2}", Local Player.AchievePrefix, Local Player, Custom String(" {0}{1}",
 			Icon String(Heart), Local Player.Love)), Left, 0, Color(Violet), Color(Violet), Local Player.NameColor,
@@ -380,6 +379,8 @@ rule("글로벌 초기값")
 			Wait(0.500, Ignore Condition);
 			All Players(All Teams).Camera = True;
 		End;
+		Create Effect(Filtered Array(All Players(All Teams), !Current Array Element.MAXLightEffect), Sphere, Color(Black),
+			Local Player + Vector(0, 0.100, 0), 50, Visible To Position and Radius);
 	}
 }
 
@@ -1026,12 +1027,12 @@ rule("조명모드 - 빛당태!")
 		Wait(30 / Global.BPM, Ignore Condition);
 		Destroy Effect(Global.stageEntity);
 		Loop If Condition Is True;
-		Create Effect(All Players(All Teams), Sparkles, Global.ThemeColor1, Global.DJPlayer + Vector(0, Random Integer(-10, 50), 0), 10000,
-			None);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Global.ThemeColor1,
+			Global.DJPlayer + Vector(0, Random Integer(-10, 50), 0), 10000, None);
 		Global.GlobalBoostSparkleArray[Count Of(Global.GlobalBoostSparkleArray)] = Append To Array(Append To Array(Empty Array,
 			Last Created Entity), Event Player);
-		Create Effect(All Players(All Teams), Sparkles, Global.ThemeColor2, Global.DJPlayer + Vector(0, Random Integer(-10, 50), 0), 10000,
-			None);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Global.ThemeColor2,
+			Global.DJPlayer + Vector(0, Random Integer(-10, 50), 0), 10000, None);
 		Global.GlobalBoostSparkleArray[Count Of(Global.GlobalBoostSparkleArray)] = Append To Array(Append To Array(Empty Array,
 			Last Created Entity), Event Player);
 		If(Entity Exists(Last Created Entity) == False);
@@ -1345,13 +1346,16 @@ rule("Global 타이밍 조명 1-1")
 		End;
 		Play Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Explosion, Global.ThemeColor4,
 			Global.BeamVector, Global.LevelOfClimax < 3 ? 3 : 10);
-		Play Effect(All Players(All Teams), Ring Explosion, Global.ThemeColor1, Global.DJPlayer, 3);
+		Play Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Ring Explosion, Global.ThemeColor1,
+			Global.DJPlayer, 3);
 		Abort If(Global.LevelOfClimax <= 1);
-		Play Effect(All Players(All Teams), Ring Explosion, Global.ThemeColor3, Global.DJPlayer, 4);
+		Play Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Ring Explosion, Global.ThemeColor3,
+			Global.DJPlayer, 4);
 		Abort If(Global.LevelOfClimax <= 2);
 		Play Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Explosion, Global.ThemeColor1,
 			Global.HostSpawnVector, 10);
-		Play Effect(All Players(All Teams), Ring Explosion, Global.ThemeColor2, Global.DJPlayer, 5);
+		Play Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Ring Explosion, Global.ThemeColor2,
+			Global.DJPlayer, 5);
 		Start Forcing Player Outlines(All Players(All Teams), All Players(All Teams), True, Global.ThemeColor1, Always);
 	}
 }
@@ -1372,7 +1376,8 @@ rule("Global 타이밍 조명 1-2")
 
 	action
 	{
-		Play Effect(All Players(All Teams), Ring Explosion, Global.ThemeColor3, Global.DJPlayer, 1);
+		Play Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Ring Explosion, Global.ThemeColor3,
+			Global.DJPlayer, 1);
 		Abort If(Global.LevelOfClimax <= 1);
 		Play Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Pickup Effect, Global.ThemeColor1,
 			Global.DJPlayer, 3);
@@ -1400,7 +1405,8 @@ rule("Global 타이밍 조명 1-3")
 
 	action
 	{
-		Play Effect(All Players(All Teams), Ring Explosion, Global.ThemeColor2, Global.DJPlayer, 1);
+		Play Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Ring Explosion, Global.ThemeColor2,
+			Global.DJPlayer, 1);
 		Play Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Explosion, Global.ThemeColor3,
 			Global.BeamVector, Global.LevelOfClimax < 3 ? 3 : 10);
 		Abort If(Global.LevelOfClimax <= 2);
@@ -1426,7 +1432,8 @@ rule("Global 타이밍 조명 1-4")
 
 	action
 	{
-		Play Effect(All Players(All Teams), Ring Explosion, Global.ThemeColor4, Global.DJPlayer, 1);
+		Play Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Ring Explosion, Global.ThemeColor4,
+			Global.DJPlayer, 1);
 		Abort If(Global.LevelOfClimax <= 1);
 		Play Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Pickup Effect, Global.ThemeColor2,
 			Global.DJPlayer, 3);
@@ -1613,7 +1620,8 @@ rule("관중 춤추기 1")
 
 	action
 	{
-		Create Effect(All Players(All Teams), Sparkles, Global.ThemeColor1, Event Player, 5, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Global.ThemeColor1,
+			Event Player, 5, Visible To Position and Radius);
 		Event Player.DanceSparkle = Last Created Entity;
 		Play Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Explosion, Global.ThemeColor2,
 			Event Player, 0.700);
@@ -1735,7 +1743,8 @@ rule("앉기 1")
 			Event Player.NameColor = Color(Purple);
 			Event Player.Love += 3;
 		End;
-		Play Effect(All Players(All Teams), Ring Explosion, Global.ThemeColor2, Event Player, 2.500);
+		Play Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Ring Explosion, Global.ThemeColor2,
+			Event Player, 2.500);
 		Abort If(Global.LevelOfClimax <= 1);
 		Play Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Bad Explosion, Global.ThemeColor1,
 			Event Player, 2);
@@ -1768,7 +1777,8 @@ rule("Jump! 1")
 			Event Player.NameColor = Color(Purple);
 			Event Player.Love += 3;
 		End;
-		Play Effect(All Players(All Teams), Ring Explosion, Global.ThemeColor1, Event Player, 2.500);
+		Play Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Ring Explosion, Global.ThemeColor1,
+			Event Player, 2.500);
 		Abort If(Global.LevelOfClimax <= 1);
 		Play Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Bad Explosion, Global.ThemeColor2,
 			Event Player, 2);
@@ -1860,9 +1870,9 @@ rule("야광봉")
 		If(Event Player.Light == 0);
 			Event Player.Light = Random Integer(1, 15);
 			If(Event Player.Light < 7);
-				Create Beam Effect(All Players(All Teams), Good Beam, Eye Position(Event Player) + World Vector Of(Vector(-0.500, 0, 0),
-					Event Player, Rotation), Event Player + Facing Direction Of(Event Player) * 4, Custom Color(Random Real(0, 255), Random Real(0,
-					255), Random Real(0, 255), 255), Visible To Position and Radius);
+				Create Beam Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Beam, Eye Position(
+					Event Player) + World Vector Of(Vector(-0.500, 0, 0), Event Player, Rotation), Event Player + Facing Direction Of(Event Player)
+					* 4, Custom Color(Random Real(0, 255), Random Real(0, 255), Random Real(0, 255), 255), Visible To Position and Radius);
 			Else If(Event Player.Light == 7);
 				Event Player.AchievePrefix = Custom String("{0}이상한 {1} ", Icon String(Question Mark), Hero Of(Event Player));
 				Event Player.NameColor = Color(Gray);
@@ -1872,9 +1882,9 @@ rule("야광봉")
 				Small Message(All Players(All Teams), Custom String("{0} {1} 님이 고장난 야광봉을 얻었습니다! 축하해주세요!", Hero Icon String(Hero Of(Event Player)),
 					Event Player));
 			Else If(Event Player.Light > 7);
-				Create Beam Effect(All Players(All Teams), Bad Beam, Eye Position(Event Player) + World Vector Of(Vector(-0.500, 0, 0),
-					Event Player, Rotation), Event Player + Facing Direction Of(Event Player) * 4, Custom Color(Random Real(0, 255), Random Real(0,
-					255), Random Real(0, 255), 255), Visible To Position and Radius);
+				Create Beam Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Bad Beam, Eye Position(
+					Event Player) + World Vector Of(Vector(-0.500, 0, 0), Event Player, Rotation), Event Player + Facing Direction Of(Event Player)
+					* 4, Custom Color(Random Real(0, 255), Random Real(0, 255), Random Real(0, 255), 255), Visible To Position and Radius);
 			End;
 			Event Player.LightEntity = Last Created Entity;
 			If(Entity Exists(Last Created Entity) == False);
@@ -1978,12 +1988,13 @@ rule("눈뽕 제거")
 	{
 		If(Event Player.MAXLightEffect);
 			Event Player.MAXLightEffect = False;
-			Small Message(Event Player, Custom String("시각효과가 감소되었습니다."));
+			Small Message(Event Player, Custom String("조명 및 시각효과가 감소되었습니다."));
 			Wait(1, Ignore Condition);
 		Else;
 			Event Player.MAXLightEffect = True;
-			Small Message(Event Player, Custom String("눈뽕이 다시 활성화 되었습니다ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ"));
+			Small Message(Event Player, Custom String("모든 조명 및 시각효과가 활성화 됩니다"));
 			Wait(1, Ignore Condition);
+		End;
 	}
 }
 
@@ -2187,25 +2198,37 @@ rule("무대 세팅 - 호라이즌")
 		Global.SpawnVector = Vector(12.017, 10.174, -8.860);
 		Global.DanceZoneVector = Vector(-23.466, 9.790, -17.825);
 		Global.HostSpawnVector = Vector(-31.624, 9.450, 13.730);
-		Create Effect(All Players(All Teams), Good Aura, Color(Green), Vector(-467, 181, 254), 200, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(Purple), Vector(-476, 181, 254), 200, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(Turquoise), Vector(-476, 181, 254), 200, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(Yellow), Vector(-476, 181, 254), 200, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(Blue), Vector(-476, 181, 254), 200, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(Blue), Vector(-476, 181, 254), 200, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(Blue), Vector(-476, 181, 254), 200, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(Blue), Vector(-476, 181, 254), 200, Visible To Position and Radius);
-		Create Beam Effect(All Players(All Teams), Good Beam, Vector(-32.959, 7.173, 19.257), Vector(-25.985, 27.173, 16.310), Color(
-			Purple), Visible To Position and Radius);
-		Create Beam Effect(All Players(All Teams), Good Beam, Vector(-40.093, 6.822, 11.991), Vector(-30.658, 27.173, 7.913), Color(
-			Purple), Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Ring, Color(Orange), Vector(-18.560, 9.496, -6.555), 2, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Green), Vector(-467,
+			181, 254), 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Purple), Vector(-476,
+			181, 254), 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Turquoise), Vector(
+			-476, 181, 254), 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Yellow), Vector(-476,
+			181, 254), 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Blue), Vector(-476,
+			181, 254), 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Blue), Vector(-476,
+			181, 254), 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Blue), Vector(-476,
+			181, 254), 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Blue), Vector(-476,
+			181, 254), 200, Visible To Position and Radius);
+		Create Beam Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Beam, Vector(-32.959, 7.173,
+			19.257), Vector(-25.985, 27.173, 16.310), Color(Purple), Visible To Position and Radius);
+		Create Beam Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Beam, Vector(-40.093, 6.822,
+			11.991), Vector(-30.658, 27.173, 7.913), Color(Purple), Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Ring, Color(Orange), Vector(-18.560,
+			9.496, -6.555), 2, Visible To Position and Radius);
 		Create In-World Text(All Players(All Teams), Custom String("지구.. 지구를 보자..!"), Vector(-18.560, 9.496, -6.555), 1,
 			Clip Against Surfaces, Visible To Position and String, Color(Sky Blue), Default Visibility);
 		Global.BeamVector = Vector(-28.054, 21.962, 11.803);
-		Create Effect(All Players(All Teams), Orb, Color(Blue), Global.BeamVector, 18, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Sparkles, Color(Blue), Global.BeamVector, 10, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Bad Aura, Color(White), Global.BeamVector, 1, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Orb, Color(Blue), Global.BeamVector,
+			18, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Blue),
+			Global.BeamVector, 10, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Bad Aura, Color(White),
+			Global.BeamVector, 1, Visible To Position and Radius);
 		While(True);
 			If(!Entity Exists(Players In Slot(4, Team 1)));
 				Create Dummy Bot(Hero(레킹볼), Team 1, 4, Vector(2.634, 10.174, -31.617), Null);
@@ -2243,21 +2266,25 @@ rule("무대세팅 - 부산 (메카기지)")
 		Global.SpawnVector = Vector(211.938, 10.832, 217.118);
 		Global.DanceZoneVector = Vector(222.719, 10.584, 242.078);
 		Global.HostSpawnVector = Vector(224.601, 17.466, 246.585);
-		Create Effect(All Players(All Teams), Good Aura, Color(Yellow), Vector(253.047, 35.548, 313.186), 200,
-			Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(Red), Vector(253.375, 35.548, 314.172), 200,
-			Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(White), Vector(253.549, 35.548, 314.694), 200,
-			Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(Sky Blue), Vector(253.762, 35.548, 315.333), 200,
-			Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Sparkles, Color(Red), Vector(219.602, 12, 234.571), 200, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Sparkles, Color(Sky Blue), Vector(219.602, 11.424, 234.571), 200,
-			Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Yellow), Vector(
+			253.047, 35.548, 313.186), 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Red), Vector(253.375,
+			35.548, 314.172), 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(White), Vector(
+			253.549, 35.548, 314.694), 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Sky Blue), Vector(
+			253.762, 35.548, 315.333), 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Red), Vector(219.602,
+			12, 234.571), 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Sky Blue), Vector(
+			219.602, 11.424, 234.571), 200, Visible To Position and Radius);
 		Global.BeamVector = Vector(222.719, 22.584, 242.078);
-		Create Effect(All Players(All Teams), Orb, Color(Red), Global.BeamVector, 18, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Cloud, Color(Sky Blue), Global.BeamVector, 18, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(Blue), Global.BeamVector, 1, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Orb, Color(Red), Global.BeamVector, 18,
+			Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Cloud, Color(Sky Blue),
+			Global.BeamVector, 18, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Blue),
+			Global.BeamVector, 1, Visible To Position and Radius);
 		While(True);
 			If(!Entity Exists(Players In Slot(4, Team 1)));
 				Create Dummy Bot(Hero(D.Va), Team 1, 4, Vector(221.028, 10.268, 212.685), Null);
@@ -2295,17 +2322,25 @@ rule("무대세팅 - 쓰레기촌")
 		Global.HostSpawnVector = Vector(-29.119, 3.654, -135.695);
 		Global.DanceZoneVector = Vector(-49.666, 2.655, -134.895);
 		Global.SpawnVector = Vector(-42.642, 8.008, -118.726);
-		Create Effect(All Players(All Teams), Cloud, Color(White), Vector(-29.392, 3.489, -135.887), 3, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Cloud, Color(White), Vector(-29.107, 2.655, -132.664), 2, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Cloud, Color(White), Vector(-32.055, 2.655, -137.712), 2, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Cloud, Color(White), Vector(-31.463, 2.657, -134.643), 2, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Cloud, Color(Purple), Vector(-46.881, 3.629, -126.392), 4, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Cloud, Color(Purple), Vector(-27.649, 3.678, -124.225), 4, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Sparkles, Color(Turquoise), Vector(-29.392, 3.489, -135.887), 3,
-			Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Cloud, Color(White), Vector(-29.392,
+			3.489, -135.887), 3, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Cloud, Color(White), Vector(-29.107,
+			2.655, -132.664), 2, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Cloud, Color(White), Vector(-32.055,
+			2.655, -137.712), 2, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Cloud, Color(White), Vector(-31.463,
+			2.657, -134.643), 2, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Cloud, Color(Purple), Vector(-46.881,
+			3.629, -126.392), 4, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Cloud, Color(Purple), Vector(-27.649,
+			3.678, -124.225), 4, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Turquoise), Vector(
+			-29.392, 3.489, -135.887), 3, Visible To Position and Radius);
 		Global.BeamVector = Vector(-33.434, 6.342, -133.603);
-		Create Effect(All Players(All Teams), Orb, Color(Orange), Global.BeamVector, 18, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Cloud, Color(White), Global.BeamVector, 18, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Orb, Color(Orange), Global.BeamVector,
+			18, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Cloud, Color(White), Global.BeamVector,
+			18, Visible To Position and Radius);
 		Create In-World Text(All Players(All Teams), Custom String("{0}쓰레기 클럽{0}", Icon String(Diamond)), Vector(-41.230, 11.939,
 			-116.952), 2, Clip Against Surfaces, Visible To Position and String, Color(Orange), Default Visibility);
 		While(True);
@@ -2342,14 +2377,21 @@ rule("무대세팅 - 쓰레기촌 2")
 		Global.HostSpawnVector = Vector(-89.155, 8.882, -103.593);
 		Global.DanceZoneVector = Vector(-92.789, 6.606, -118.897);
 		Global.SpawnVector = Vector(-97.117, 14.545, -139.363);
-		Create Effect(All Players(All Teams), Cloud, Color(White), Vector(-87.009, 8.613, -101.948), 2, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Cloud, Color(White), Vector(-90.537, 8.612, -100.947), 2, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Cloud, Color(Purple), Vector(-87.009, 8.613, -101.948), 4, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Cloud, Color(Purple), Vector(-90.537, 8.612, -100.947), 4, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Sparkles, Color(Turquoise), Global.DanceZoneVector, 10, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Cloud, Color(White), Vector(-87.009,
+			8.613, -101.948), 2, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Cloud, Color(White), Vector(-90.537,
+			8.612, -100.947), 2, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Cloud, Color(Purple), Vector(-87.009,
+			8.613, -101.948), 4, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Cloud, Color(Purple), Vector(-90.537,
+			8.612, -100.947), 4, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Turquoise),
+			Global.DanceZoneVector, 10, Visible To Position and Radius);
 		Global.BeamVector = Vector(-90.299, 13.958, -110.974);
-		Create Effect(All Players(All Teams), Orb, Color(Orange), Global.BeamVector, 18, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Cloud, Color(White), Global.BeamVector, 18, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Orb, Color(Orange), Global.BeamVector,
+			18, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Cloud, Color(White), Global.BeamVector,
+			18, Visible To Position and Radius);
 		While(True);
 			If(!Entity Exists(Players In Slot(4, Team 1)));
 				Create Dummy Bot(Hero(로드호그), Team 1, 4, Vector(-66.227, 14.545, -146.555), Null);
@@ -2382,11 +2424,15 @@ rule("무대세팅 - 쓰레기촌 3")
 		Global.HostSpawnVector = Vector(-61.930, 11.655, -57.970);
 		Global.DanceZoneVector = Vector(-64.308, 11.655, -67.051);
 		Global.SpawnVector = Vector(-66.049, 10.655, -79.267);
-		Create Effect(All Players(All Teams), Cloud, Color(Purple), Global.DanceZoneVector, 4, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Sparkles, Color(Purple), Global.DanceZoneVector, 5, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Cloud, Color(Purple),
+			Global.DanceZoneVector, 4, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Purple),
+			Global.DanceZoneVector, 5, Visible To Position and Radius);
 		Global.BeamVector = Vector(-61.920, 14.481, -57.921);
-		Create Effect(All Players(All Teams), Orb, Color(Purple), Global.BeamVector, 18, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Cloud, Color(White), Global.BeamVector, 18, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Orb, Color(Purple), Global.BeamVector,
+			18, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Cloud, Color(White), Global.BeamVector,
+			18, Visible To Position and Radius);
 		While(True);
 			If(!Entity Exists(Players In Slot(4, Team 1)));
 				Create Dummy Bot(Hero(로드호그), Team 1, 4, Vector(-55.300, 9.676, -80.901), Null);
@@ -2419,18 +2465,29 @@ rule("무대세팅 - 쓰레기촌 4")
 		Global.HostSpawnVector = Vector(-92.540, 17.186, -72.212);
 		Global.DanceZoneVector = Vector(-94.423, 11.363, -79.356);
 		Global.SpawnVector = Vector(-76.218, 7.612, -101.862);
-		Create Effect(All Players(All Teams), Sparkles, Color(Orange), Global.DanceZoneVector, 10, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Sparkles, Color(Orange), Vector(-94.162, 11, -80.755), 20, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Sparkles, Color(Orange), Vector(-94.162, 12, -80.755), 20, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Sparkles, Color(Orange), Vector(-94.162, 13, -80.755), 20, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Sparkles, Color(Orange), Vector(-94.162, 14, -80.755), 20, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Sparkles, Color(Orange), Vector(-94.162, 15, -80.755), 20, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Sparkles, Color(Orange), Vector(-94.162, 16, -80.755), 20, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Sparkles, Color(Orange), Vector(-94.162, 17, -80.755), 20, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Sparkles, Color(Orange), Vector(-94.162, 18, -80.755), 20, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Sparkles, Color(Orange), Vector(-94.162, 20, -80.755), 20, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Orange),
+			Global.DanceZoneVector, 10, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Orange), Vector(
+			-94.162, 11, -80.755), 20, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Orange), Vector(
+			-94.162, 12, -80.755), 20, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Orange), Vector(
+			-94.162, 13, -80.755), 20, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Orange), Vector(
+			-94.162, 14, -80.755), 20, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Orange), Vector(
+			-94.162, 15, -80.755), 20, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Orange), Vector(
+			-94.162, 16, -80.755), 20, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Orange), Vector(
+			-94.162, 17, -80.755), 20, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Orange), Vector(
+			-94.162, 18, -80.755), 20, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Orange), Vector(
+			-94.162, 20, -80.755), 20, Visible To Position and Radius);
 		Global.BeamVector = Vector(-94.025, 22.773, -80.932);
-		Create Effect(All Players(All Teams), Orb, Color(Orange), Global.BeamVector, 18, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Orb, Color(Orange), Global.BeamVector,
+			18, Visible To Position and Radius);
 		While(True);
 			If(!Entity Exists(Players In Slot(4, Team 1)));
 				Create Dummy Bot(Hero(로드호그), Team 1, 4, Vector(-83.546, 15.176, -77.097), Null);
@@ -2461,15 +2518,21 @@ rule("무대세팅 - 파리")
 		Global.HostSpawnVector = Vector(26.768, 13.173, -79.752);
 		Global.DanceZoneVector = Vector(20.083, 18.174, -67.352);
 		Global.SpawnVector = Vector(17.893, 11.180, -63.083);
-		Create Effect(All Players(All Teams), Cloud, Color(Purple), Vector(23.880, 12.173, -81.192), 4, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Cloud, Color(Purple), Vector(29.329, 12.173, -77.880), 4, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Sparkles, Color(Purple), Vector(27.783, 13.173, -81.201), 10,
-			Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(Red), Vector(31.268, 15.601, -87.323), 5, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Cloud, Color(Purple), Vector(23.880,
+			12.173, -81.192), 4, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Cloud, Color(Purple), Vector(29.329,
+			12.173, -77.880), 4, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Purple), Vector(27.783,
+			13.173, -81.201), 10, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Red), Vector(31.268,
+			15.601, -87.323), 5, Visible To Position and Radius);
 		Global.BeamVector = Vector(26.341, 18, -79.056);
-		Create Effect(All Players(All Teams), Orb, Color(Purple), Global.BeamVector, 18, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Cloud, Color(Purple), Global.BeamVector, 1, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Bad Aura, Color(Purple), Global.BeamVector, 1, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Orb, Color(Purple), Global.BeamVector,
+			18, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Cloud, Color(Purple),
+			Global.BeamVector, 1, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Bad Aura, Color(Purple),
+			Global.BeamVector, 1, Visible To Position and Radius);
 		While(True);
 			If(!Entity Exists(Players In Slot(4, Team 1)));
 				Create Dummy Bot(Hero(에코), Team 1, 4, Vector(23.961, 19, -74.146), Local Vector Of(Vector(25.502, 12.174, -71.159),
@@ -2502,11 +2565,15 @@ rule("무대세팅 - 왕의길")
 		Global.HostSpawnVector = Vector(-113.850, -3.227, -54.485);
 		Global.DanceZoneVector = Vector(-104.016, -2.322, -50.531);
 		Global.SpawnVector = Vector(-92.131, -1.319, -44.956);
-		Create Effect(All Players(All Teams), Cloud, Color(Yellow), Global.BeamVector, 4, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Sparkles, Color(Lime Green), Global.DanceZoneVector, 10, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(Green), Global.BeamVector, 5, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Cloud, Color(Yellow),
+			Global.BeamVector, 4, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Lime Green),
+			Global.DanceZoneVector, 10, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Green),
+			Global.BeamVector, 5, Visible To Position and Radius);
 		Global.BeamVector = Vector(-112.119, 1.220, -53.516);
-		Create Effect(All Players(All Teams), Orb, Color(Green), Global.BeamVector, 18, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Orb, Color(Green), Global.BeamVector,
+			18, Visible To Position and Radius);
 		While(True);
 			If(!Entity Exists(Players In Slot(4, Team 1)));
 				Create Dummy Bot(Hero(트레이서), Team 1, 4, Vector(-117.575, -3.227, -28.470), Vector(2.815, 3.176, 50.844));
@@ -2537,22 +2604,29 @@ rule("무대세팅 - 도라도")
 		Global.HostSpawnVector = Vector(80.251, 17.102, -6.273);
 		Global.DanceZoneVector = Vector(73.607, 8.128, -11.414);
 		Global.SpawnVector = Vector(46.096, 7.896, -30.880);
-		Create Effect(All Players(All Teams), Good Aura, Color(Green), Vector(94.829, 19.810, 5.407), 200, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(Purple), Vector(94.829, 19.810, 5.407), 200,
-			Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(Orange), Vector(94.829, 19.810, 5.407), 200,
-			Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(Sky Blue), Vector(94.829, 19.810, 5.407), 200,
-			Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Sparkles, Color(Yellow), Vector(59.714, 8.200, -14.124), 200,
-			Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Sparkles, Color(Blue), Vector(59.714, 8.200, -14.124), 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Green), Vector(94.829,
+			19.810, 5.407), 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Purple), Vector(
+			94.829, 19.810, 5.407), 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Orange), Vector(
+			94.829, 19.810, 5.407), 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Sky Blue), Vector(
+			94.829, 19.810, 5.407), 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Yellow), Vector(59.714,
+			8.200, -14.124), 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Blue), Vector(59.714,
+			8.200, -14.124), 200, Visible To Position and Radius);
 		Global.BeamVector = Vector(63.447, 16.575, -18.358);
-		Create Effect(All Players(All Teams), Orb, Color(Purple), Global.BeamVector, 18, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Bad Aura, Color(Green), Global.BeamVector, 1, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Cloud, Color(Sky Blue), Vector(63.140, 10.803, -18.731), 2, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Cloud, Color(Sky Blue), Vector(63.140, 7.803, -18.731), 6, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Light Shaft, Color(Turquoise), Global.BeamVector, 1, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Orb, Color(Purple), Global.BeamVector,
+			18, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Bad Aura, Color(Green),
+			Global.BeamVector, 1, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Cloud, Color(Sky Blue), Vector(63.140,
+			10.803, -18.731), 2, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Cloud, Color(Sky Blue), Vector(63.140,
+			7.803, -18.731), 6, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Light Shaft, Color(Turquoise),
+			Global.BeamVector, 1, Visible To Position and Radius);
 		While(True);
 			If(!Entity Exists(Players In Slot(4, Team 1)));
 			End;
@@ -2582,11 +2656,15 @@ rule("무대세팅 - 할리우드")
 		Global.HostSpawnVector = Vector(-27.131, 5.364, -156.348);
 		Global.DanceZoneVector = Vector(-29.317, 7.126, -165.249);
 		Global.SpawnVector = Vector(-31.880, 7.130, -175.804);
-		Create Effect(All Players(All Teams), Cloud, Color(Green), Vector(-21.659, 5.089, -158.228), 4, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Cloud, Color(Green), Vector(-32.197, 5.089, -155.257), 4, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Cloud, Color(Green), Vector(-21.659,
+			5.089, -158.228), 4, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Cloud, Color(Green), Vector(-32.197,
+			5.089, -155.257), 4, Visible To Position and Radius);
 		Global.BeamVector = Vector(-32.509, 10.495, -178.148);
-		Create Effect(All Players(All Teams), Orb, Color(White), Global.BeamVector, 18, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Cloud, Color(White), Global.BeamVector, 1, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Orb, Color(White), Global.BeamVector,
+			18, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Cloud, Color(White), Global.BeamVector,
+			1, Visible To Position and Radius);
 		While(True);
 			If(!Entity Exists(Players In Slot(4, Team 1)));
 				Create Dummy Bot(Hero(솔저: 76), Team 1, 4, Vector(-17.393, 4.927, -160.935), Local Vector Of(Vector(-39.149, 4.927, -155.505),
@@ -2620,9 +2698,12 @@ rule("무대세팅 - 66번국도")
 		Global.DanceZoneVector = Vector(58.040, 3.179, -22.160);
 		Global.SpawnVector = Vector(48.597, 4.718, -18.096);
 		Global.BeamVector = Vector(63.267, 7.475, -25.405);
-		Create Effect(All Players(All Teams), Orb, Color(Purple), Global.BeamVector, 18, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Cloud, Color(Blue), Global.BeamVector, 18, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Bad Aura, Color(Blue), Global.BeamVector, 1, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Orb, Color(Purple), Global.BeamVector,
+			18, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Cloud, Color(Blue), Global.BeamVector,
+			18, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Bad Aura, Color(Blue),
+			Global.BeamVector, 1, Visible To Position and Radius);
 		While(True);
 			If(!Entity Exists(Players In Slot(4, Team 1)));
 				Create Dummy Bot(Hero(애쉬), Team 1, 4, Vector(55.374, 3.904, -28.784), Null);
@@ -2656,10 +2737,14 @@ rule("무대세팅 - 네팔마을")
 		Global.DanceZoneVector = Vector(-141.236, -97.652, -111.829);
 		Global.SpawnVector = Vector(-149.952, -97.053, -95.196);
 		Global.BeamVector = Vector(-141.236, -89, -111.829);
-		Create Effect(All Players(All Teams), Orb, Color(Orange), Global.BeamVector, 18, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Cloud, Color(Orange), Global.BeamVector, 18, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(Orange), Global.BeamVector, 300, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Sparkles, Color(Orange), Global.DanceZoneVector, 25, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Orb, Color(Orange), Global.BeamVector,
+			18, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Cloud, Color(Orange),
+			Global.BeamVector, 18, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Orange),
+			Global.BeamVector, 300, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Orange),
+			Global.DanceZoneVector, 25, Visible To Position and Radius);
 		While(True);
 			If(!Entity Exists(Players In Slot(4, Team 1)));
 				Create Dummy Bot(Hero(젠야타), Team 1, 4, Vector(-145.728, -97.053, -120.869), Null);
@@ -2691,10 +2776,14 @@ rule("무대세팅 - 네팔제단")
 		Global.DanceZoneVector = Vector(-40.914, 14.348, -0.015);
 		Global.SpawnVector = Vector(-80.720, 9.348, 0.067);
 		Global.BeamVector = Vector(-33.440, 20.220, -0.040);
-		Create Effect(All Players(All Teams), Orb, Color(Orange), Global.BeamVector, 18, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Cloud, Color(Orange), Global.BeamVector, 18, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(Orange), Global.BeamVector, 300, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Sparkles, Color(Orange), Global.DanceZoneVector, 25, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Orb, Color(Orange), Global.BeamVector,
+			18, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Cloud, Color(Orange),
+			Global.BeamVector, 18, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Orange),
+			Global.BeamVector, 300, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Orange),
+			Global.DanceZoneVector, 25, Visible To Position and Radius);
 		While(True);
 			If(!Entity Exists(Players In Slot(4, Team 1)));
 				Create Dummy Bot(Hero(젠야타), Team 1, 4, Vector(-25.075, 18.319, -8.298), Null);
@@ -2726,10 +2815,14 @@ rule("무대세팅 - 네팔성소")
 		Global.DanceZoneVector = Vector(99.920, 129.173, -0.053);
 		Global.SpawnVector = Vector(51.097, 130.892, 0.047);
 		Global.BeamVector = Vector(80.526, 179.100, 0.595);
-		Create Effect(All Players(All Teams), Orb, Color(Orange), Global.BeamVector, 18, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Cloud, Color(Orange), Global.BeamVector, 18, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(Orange), Global.BeamVector, 300, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Sparkles, Color(Orange), Vector(99.920, 129.173, -0.053), 5, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Orb, Color(Orange), Global.BeamVector,
+			18, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Cloud, Color(Orange),
+			Global.BeamVector, 18, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Orange),
+			Global.BeamVector, 300, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Orange), Vector(99.920,
+			129.173, -0.053), 5, Visible To Position and Radius);
 		While(True);
 			If(!Entity Exists(Players In Slot(4, Team 1)));
 				Create Dummy Bot(Hero(젠야타), Team 1, 4, Vector(92.569, 129.173, -4.079), Null);
@@ -2761,19 +2854,24 @@ rule("무대세팅 - 리장센터 설날")
 		Global.DanceZoneVector = Vector(-0.013, 279.174, 300.981);
 		Global.BeamVector = Vector(0.004, 280.498, 280.033);
 		Global.SpawnVector = Vector(0.001, 270, 314.677);
-		Create Effect(All Players(All Teams), Cloud, Color(Red), Global.BeamVector, 18, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Orb, Color(Red), Global.BeamVector, 18, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Sparkles, Color(Red), Global.BeamVector, 18, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(Red), Vector(1.849, 285.753, 204.970), 200, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(Purple), Vector(1.849, 285.753, 204.970), 200,
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Cloud, Color(Red), Global.BeamVector,
+			18, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Orb, Color(Red), Global.BeamVector, 18,
 			Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(Orange), Vector(1.849, 285.753, 204.970), 200,
-			Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(Sky Blue), Vector(1.849, 285.753, 204.970), 200,
-			Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(Turquoise), Vector(1.849, 285.753, 204.970), 200,
-			Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Cloud, Color(White), Vector(0.017, 279.176, 303.019), 10, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Red),
+			Global.BeamVector, 18, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Red), Vector(1.849,
+			285.753, 204.970), 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Purple), Vector(1.849,
+			285.753, 204.970), 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Orange), Vector(1.849,
+			285.753, 204.970), 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Sky Blue), Vector(
+			1.849, 285.753, 204.970), 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Turquoise), Vector(
+			1.849, 285.753, 204.970), 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Cloud, Color(White), Vector(0.017,
+			279.176, 303.019), 10, Visible To Position and Radius);
 		While(True);
 			If(!Entity Exists(Players In Slot(4, Team 1)));
 			End;
@@ -2804,9 +2902,12 @@ rule("무대세팅 - 아유타야")
 		Global.DanceZoneVector = Vector(15.999, 2.174, 98.075);
 		Global.BeamVector = Vector(16.004, 4.667, 97.971);
 		Global.SpawnVector = Vector(15.958, 2.173, 108.588);
-		Create Effect(All Players(All Teams), Cloud, Color(Orange), Global.BeamVector, 18, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Orb, Color(Orange), Global.BeamVector, 18, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Sparkles, Color(Orange), Global.BeamVector, 18, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Cloud, Color(Orange),
+			Global.BeamVector, 18, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Orb, Color(Orange), Global.BeamVector,
+			18, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Orange),
+			Global.BeamVector, 18, Visible To Position and Radius);
 		While(True);
 			If(!Entity Exists(Players In Slot(4, Team 1)));
 				Create Dummy Bot(Hero(시메트라), Team 1, 4, Vector(5.961, 2.173, 107.550), Null);
@@ -2839,10 +2940,14 @@ rule("무대세팅 - 하바나")
 		Global.DanceZoneVector = Vector(-34.295, 8.020, 47.800);
 		Global.BeamVector = Vector(-34.223, 12.840, 77.707);
 		Global.SpawnVector = Vector(-34.229, 7.024, -16.754);
-		Create Effect(All Players(All Teams), Good Aura, Color(Yellow), Global.BeamVector, 18, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Orb, Color(White), Global.BeamVector, 18, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Bad Aura, Color(Lime Green), Global.BeamVector, 18, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Sparkles, Color(Yellow), Vector(-34.220, 8.020, 51.499), 10, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Yellow),
+			Global.BeamVector, 18, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Orb, Color(White), Global.BeamVector,
+			18, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Bad Aura, Color(Lime Green),
+			Global.BeamVector, 18, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Yellow), Vector(
+			-34.220, 8.020, 51.499), 10, Visible To Position and Radius);
 		While(True);
 			If(!Entity Exists(Players In Slot(4, Team 1)));
 				Create Dummy Bot(Hero(메르시), Team 1, 4, Vector(-19.649, 8.172, 50.245), Null);
@@ -2876,10 +2981,14 @@ rule("무대세팅 - 하바나 2")
 		Global.DanceZoneVector = Vector(186.101, 12.424, -46.465);
 		Global.BeamVector = Vector(187.345, 26.812, -50.519);
 		Global.SpawnVector = Vector(199.896, 11.173, -32.300);
-		Create Effect(All Players(All Teams), Good Aura, Color(Yellow), Global.BeamVector, 18, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Orb, Color(White), Global.BeamVector, 18, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Bad Aura, Color(Lime Green), Global.BeamVector, 18, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Sparkles, Color(Yellow), Global.DanceZoneVector, 20, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Yellow),
+			Global.BeamVector, 18, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Orb, Color(White), Global.BeamVector,
+			18, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Bad Aura, Color(Lime Green),
+			Global.BeamVector, 18, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Yellow),
+			Global.DanceZoneVector, 20, Visible To Position and Radius);
 		While(True);
 			If(!Entity Exists(Players In Slot(4, Team 1)));
 				Create Dummy Bot(Hero(메르시), Team 1, 4, Vector(159.306, 12.201, -29.509), Null);
@@ -2911,10 +3020,14 @@ rule("무대세팅 - 볼스카야")
 		Global.DanceZoneVector = Vector(-123.001, 6.020, 31.693);
 		Global.BeamVector = Vector(-139.330, 30.218, 22.171);
 		Global.SpawnVector = Vector(-115.158, 6.020, 36.489);
-		Create Effect(All Players(All Teams), Good Aura, Color(Blue), Global.BeamVector, 18, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Orb, Color(Purple), Global.BeamVector, 18, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Bad Aura, Color(Red), Global.BeamVector, 18, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Sparkles, Color(Blue), Vector(-118.357, 6.020, 34.747), 10, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Blue),
+			Global.BeamVector, 18, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Orb, Color(Purple), Global.BeamVector,
+			18, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Bad Aura, Color(Red),
+			Global.BeamVector, 18, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Blue), Vector(-118.357,
+			6.020, 34.747), 10, Visible To Position and Radius);
 		While(True);
 			If(!Entity Exists(Players In Slot(4, Team 1)));
 				Create Dummy Bot(Hero(자리야), Team 1, 4, Vector(-108.633, 7.193, 9.114), Null);
@@ -2946,12 +3059,18 @@ rule("무대세팅 - 오아시스 도심")
 		Global.DanceZoneVector = Vector(213.214, 2.347, 178.477);
 		Global.BeamVector = Vector(217.306, 12.152, 172.408);
 		Global.SpawnVector = Vector(203.737, 2.347, 193.350);
-		Create Effect(All Players(All Teams), Sparkles, Color(Orange), Global.DanceZoneVector, 20, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Sparkles, Color(Yellow), Global.DanceZoneVector, 20, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Sparkles, Color(Lime Green), Global.DanceZoneVector, 20, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Sparkles, Color(Sky Blue), Global.BeamVector, 38, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Orb, Color(Yellow), Global.BeamVector, 18, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Sphere, Color(Orange), Global.BeamVector, 20, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Orange),
+			Global.DanceZoneVector, 20, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Yellow),
+			Global.DanceZoneVector, 20, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Lime Green),
+			Global.DanceZoneVector, 20, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Sky Blue),
+			Global.BeamVector, 38, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Orb, Color(Yellow), Global.BeamVector,
+			18, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sphere, Color(Orange),
+			Global.BeamVector, 20, Visible To Position and Radius);
 		While(True);
 			If(!Entity Exists(Players In Slot(4, Team 1)));
 				Create Dummy Bot(Hero(모이라), Team 1, 4, Vector(215.900, 8.174, 185.543), Null);
@@ -2983,12 +3102,18 @@ rule("무대세팅 - 오아시스 정원")
 		Global.DanceZoneVector = Vector(206.430, 7.768, -182.528);
 		Global.BeamVector = Vector(197.321, 15, -173.244);
 		Global.SpawnVector = Vector(220.008, 7.768, -193.280);
-		Create Effect(All Players(All Teams), Sparkles, Color(Orange), Global.DanceZoneVector, 20, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Sparkles, Color(Yellow), Global.DanceZoneVector, 20, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Sparkles, Color(Lime Green), Global.DanceZoneVector, 20, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Sparkles, Color(Sky Blue), Global.BeamVector, 38, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Orb, Color(Yellow), Global.BeamVector, 18, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Sphere, Color(Orange), Global.DanceZoneVector, 23, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Orange),
+			Global.DanceZoneVector, 20, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Yellow),
+			Global.DanceZoneVector, 20, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Lime Green),
+			Global.DanceZoneVector, 20, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Sky Blue),
+			Global.BeamVector, 38, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Orb, Color(Yellow), Global.BeamVector,
+			18, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sphere, Color(Orange),
+			Global.DanceZoneVector, 23, Visible To Position and Radius);
 		While(True);
 			If(!Entity Exists(Players In Slot(4, Team 1)));
 				Create Dummy Bot(Hero(모이라), Team 1, 4, Vector(192.710, 25.683, -196.245), Null);
@@ -3020,17 +3145,25 @@ rule("무대세팅 - 오아시스 대학")
 		Global.DanceZoneVector = Vector(-188.873, 60.174, -0.868);
 		Global.BeamVector = Vector(-188.933, 74.997, -0.489);
 		Global.SpawnVector = Vector(-166.838, 59, -1.194);
-		Create Effect(All Players(All Teams), Sparkles, Color(Orange), Vector(-232.231, 0, 0.004), 1000, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Sparkles, Color(Aqua), Vector(-232.231, 0, 0.004), 1000, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Sparkles, Color(Blue), Vector(-232.231, 0, 0.004), 1000, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Orange), Vector(
+			-232.231, 0, 0.004), 1000, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Aqua), Vector(-232.231,
+			0, 0.004), 1000, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Blue), Vector(-232.231,
+			0, 0.004), 1000, Visible To Position and Radius);
 		Create In-World Text(All Players(All Teams), Custom String("{0} 밖으로 텔레포트 하면 {1}수영하실 수 있습니다 {0}", Icon String(Arrow: Up),
 			Icon String(Spiral)), Vector(-232.231, 61.650, 0.004), 1, Clip Against Surfaces, Visible To Position and String, Color(Blue),
 			Default Visibility);
-		Create Effect(All Players(All Teams), Sparkles, Color(Sky Blue), Global.BeamVector, 38, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Orb, Color(Yellow), Global.BeamVector, 18, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Sphere, Color(Orange), Global.BeamVector, 58, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Cloud, Color(White), Vector(-187.247, 59, -0.679), 40, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Cloud, Color(Sky Blue), Vector(-187.247, 59, -0.679), 30, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Sky Blue),
+			Global.BeamVector, 38, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Orb, Color(Yellow), Global.BeamVector,
+			18, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sphere, Color(Orange),
+			Global.BeamVector, 58, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Cloud, Color(White), Vector(-187.247,
+			59, -0.679), 40, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Cloud, Color(Sky Blue), Vector(
+			-187.247, 59, -0.679), 30, Visible To Position and Radius);
 		While(True);
 			If(!Entity Exists(Players In Slot(4, Team 1)));
 				Create Dummy Bot(Hero(모이라), Team 1, 4, Vector(-188.024, 67.976, -24.688), Null);
@@ -3061,20 +3194,24 @@ rule("무대세팅 - 리알토")
 		Create In-World Text(All Players(All Teams), Custom String("{0} 밖으로 텔레포트 하면 {1}수영하실 수 있습니다 {0}", Icon String(Arrow: Up),
 			Icon String(Spiral)), Vector(-56.075, 0.099, -59.323), 1, Clip Against Surfaces, Visible To Position and String, Color(Blue),
 			Default Visibility);
-		Create Effect(All Players(All Teams), Sparkles, Color(White), Vector(-112.133, -0.990, -37.119), 1000,
-			Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Sparkles, Color(Aqua), Vector(-110.745, -2.563, -37.987), 1000,
-			Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Sparkles, Color(Blue), Vector(-108.711, -0.170, -39.257), 1000,
-			Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(White), Vector(
+			-112.133, -0.990, -37.119), 1000, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Aqua), Vector(-110.745,
+			-2.563, -37.987), 1000, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Blue), Vector(-108.711,
+			-0.170, -39.257), 1000, Visible To Position and Radius);
 		Global.HostSpawnVector = Vector(-57.007, 6.108, -166.300);
 		Global.DanceZoneVector = Vector(-56.941, 4.924, -156.976);
 		Global.BeamVector = Vector(-56.997, 10.657, -171.029);
 		Global.SpawnVector = Vector(-56.986, 5.198, -185.825);
-		Create Effect(All Players(All Teams), Light Shaft, Color(Red), Vector(-57.068, 2, -171.168), 16, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Orb, Color(Red), Global.BeamVector, 18, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Bad Aura, Color(Red), Global.BeamVector, 8, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Sparkles, Color(Red), Vector(-56.834, 3.750, -161.552), 100, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Light Shaft, Color(Red), Vector(
+			-57.068, 2, -171.168), 16, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Orb, Color(Red), Global.BeamVector, 18,
+			Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Bad Aura, Color(Red),
+			Global.BeamVector, 8, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Red), Vector(-56.834,
+			3.750, -161.552), 100, Visible To Position and Radius);
 		While(True);
 			If(!Entity Exists(Players In Slot(4, Team 1)));
 				Create Dummy Bot(Hero(리퍼), Team 1, 4, Vector(-49.002, 4.924, -157.982), Null);
@@ -3124,15 +3261,20 @@ rule("무대세팅 - Aㅏ누비스 신전")
 		Global.DanceZoneVector = Vector(9.056, 21.988, 111.001);
 		Global.BeamVector = Vector(-5.228, 47.673, 151.729);
 		Global.SpawnVector = Vector(-13.381, 20.736, 94.919);
-		Create Effect(All Players(All Teams), Cloud, Color(Orange), Vector(-3.016, 20.989, 129.511), 20, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Sparkles, Color(Sky Blue), Vector(-3.016, 20.989, 129.511), 15,
-			Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Cloud, Color(Orange), Vector(-3.016,
+			20.989, 129.511), 20, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Sky Blue), Vector(
+			-3.016, 20.989, 129.511), 15, Visible To Position and Radius);
 		Create In-World Text(All Players(All Teams), Custom String("{0} 떨어지면 못올라옴 ㅋ", Icon String(Warning)), Vector(-7.508, 21.341,
 			104.589), 1, Clip Against Surfaces, Visible To Position and String, Color(Red), Default Visibility);
-		Create Effect(All Players(All Teams), Sparkles, Color(Sky Blue), Global.BeamVector, 38, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Orb, Color(Yellow), Global.BeamVector, 18, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Sphere, Color(Orange), Global.BeamVector, 58, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Cloud, Color(Orange), Vector(-6.737, 20.291, 116.647), 10, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Sky Blue),
+			Global.BeamVector, 38, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Orb, Color(Yellow), Global.BeamVector,
+			18, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sphere, Color(Orange),
+			Global.BeamVector, 58, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Cloud, Color(Orange), Vector(-6.737,
+			20.291, 116.647), 10, Visible To Position and Radius);
 		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Bad Aura, Color(Orange), Vector(-6.253,
 			21.988, 140.183), 400, Visible To Position and Radius);
 		While(True);
@@ -3166,11 +3308,14 @@ rule("무대세팅 - 지브롤터")
 		Global.DanceZoneVector = Vector(75.462, -9.050, 38.567);
 		Global.BeamVector = Vector(75.509, -3.053, 38.584);
 		Global.SpawnVector = Vector(62.862, -4.975, 62.187);
-		Create Effect(All Players(All Teams), Light Shaft, Color(Turquoise), Vector(75.453, -11.050, 38.438), 16,
-			Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Orb, Color(White), Global.BeamVector, 18, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Bad Aura, Color(Turquoise), Global.BeamVector, 8, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Sparkles, Color(Red), Vector(-56.834, 3.750, -161.552), 100, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Light Shaft, Color(Turquoise), Vector(
+			75.453, -11.050, 38.438), 16, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Orb, Color(White), Global.BeamVector,
+			18, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Bad Aura, Color(Turquoise),
+			Global.BeamVector, 8, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Red), Vector(-56.834,
+			3.750, -161.552), 100, Visible To Position and Radius);
 		While(True);
 			If(!Entity Exists(Players In Slot(4, Team 1)));
 				Create Dummy Bot(Hero(윈스턴), Team 1, 4, Vector(92.215, -5.799, 36.158), Null);
@@ -3217,23 +3362,40 @@ rule("무대세팅 - 남극 겨울")
 		Create In-World Text(All Players(All Teams), Custom String("{0} {1} + {2} = 텔포", Icon String(Arrow: Up), Input Binding String(
 			Button(Jump)), Input Binding String(Button(Interact))), Vector(0.682, 26.300, -42.420), 1, Clip Against Surfaces,
 			Visible To Position and String, Color(Sky Blue), Default Visibility);
-		Create Effect(All Players(All Teams), Sparkles, Color(Blue), Global.DanceZoneVector, 1000, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Cloud, Color(Blue), Global.BeamVector, 18, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Orb, Color(Blue), Global.BeamVector, 18, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Sparkles, Color(Blue), Global.HostSpawnVector, 18, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Sparkles, Color(Blue), Global.BeamVector, 1000, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Sparkles, Color(Sky Blue), Global.BeamVector, 1000, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Sparkles, Color(White), Global.BeamVector, 1000, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(White), Global.BeamVector, 200, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(Purple), Global.BeamVector, 200, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(Blue), Global.BeamVector, 200, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(Lime Green), Global.BeamVector, 200, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(Turquoise), Global.BeamVector, 200, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Cloud, Color(White), Global.BeamVector, 10, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(Sky Blue), Global.BeamVector, 300, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(Yellow), Global.BeamVector, 300, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(Aqua), Global.BeamVector, 100, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Cloud, Color(White), Global.BeamVector, 150, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Blue),
+			Global.DanceZoneVector, 1000, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Cloud, Color(Blue), Global.BeamVector,
+			18, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Orb, Color(Blue), Global.BeamVector,
+			18, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Blue),
+			Global.HostSpawnVector, 18, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Blue),
+			Global.BeamVector, 1000, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Sky Blue),
+			Global.BeamVector, 1000, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(White),
+			Global.BeamVector, 1000, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(White),
+			Global.BeamVector, 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Purple),
+			Global.BeamVector, 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Blue),
+			Global.BeamVector, 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Lime Green),
+			Global.BeamVector, 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Turquoise),
+			Global.BeamVector, 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Cloud, Color(White), Global.BeamVector,
+			10, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Sky Blue),
+			Global.BeamVector, 300, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Yellow),
+			Global.BeamVector, 300, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Aqua),
+			Global.BeamVector, 100, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Cloud, Color(White), Global.BeamVector,
+			150, Visible To Position and Radius);
 		While(True);
 			If(!Entity Exists(Players In Slot(4, Team 1)));
 			End;
@@ -3260,33 +3422,41 @@ rule("무대세팅 - 일리오스 + 일리오스 등대")
 	action
 	{
 		Global.HiddenVector = Vector(-47.747, -60.998, -1000);
-		Create Effect(All Players(All Teams), Cloud, Color(White), Vector(505.603, -71.500, -131.510), 1500,
-			Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Cloud, Color(Blue), Vector(505.603, -71.500, -131.510), 1500,
-			Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Sparkles, Color(White), Vector(505.603, -63, -131.510), 1000,
-			Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Sparkles, Color(Aqua), Vector(505.603, -63, -131.510), 1000, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Sparkles, Color(Blue), Vector(505.603, -63, -131.510), 1000, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Cloud, Color(White), Vector(505.603,
+			-71.500, -131.510), 1500, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Cloud, Color(Blue), Vector(505.603,
+			-71.500, -131.510), 1500, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(White), Vector(505.603,
+			-63, -131.510), 1000, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Aqua), Vector(505.603,
+			-63, -131.510), 1000, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Blue), Vector(505.603,
+			-63, -131.510), 1000, Visible To Position and Radius);
 		Global.HostSpawnVector = Vector(370.460, -28.641, -56.747);
 		Global.DanceZoneVector = Vector(358.504, -25.641, -51.752);
 		Global.BeamVector = Vector(357.869, -13.716, -51.251);
 		Global.SpawnVector = Vector(326.409, -23.665, -38.359);
-		Create Effect(All Players(All Teams), Light Shaft, Color(Blue), Vector(370.429, -70.060, -56.729), 80,
-			Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Light Shaft, Color(Blue), Vector(
+			370.429, -70.060, -56.729), 80, Visible To Position and Radius);
 		Create In-World Text(All Players(All Teams), Custom String("{0} 외곽 원 밖까지 텔레포트 하면 {1}수영하실 수 있습니다 {0}", Icon String(Arrow: Up),
 			Icon String(Spiral)), Vector(420, -23.645, -76), 1, Clip Against Surfaces, Visible To Position and String, Color(Blue),
 			Default Visibility);
 		Create In-World Text(All Players(All Teams), Custom String("{0} 접근 금지! 원에 가까이 오시면 죽습니다! {0}", Icon String(Warning)), Vector(
 			420.080, -60.863, -76.326), 1, Clip Against Surfaces, Visible To Position and String, Color(Blue), Default Visibility);
-		Create Effect(All Players(All Teams), Orb, Color(White), Global.BeamVector, 1, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Bad Aura, Color(Aqua), Global.BeamVector, 1.500, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Cloud, Color(Blue), Vector(352.022, -28.253, -17.159), 2, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Cloud, Color(White), Vector(352.022, -28.253, -17.159), 2, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Cloud, Color(Blue), Vector(329.947, -28.253, -72.131), 2, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Cloud, Color(White), Vector(329.947, -28.253, -72.131), 2, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Sparkles, Color(White), Vector(368.701, -26.892, -55.973), 200,
-			Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Orb, Color(White), Global.BeamVector,
+			1, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Bad Aura, Color(Aqua),
+			Global.BeamVector, 1.500, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Cloud, Color(Blue), Vector(352.022,
+			-28.253, -17.159), 2, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Cloud, Color(White), Vector(352.022,
+			-28.253, -17.159), 2, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Cloud, Color(Blue), Vector(329.947,
+			-28.253, -72.131), 2, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Cloud, Color(White), Vector(329.947,
+			-28.253, -72.131), 2, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(White), Vector(368.701,
+			-26.892, -55.973), 200, Visible To Position and Radius);
 		While(True);
 			If(!Entity Exists(Players In Slot(4, Team 1)));
 				Create Dummy Bot(Hero(루시우), Team 1, 4, Vector(353.023, -25.846, -12.030), Null);
@@ -3314,20 +3484,22 @@ rule("무대세팅 - 일리오스 우물")
 	action
 	{
 		Global.HiddenVector = Vector(-315.364, -2.853, 64.149);
-		Create Effect(All Players(All Teams), Good Aura, Color(Aqua), Vector(-91.115, 105.466, -190.541), 40,
-			Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(Orange), Vector(-91.115, 105.466, -190.541), 50,
-			Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(Lime Green), Vector(-91.115, 105.466, -190.541), 60,
-			Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(Blue), Vector(-91.115, 105.466, -190.541), 70,
-			Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Aqua), Vector(-91.115,
+			105.466, -190.541), 40, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Orange), Vector(
+			-91.115, 105.466, -190.541), 50, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Lime Green), Vector(
+			-91.115, 105.466, -190.541), 60, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Blue), Vector(-91.115,
+			105.466, -190.541), 70, Visible To Position and Radius);
 		Global.HostSpawnVector = Vector(-90.479, 102.720, -187.036);
 		Global.DanceZoneVector = Vector(-37.410, 91.056, -112.206);
 		Global.BeamVector = Vector(-90.541, 117.383, -187.323);
 		Global.SpawnVector = Vector(-139.237, 62.697, 13.595);
-		Create Effect(All Players(All Teams), Orb, Color(White), Global.BeamVector, 1, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Bad Aura, Color(Aqua), Global.BeamVector, 1.500, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Orb, Color(White), Global.BeamVector,
+			1, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Bad Aura, Color(Aqua),
+			Global.BeamVector, 1.500, Visible To Position and Radius);
 		While(True);
 			If(!Entity Exists(Players In Slot(4, Team 1)));
 				Create Dummy Bot(Hero(루시우), Team 1, 4, Vector(-71.208, 83.048, -92.438), Null);
@@ -3368,8 +3540,10 @@ rule("무대세팅 - 일리오스 폐허")
 		Global.DanceZoneVector = Vector(28.385, 58.542, -157.259);
 		Global.BeamVector = Vector(28.404, 80, -157.159);
 		Global.SpawnVector = Vector(28.538, 61.804, -177.576);
-		Create Effect(All Players(All Teams), Orb, Color(White), Global.BeamVector, 1, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Bad Aura, Color(Aqua), Global.BeamVector, 1.500, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Orb, Color(White), Global.BeamVector,
+			1, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Bad Aura, Color(Aqua),
+			Global.BeamVector, 1.500, Visible To Position and Radius);
 		While(True);
 			If(!Entity Exists(Players In Slot(4, Team 1)));
 				Create Dummy Bot(Hero(루시우), Team 1, 4, Vector(33.543, 58.542, -148.711), Null);
@@ -3399,20 +3573,22 @@ rule("무대세팅 - 일리오스 폐허 2")
 	{
 		Global.HiddenVector = Vector(-51.533, 107.566, -112.868);
 		Global.HiddenMap = True;
-		Create Effect(All Players(All Teams), Good Aura, Color(Aqua), Vector(306.880, 74.337, -164.103), 40,
-			Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(Orange), Vector(306.880, 74.337, -164.104), 50,
-			Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(Lime Green), Vector(306.880, 74.337, -164.103), 60,
-			Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(Blue), Vector(306.878, 74.337, -164.103), 70,
-			Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Aqua), Vector(306.880,
+			74.337, -164.103), 40, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Orange), Vector(
+			306.880, 74.337, -164.104), 50, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Lime Green), Vector(
+			306.880, 74.337, -164.103), 60, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Blue), Vector(306.878,
+			74.337, -164.103), 70, Visible To Position and Radius);
 		Global.HostSpawnVector = Vector(179.644, 61.447, -160.132);
 		Global.DanceZoneVector = Vector(164.683, 60.847, -160.200);
 		Global.BeamVector = Vector(179.871, 78.063, -160.257);
 		Global.SpawnVector = Vector(145.606, 62.551, -160.180);
-		Create Effect(All Players(All Teams), Orb, Color(White), Global.BeamVector, 1, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Bad Aura, Color(Aqua), Global.BeamVector, 1.500, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Orb, Color(White), Global.BeamVector,
+			1, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Bad Aura, Color(Aqua),
+			Global.BeamVector, 1.500, Visible To Position and Radius);
 		While(True);
 			If(!Entity Exists(Players In Slot(4, Team 1)));
 				Create Dummy Bot(Hero(루시우), Team 1, 4, Vector(161.391, 66.350, -166.768), Null);
@@ -3443,10 +3619,13 @@ rule("무대세팅 - 눔바니")
 		Global.HostSpawnVector = Vector(258.448, 8.623, 22.743);
 		Global.DanceZoneVector = Vector(248.790, 1.432, 22.723);
 		Global.SpawnVector = Vector(234.864, 1.429, 22.734);
-		Create Effect(All Players(All Teams), Sparkles, Color(Lime Green), Global.DanceZoneVector, 10, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Lime Green),
+			Global.DanceZoneVector, 10, Visible To Position and Radius);
 		Global.BeamVector = Vector(240.309, 3, 22.702);
-		Create Effect(All Players(All Teams), Orb, Color(Green), Global.BeamVector, 18, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(Lime Green), Global.BeamVector, 1, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Orb, Color(Green), Global.BeamVector,
+			18, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Lime Green),
+			Global.BeamVector, 1, Visible To Position and Radius);
 		While(True);
 			If(!Entity Exists(Players In Slot(4, Team 1)));
 				Create Dummy Bot(Hero(오리사), Team 1, 4, Vector(248.096, 4.886, 33.663), Vector(2.815, 3.176, 50.844));
@@ -3486,22 +3665,29 @@ rule("무대세팅 - 카스티요")
 		Global.HostSpawnVector = Vector(-130.263, 35.553, 63.921);
 		Global.DanceZoneVector = Vector(-115.650, 39.747, 60.919);
 		Global.SpawnVector = Vector(-75.069, 33.172, 53.019);
-		Create Effect(All Players(All Teams), Good Aura, Color(Green), Vector(-102.884, 41.657, 59.026), 200,
-			Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(Purple), Vector(-102.884, 41.657, 59.026), 200,
-			Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(Orange), Vector(-102.884, 41.657, 59.026), 200,
-			Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(Sky Blue), Vector(-102.884, 41.657, 59.026), 200,
-			Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Sparkles, Color(Yellow), Global.SpawnVector, 200, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Sparkles, Color(Blue), Global.SpawnVector, 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Green), Vector(
+			-102.884, 41.657, 59.026), 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Purple), Vector(
+			-102.884, 41.657, 59.026), 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Orange), Vector(
+			-102.884, 41.657, 59.026), 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Sky Blue), Vector(
+			-102.884, 41.657, 59.026), 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Yellow),
+			Global.SpawnVector, 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Blue),
+			Global.SpawnVector, 200, Visible To Position and Radius);
 		Global.BeamVector = Vector(-130.903, 42.743, 63.738);
-		Create Effect(All Players(All Teams), Orb, Color(Purple), Global.BeamVector, 18, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Bad Aura, Color(Green), Global.BeamVector, 1, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Cloud, Color(Sky Blue), Vector(63.140, 10.803, -18.731), 2, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Cloud, Color(Sky Blue), Vector(63.140, 7.803, -18.731), 6, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Sphere, Color(Turquoise), Global.BeamVector, 30, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Orb, Color(Purple), Global.BeamVector,
+			18, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Bad Aura, Color(Green),
+			Global.BeamVector, 1, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Cloud, Color(Sky Blue), Vector(63.140,
+			10.803, -18.731), 2, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Cloud, Color(Sky Blue), Vector(63.140,
+			7.803, -18.731), 6, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sphere, Color(Turquoise),
+			Global.BeamVector, 30, Visible To Position and Radius);
 		While(True);
 			If(!Entity Exists(Players In Slot(4, Team 1)));
 			End;
@@ -3531,18 +3717,25 @@ rule("무대세팅 - 네크로폴리스")
 		Global.HostSpawnVector = Vector(-17.497, 5.494, -0.152);
 		Global.DanceZoneVector = Vector(-31.121, 3.348, 0.062);
 		Global.SpawnVector = Vector(18.385, -0.652, -0.100);
-		Create Effect(All Players(All Teams), Good Aura, Color(Blue), Vector(-97.455, 57.275, -6.647), 15, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(Purple), Vector(-97.455, 57.275, -6.647), 25,
-			Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(Yellow), Vector(-97.455, 57.275, -6.647), 35,
-			Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(Red), Vector(-97.455, 57.275, -6.647), 45, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Sparkles, Color(Yellow), Global.SpawnVector, 200, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Sparkles, Color(Blue), Global.SpawnVector, 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Blue), Vector(-97.455,
+			57.275, -6.647), 15, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Purple), Vector(
+			-97.455, 57.275, -6.647), 25, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Yellow), Vector(
+			-97.455, 57.275, -6.647), 35, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Red), Vector(-97.455,
+			57.275, -6.647), 45, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Yellow),
+			Global.SpawnVector, 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Blue),
+			Global.SpawnVector, 200, Visible To Position and Radius);
 		Global.BeamVector = Vector(-19.137, 10.898, 0.028);
-		Create Effect(All Players(All Teams), Orb, Color(Purple), Global.BeamVector, 18, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Bad Aura, Color(Green), Global.BeamVector, 1, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Sphere, Color(Purple), Global.BeamVector, 60, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Orb, Color(Purple), Global.BeamVector,
+			18, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Bad Aura, Color(Green),
+			Global.BeamVector, 1, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sphere, Color(Purple),
+			Global.BeamVector, 60, Visible To Position and Radius);
 		While(True);
 			If(!Entity Exists(Players In Slot(4, Team 1)));
 				Create Dummy Bot(Hero(솔저: 76), Team 1, 4, Vector(8.543, 6.061, -8.569), Null);
@@ -3575,104 +3768,121 @@ rule("무대세팅 - 개활지")
 			Color(Red), Visible To and String, Default Visibility);
 		Create In-World Text(All Players(All Teams), Custom String("길게 [{1}] = {0}부스터!!", Icon String(Bolt), Input Binding String(Button(
 			Ability 1))), Vector(0, 4, -370), 1, Clip Against Surfaces, Visible To Position and String, Color(Red), Default Visibility);
-		Create Beam Effect(All Players(All Teams), Good Beam, Vector(3, 0, -384), Vector(3, 10, 384), Color(Purple),
-			Visible To Position and Radius);
-		Create Beam Effect(All Players(All Teams), Good Beam, Vector(-3, 0, -384), Vector(-3, 10, 384), Color(Purple),
-			Visible To Position and Radius);
+		Create Beam Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Beam, Vector(3, 0, -384),
+			Vector(3, 10, 384), Color(Purple), Visible To Position and Radius);
+		Create Beam Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Beam, Vector(-3, 0, -384),
+			Vector(-3, 10, 384), Color(Purple), Visible To Position and Radius);
 		Global.HostSpawnVector = Vector(0, 0, 380);
 		Global.DanceZoneVector = Vector(0, 0, 0);
 		Global.BeamVector = Vector(0, 30, 384);
 		Global.SpawnVector = Vector(0, 0, -380);
-		Create Beam Effect(All Players(All Teams), Bad Beam, Vector(-2.500, 0, -2.500), Vector(0, 10, 0), Global.ThemeColor4,
-			Visible To Position Radius and Color);
-		Create Beam Effect(All Players(All Teams), Bad Beam, Vector(2.500, 0, -2.500), Vector(0, 10, 0), Global.ThemeColor2,
-			Visible To Position Radius and Color);
-		Create Beam Effect(All Players(All Teams), Bad Beam, Vector(-2.500, 0, 2.500), Vector(0, 10, 0), Global.ThemeColor3,
-			Visible To Position Radius and Color);
-		Create Beam Effect(All Players(All Teams), Bad Beam, Vector(2.500, 0, 2.500), Vector(0, 10, 0), Global.ThemeColor1,
-			Visible To Position Radius and Color);
-		Create Effect(All Players(All Teams), Orb, Color(Turquoise), Vector(0, 10, 0), 1, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Global.ThemeColor1, Vector(288, 0, 288), 10000,
-			Visible To Position Radius and Color);
-		Create Effect(All Players(All Teams), Good Aura, Global.ThemeColor2, Vector(288, 0, -288), 10000,
-			Visible To Position Radius and Color);
-		Create Effect(All Players(All Teams), Good Aura, Global.ThemeColor3, Vector(-288, 0, 288), 10000,
-			Visible To Position Radius and Color);
-		Create Effect(All Players(All Teams), Good Aura, Global.ThemeColor4, Vector(-288, 0, -288), 10000,
-			Visible To Position Radius and Color);
-		Create Effect(All Players(All Teams), Sparkles, Global.ThemeColor1, Vector(288, 0, 288), 10000,
-			Visible To Position Radius and Color);
-		Create Effect(All Players(All Teams), Sparkles, Global.ThemeColor2, Vector(288, 0, -288), 10000,
-			Visible To Position Radius and Color);
-		Create Effect(All Players(All Teams), Sparkles, Global.ThemeColor3, Vector(-288, 0, 288), 10000,
-			Visible To Position Radius and Color);
-		Create Effect(All Players(All Teams), Sparkles, Global.ThemeColor4, Vector(-288, 0, -288), 10000,
-			Visible To Position Radius and Color);
-		Create Effect(All Players(All Teams), Light Shaft, Global.ThemeColor1, Vector(288, 0, 288), 20,
-			Visible To Position Radius and Color);
-		Create Effect(All Players(All Teams), Light Shaft, Global.ThemeColor2, Vector(288, 0, -288), 20,
-			Visible To Position Radius and Color);
-		Create Effect(All Players(All Teams), Light Shaft, Global.ThemeColor3, Vector(-288, 0, 288), 20,
-			Visible To Position Radius and Color);
-		Create Effect(All Players(All Teams), Light Shaft, Global.ThemeColor4, Vector(-288, 0, -288), 20,
-			Visible To Position Radius and Color);
-		Create Beam Effect(All Players(All Teams), Good Beam, Vector(0, 0, 384), Vector(0, 384, 0), Color(Purple),
-			Visible To Position and Radius);
-		Create Beam Effect(All Players(All Teams), Good Beam, Vector(0, 0, -384), Vector(0, 384, 0), Color(Purple),
-			Visible To Position and Radius);
-		Create Beam Effect(All Players(All Teams), Good Beam, Vector(-384, 0, 0), Vector(0, 384, 0), Color(Purple),
-			Visible To Position and Radius);
-		Create Beam Effect(All Players(All Teams), Good Beam, Vector(384, 0, 0), Vector(0, 384, 0), Color(Purple),
-			Visible To Position and Radius);
-		Create Beam Effect(All Players(All Teams), Good Beam, Vector(384, 0, 384), Vector(0, 384, 0), Color(Green),
-			Visible To Position and Radius);
-		Create Beam Effect(All Players(All Teams), Good Beam, Vector(384, 0, -384), Vector(0, 384, 0), Color(Green),
-			Visible To Position and Radius);
-		Create Beam Effect(All Players(All Teams), Good Beam, Vector(-384, 0, 384), Vector(0, 384, 0), Color(Green),
-			Visible To Position and Radius);
-		Create Beam Effect(All Players(All Teams), Good Beam, Vector(-384, 0, -384), Vector(0, 384, 0), Color(Green),
-			Visible To Position and Radius);
-		Create Beam Effect(All Players(All Teams), Good Beam, Vector(192, 0, 384), Vector(0, 384, 0), Color(Yellow),
-			Visible To Position and Radius);
-		Create Beam Effect(All Players(All Teams), Good Beam, Vector(384, 0, 192), Vector(0, 384, 0), Color(Yellow),
-			Visible To Position and Radius);
-		Create Beam Effect(All Players(All Teams), Good Beam, Vector(-192, 0, 384), Vector(0, 384, 0), Color(Yellow),
-			Visible To Position and Radius);
-		Create Beam Effect(All Players(All Teams), Good Beam, Vector(384, 0, -192), Vector(0, 384, 0), Color(Yellow),
-			Visible To Position and Radius);
-		Create Beam Effect(All Players(All Teams), Good Beam, Vector(192, 0, -384), Vector(0, 384, 0), Color(Yellow),
-			Visible To Position and Radius);
-		Create Beam Effect(All Players(All Teams), Good Beam, Vector(-384, 0, 192), Vector(0, 384, 0), Color(Yellow),
-			Visible To Position and Radius);
-		Create Beam Effect(All Players(All Teams), Good Beam, Vector(-192, 0, -384), Vector(0, 384, 0), Color(Yellow),
-			Visible To Position and Radius);
-		Create Beam Effect(All Players(All Teams), Good Beam, Vector(-384, 0, -192), Vector(0, 384, 0), Color(Yellow),
-			Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(Blue), Global.HostSpawnVector, 10000, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(Purple), Global.HostSpawnVector, 10000, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(Turquoise), Global.HostSpawnVector, 10000, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(Orange), Global.HostSpawnVector, 10000, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(White), Global.HostSpawnVector, 10000, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Sphere, Global.Tick == 1 ? Global.ThemeColor1 : (Global.Tick == 2 ? Global.ThemeColor2 : (
+		Create Beam Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Bad Beam, Vector(-2.500, 0,
+			-2.500), Vector(0, 10, 0), Global.ThemeColor4, Visible To Position Radius and Color);
+		Create Beam Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Bad Beam, Vector(2.500, 0,
+			-2.500), Vector(0, 10, 0), Global.ThemeColor2, Visible To Position Radius and Color);
+		Create Beam Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Bad Beam, Vector(-2.500, 0,
+			2.500), Vector(0, 10, 0), Global.ThemeColor3, Visible To Position Radius and Color);
+		Create Beam Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Bad Beam, Vector(2.500, 0, 2.500),
+			Vector(0, 10, 0), Global.ThemeColor1, Visible To Position Radius and Color);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Orb, Color(Turquoise), Vector(0, 10,
+			0), 1, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Global.ThemeColor1, Vector(
+			288, 0, 288), 10000, Visible To Position Radius and Color);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Global.ThemeColor2, Vector(
+			288, 0, -288), 10000, Visible To Position Radius and Color);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Global.ThemeColor3, Vector(
+			-288, 0, 288), 10000, Visible To Position Radius and Color);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Global.ThemeColor4, Vector(
+			-288, 0, -288), 10000, Visible To Position Radius and Color);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Global.ThemeColor1, Vector(
+			288, 0, 288), 10000, Visible To Position Radius and Color);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Global.ThemeColor2, Vector(
+			288, 0, -288), 10000, Visible To Position Radius and Color);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Global.ThemeColor3, Vector(
+			-288, 0, 288), 10000, Visible To Position Radius and Color);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Global.ThemeColor4, Vector(
+			-288, 0, -288), 10000, Visible To Position Radius and Color);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Light Shaft, Global.ThemeColor1,
+			Vector(288, 0, 288), 20, Visible To Position Radius and Color);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Light Shaft, Global.ThemeColor2,
+			Vector(288, 0, -288), 20, Visible To Position Radius and Color);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Light Shaft, Global.ThemeColor3,
+			Vector(-288, 0, 288), 20, Visible To Position Radius and Color);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Light Shaft, Global.ThemeColor4,
+			Vector(-288, 0, -288), 20, Visible To Position Radius and Color);
+		Create Beam Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Beam, Vector(0, 0, 384),
+			Vector(0, 384, 0), Color(Purple), Visible To Position and Radius);
+		Create Beam Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Beam, Vector(0, 0, -384),
+			Vector(0, 384, 0), Color(Purple), Visible To Position and Radius);
+		Create Beam Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Beam, Vector(-384, 0, 0),
+			Vector(0, 384, 0), Color(Purple), Visible To Position and Radius);
+		Create Beam Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Beam, Vector(384, 0, 0),
+			Vector(0, 384, 0), Color(Purple), Visible To Position and Radius);
+		Create Beam Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Beam, Vector(384, 0, 384),
+			Vector(0, 384, 0), Color(Green), Visible To Position and Radius);
+		Create Beam Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Beam, Vector(384, 0, -384),
+			Vector(0, 384, 0), Color(Green), Visible To Position and Radius);
+		Create Beam Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Beam, Vector(-384, 0, 384),
+			Vector(0, 384, 0), Color(Green), Visible To Position and Radius);
+		Create Beam Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Beam, Vector(-384, 0, -384),
+			Vector(0, 384, 0), Color(Green), Visible To Position and Radius);
+		Create Beam Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Beam, Vector(192, 0, 384),
+			Vector(0, 384, 0), Color(Yellow), Visible To Position and Radius);
+		Create Beam Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Beam, Vector(384, 0, 192),
+			Vector(0, 384, 0), Color(Yellow), Visible To Position and Radius);
+		Create Beam Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Beam, Vector(-192, 0, 384),
+			Vector(0, 384, 0), Color(Yellow), Visible To Position and Radius);
+		Create Beam Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Beam, Vector(384, 0, -192),
+			Vector(0, 384, 0), Color(Yellow), Visible To Position and Radius);
+		Create Beam Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Beam, Vector(192, 0, -384),
+			Vector(0, 384, 0), Color(Yellow), Visible To Position and Radius);
+		Create Beam Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Beam, Vector(-384, 0, 192),
+			Vector(0, 384, 0), Color(Yellow), Visible To Position and Radius);
+		Create Beam Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Beam, Vector(-192, 0, -384),
+			Vector(0, 384, 0), Color(Yellow), Visible To Position and Radius);
+		Create Beam Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Beam, Vector(-384, 0, -192),
+			Vector(0, 384, 0), Color(Yellow), Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Blue),
+			Global.HostSpawnVector, 10000, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Purple),
+			Global.HostSpawnVector, 10000, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Turquoise),
+			Global.HostSpawnVector, 10000, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Orange),
+			Global.HostSpawnVector, 10000, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(White),
+			Global.HostSpawnVector, 10000, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sphere,
+			Global.Tick == 1 ? Global.ThemeColor1 : (Global.Tick == 2 ? Global.ThemeColor2 : (
 			Global.Tick == 3 ? Global.ThemeColor3 : Global.ThemeColor4)), Vector(0, -26, 384), 135, Visible To Position Radius and Color);
-		Create Beam Effect(All Players(All Teams), Bad Beam, Vector(96, 0, 384), Global.BeamVector, Color(Red),
-			Visible To Position and Radius);
-		Create Beam Effect(All Players(All Teams), Bad Beam, Vector(-96, 0, 384), Global.BeamVector, Color(Red),
-			Visible To Position and Radius);
-		Create Beam Effect(All Players(All Teams), Bad Beam, Vector(96, 0, 288), Global.BeamVector, Color(Red),
-			Visible To Position and Radius);
-		Create Beam Effect(All Players(All Teams), Bad Beam, Vector(-96, 0, 288), Global.BeamVector, Color(Red),
-			Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Bad Aura, Color(Sky Blue), Global.BeamVector, 38, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Orb, Color(Blue), Global.BeamVector, 18, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Sphere, Color(Blue), Vector(0, 0, 0), 10000, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Sphere, Color(Red), Vector(0, 384, 0), 30, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Cloud, Color(Blue), Vector(0, 10, 0), 10000, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Sparkles, Color(Purple), Vector(0, 0, 0), 10000, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Sparkles, Color(Yellow), Vector(0, 0, 0), 10000, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Sparkles, Color(Red), Vector(0, 0, 384), 10000, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Sparkles, Color(Purple), Vector(0, 1, 384), 10000, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Sparkles, Color(White), Vector(0, 2, 384), 10000, Visible To Position and Radius);
+		Create Beam Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Bad Beam, Vector(96, 0, 384),
+			Global.BeamVector, Color(Red), Visible To Position and Radius);
+		Create Beam Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Bad Beam, Vector(-96, 0, 384),
+			Global.BeamVector, Color(Red), Visible To Position and Radius);
+		Create Beam Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Bad Beam, Vector(96, 0, 288),
+			Global.BeamVector, Color(Red), Visible To Position and Radius);
+		Create Beam Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Bad Beam, Vector(-96, 0, 288),
+			Global.BeamVector, Color(Red), Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Bad Aura, Color(Sky Blue),
+			Global.BeamVector, 38, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Orb, Color(Blue), Global.BeamVector,
+			18, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sphere, Color(Blue), Vector(0, 0, 0),
+			10000, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sphere, Color(Red), Vector(0, 384, 0),
+			30, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Cloud, Color(Blue), Vector(0, 10, 0),
+			10000, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Purple), Vector(0, 0,
+			0), 10000, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Yellow), Vector(0, 0,
+			0), 10000, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Red), Vector(0, 0,
+			384), 10000, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Purple), Vector(0, 1,
+			384), 10000, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(White), Vector(0, 2,
+			384), 10000, Visible To Position and Radius);
 		While(True);
 			If(!Entity Exists(Players In Slot(4, Team 1)));
 				Create Dummy Bot(Hero(트레이서), Team 1, 4, Vector(30, 0, 330), Null);
@@ -3723,16 +3933,22 @@ rule("무대세팅 - 카네자카")
 		Global.DanceZoneVector = Vector(5.618, 10.450, 1.750);
 		Global.SpawnVector = Vector(-0.398, 10.450, -46.653);
 		Global.BeamVector = Vector(-30.719, 41.611, -9.578);
-		Create Effect(All Players(All Teams), Light Shaft, Color(Rose), Vector(-5.666, 6.300, -41.393), 5, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(Rose), Vector(-20.794, 38.457, 105.694), 60,
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Light Shaft, Color(Rose), Vector(
+			-5.666, 6.300, -41.393), 5, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Rose), Vector(-20.794,
+			38.457, 105.694), 60, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles,
+			Global.Tick % 2 == 0 ? Global.ThemeColor1 : Global.ThemeColor2, Vector(-36.576, 6.500, -9.161), 120,
+			Visible To Position Radius and Color);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles,
+			Global.Tick % 2 == 0 ? Global.ThemeColor3 : Global.ThemeColor4, Vector(-36.576, 6.500, -9.161), 120,
+			Visible To Position Radius and Color);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(White),
+			Global.BeamVector, 18, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Orb, Color(Red), Global.BeamVector, 18,
 			Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Sparkles, Global.Tick % 2 == 0 ? Global.ThemeColor1 : Global.ThemeColor2, Vector(-36.576,
-			6.500, -9.161), 120, Visible To Position Radius and Color);
-		Create Effect(All Players(All Teams), Sparkles, Global.Tick % 2 == 0 ? Global.ThemeColor3 : Global.ThemeColor4, Vector(-36.576,
-			6.500, -9.161), 120, Visible To Position Radius and Color);
-		Create Effect(All Players(All Teams), Sparkles, Color(White), Global.BeamVector, 18, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Orb, Color(Red), Global.BeamVector, 18, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Cloud, Color(White), Global.BeamVector, 1, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Cloud, Color(White), Global.BeamVector,
+			1, Visible To Position and Radius);
 		While(True);
 			If(!Entity Exists(Players In Slot(3, Team 1)));
 				Create Dummy Bot(Hero(브리기테), Team 1, 3, Vector(-16.833, 11.950, 20.982), Local Vector Of(Vector(-16.833, 11.950, 20.982),
@@ -3776,16 +3992,22 @@ rule("무대세팅 - 카네자카 2")
 		Global.DanceZoneVector = Vector(-31.013, 8.144, -9.540);
 		Global.SpawnVector = Vector(-30.588, 12.486, -9.594);
 		Global.BeamVector = Vector(-58.708, 17.550, -27.371);
-		Create Effect(All Players(All Teams), Light Shaft, Color(Rose), Vector(-5.666, 6.300, -41.393), 5, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(Rose), Vector(-20.794, 38.457, 105.694), 60,
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Light Shaft, Color(Rose), Vector(
+			-5.666, 6.300, -41.393), 5, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Rose), Vector(-20.794,
+			38.457, 105.694), 60, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles,
+			Global.Tick % 2 == 0 ? Global.ThemeColor1 : Global.ThemeColor2, Vector(-36.576, 6.500, -9.161), 120,
+			Visible To Position Radius and Color);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles,
+			Global.Tick % 2 == 0 ? Global.ThemeColor3 : Global.ThemeColor4, Vector(-36.576, 6.500, -9.161), 120,
+			Visible To Position Radius and Color);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(White),
+			Global.BeamVector, 18, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Orb, Color(Red), Global.BeamVector, 18,
 			Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Sparkles, Global.Tick % 2 == 0 ? Global.ThemeColor1 : Global.ThemeColor2, Vector(-36.576,
-			6.500, -9.161), 120, Visible To Position Radius and Color);
-		Create Effect(All Players(All Teams), Sparkles, Global.Tick % 2 == 0 ? Global.ThemeColor3 : Global.ThemeColor4, Vector(-36.576,
-			6.500, -9.161), 120, Visible To Position Radius and Color);
-		Create Effect(All Players(All Teams), Sparkles, Color(White), Global.BeamVector, 18, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Orb, Color(Red), Global.BeamVector, 18, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Cloud, Color(White), Global.BeamVector, 1, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Cloud, Color(White), Global.BeamVector,
+			1, Visible To Position and Radius);
 		While(True);
 			If(!Entity Exists(Players In Slot(3, Team 1)));
 				Create Dummy Bot(Hero(브리기테), Team 1, 3, Vector(-16.833, 11.950, 20.982), Local Vector Of(Vector(-16.833, 11.950, 20.982),
@@ -3826,21 +4048,27 @@ rule("무대세팅 - 말레벤토")
 		Global.HostSpawnVector = Vector(-0.003, 5.352, 7.852);
 		Global.DanceZoneVector = Vector(-29.252, -0.650, 8.108);
 		Global.SpawnVector = Vector(-0.343, 10.355, 38.502);
-		Create Effect(All Players(All Teams), Good Aura, Color(Green), Vector(-3.273, 32.855, -59.505), 200,
-			Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(Purple), Vector(-3.273, 32.855, -59.505), 200,
-			Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(Orange), Vector(-3.273, 32.855, -59.505), 200,
-			Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(Sky Blue), Vector(-3.273, 32.855, -59.505), 200,
-			Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Sparkles, Color(Yellow), Global.SpawnVector, 200, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Sparkles, Color(Blue), Global.SpawnVector, 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Green), Vector(-3.273,
+			32.855, -59.505), 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Purple), Vector(
+			-3.273, 32.855, -59.505), 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Orange), Vector(
+			-3.273, 32.855, -59.505), 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Sky Blue), Vector(
+			-3.273, 32.855, -59.505), 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Yellow),
+			Global.SpawnVector, 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Blue),
+			Global.SpawnVector, 200, Visible To Position and Radius);
 		Global.BeamVector = Vector(-0.214, 12.398, 0.272);
-		Create Effect(All Players(All Teams), Orb, Color(Purple), Global.BeamVector, 18, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Bad Aura, Color(Green), Global.BeamVector, 1, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Cloud, Color(Orange), Vector(0.029, -0.055, -11.021), 9, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Cloud, Color(Rose), Vector(0.029, -0.055, -11.021), 6, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Orb, Color(Purple), Global.BeamVector,
+			18, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Bad Aura, Color(Green),
+			Global.BeamVector, 1, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Cloud, Color(Orange), Vector(0.029,
+			-0.055, -11.021), 9, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Cloud, Color(Rose), Vector(0.029,
+			-0.055, -11.021), 6, Visible To Position and Radius);
 		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sphere,
 			Global.Tick % 2 == 0 ? Global.ThemeColor3 : Global.ThemeColor4, Global.BeamVector, 30, Visible To Position Radius and Color);
 		While(True);
@@ -3874,32 +4102,41 @@ rule("여름특집! : 무대세팅 - 부산스타디움+이스타지우")
 		Create In-World Text(All Players(All Teams), Custom String("{0} 멀리 바다까지 텔레포트 하면 {1}수영하실 수 있습니다 {0}", Icon String(Arrow: Up),
 			Icon String(Spiral)), Vector(-35.346, 10, -69.604), 1, Clip Against Surfaces, Visible To Position and String, Color(Blue),
 			Default Visibility);
-		Create Effect(All Players(All Teams), Sparkles, Color(White), Vector(-237.454, -2.700, -428.305), 1000,
-			Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Sparkles, Color(Aqua), Vector(-237.454, -2.700, -428.305), 1000,
-			Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Sparkles, Color(Blue), Vector(-237.454, -2.700, -428.305), 1000,
-			Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(White), Vector(
+			-237.454, -2.700, -428.305), 1000, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Aqua), Vector(-237.454,
+			-2.700, -428.305), 1000, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Blue), Vector(-237.454,
+			-2.700, -428.305), 1000, Visible To Position and Radius);
 		Disable Built-In Game Mode Completion;
 		Disable Game Mode HUD(All Players(All Teams));
-		Create Effect(All Players(All Teams), Good Aura, Color(Green), Vector(0, 4, -40), 40, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(Yellow), Vector(0, 4, -40), 50, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(Lime Green), Vector(0, 4, -40), 60, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(Blue), Vector(0, 4, -40), 70, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(White), Global.HostSpawnVector, 100, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Green), Vector(0, 4,
+			-40), 40, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Yellow), Vector(0, 4,
+			-40), 50, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Lime Green), Vector(0,
+			4, -40), 60, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Blue), Vector(0, 4,
+			-40), 70, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(White),
+			Global.HostSpawnVector, 100, Visible To Position and Radius);
 		Create In-World Text(All Players(All Teams), Custom String("{0}영웅변경 > {1}\r\n{2}", Ability Icon String(Hero(에코), Button(Ultimate)),
 			Custom String("{0}/{1}", Input Binding String(Button(Primary Fire)), Input Binding String(Button(Secondary Fire))),
 			Custom String("{0}칭호초기화 > {1}\r\n{2}저장하고 나가기 > [작별인사]", Icon String(Trashcan), Input Binding String(Button(Interact)),
 			Icon String(Arrow: Left))), Global.SpawnVector, 1, Clip Against Surfaces, Visible To Position and String, Color(Blue),
 			Default Visibility);
-		Create Effect(All Players(All Teams), Sparkles, Color(Lime Green), Vector(0, 1, 0), 50, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Sparkles, Color(Red), Vector(0, 1, 0), 50, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Lime Green), Vector(0,
+			1, 0), 50, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Red), Vector(0, 1, 0),
+			50, Visible To Position and Radius);
 		Global.HostSpawnVector = Vector(0, 1.614, -23.244);
 		Global.DanceZoneVector = Vector(0, 1, 0);
 		Global.BeamVector = Vector(0, 7, 0);
 		Global.SpawnVector = Vector(0, 1.100, 21);
-		Create Effect(All Players(All Teams), Orb, Color(White), Global.BeamVector, 1, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Bad Aura, Color(Aqua), Global.BeamVector, 1.500, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Orb, Color(White), Global.BeamVector,
+			1, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Bad Aura, Color(Aqua),
+			Global.BeamVector, 1.500, Visible To Position and Radius);
 		While(True);
 			If(!Entity Exists(Players In Slot(4, Team 1)));
 				Create Dummy Bot(Hero(루시우), Team 1, 4, Vector(-14.729, 2.536, -34.289), Null);
@@ -3932,38 +4169,45 @@ rule("여름특집! : 무대세팅 - 시드니하버아레나")
 		Create In-World Text(All Players(All Teams), Custom String("{0} 멀리 바다까지 텔레포트 하면 {1}수영하실 수 있습니다 {0}", Icon String(Arrow: Up),
 			Icon String(Spiral)), Vector(-75.128, 7.358, -78.493), 1, Clip Against Surfaces, Visible To Position and String, Color(Blue),
 			Default Visibility);
-		Create Effect(All Players(All Teams), Cloud, Color(White), Vector(141.106, -4.500, -325.694), 1500,
-			Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Cloud, Color(Blue), Vector(141.106, -4.500, -325.694), 1500, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Sparkles, Color(White), Vector(141.106, -4.500, -325.694), 1000,
-			Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Sparkles, Color(Aqua), Vector(141.106, -4.500, -325.694), 1000,
-			Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Sparkles, Color(Blue), Vector(141.106, -4.500, -325.694), 1000,
-			Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Cloud, Color(White), Vector(141.106,
+			-4.500, -325.694), 1500, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Cloud, Color(Blue), Vector(141.106,
+			-4.500, -325.694), 1500, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(White), Vector(141.106,
+			-4.500, -325.694), 1000, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Aqua), Vector(141.106,
+			-4.500, -325.694), 1000, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Blue), Vector(141.106,
+			-4.500, -325.694), 1000, Visible To Position and Radius);
 		Disable Built-In Game Mode Completion;
 		Disable Game Mode HUD(All Players(All Teams));
-		Create Effect(All Players(All Teams), Good Aura, Color(Green), Vector(15.900, 11.040, -95.860), 40,
-			Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(Yellow), Vector(15.900, 11.040, -95.860), 50,
-			Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(Lime Green), Vector(15.900, 11.040, -95.860), 60,
-			Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(Blue), Vector(15.900, 11.040, -95.860), 70, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(White), Global.HostSpawnVector, 100, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Green), Vector(15.900,
+			11.040, -95.860), 40, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Yellow), Vector(
+			15.900, 11.040, -95.860), 50, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Lime Green), Vector(
+			15.900, 11.040, -95.860), 60, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Blue), Vector(15.900,
+			11.040, -95.860), 70, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(White),
+			Global.HostSpawnVector, 100, Visible To Position and Radius);
 		Create In-World Text(All Players(All Teams), Custom String("{0}영웅변경 > {1}\r\n{2}", Ability Icon String(Hero(에코), Button(Ultimate)),
 			Custom String("{0}/{1}", Input Binding String(Button(Primary Fire)), Input Binding String(Button(Secondary Fire))),
 			Custom String("{0}칭호초기화 > {1}\r\n{2}저장하고 나가기 > [작별인사]", Icon String(Trashcan), Input Binding String(Button(Interact)),
 			Icon String(Arrow: Left))), Global.SpawnVector, 1, Clip Against Surfaces, Visible To Position and String, Color(Blue),
 			Default Visibility);
-		Create Effect(All Players(All Teams), Sparkles, Color(Aqua), Global.DanceZoneVector, 50, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Sparkles, Color(Blue), Global.DanceZoneVector, 50, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Aqua),
+			Global.DanceZoneVector, 50, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Blue),
+			Global.DanceZoneVector, 50, Visible To Position and Radius);
 		Global.HostSpawnVector = Vector(-19.271, 1.614, -89.144);
 		Global.DanceZoneVector = Vector(-42.043, 1.192, -84.810);
 		Global.BeamVector = Vector(-42.226, 24, -84.632);
 		Global.SpawnVector = Vector(-63.025, 1.178, -80.997);
-		Create Effect(All Players(All Teams), Orb, Color(White), Global.BeamVector, 1, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Bad Aura, Color(Aqua), Global.BeamVector, 1.500, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Orb, Color(White), Global.BeamVector,
+			1, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Bad Aura, Color(Aqua),
+			Global.BeamVector, 1.500, Visible To Position and Radius);
 		While(True);
 			If(!Entity Exists(Players In Slot(4, Team 1)));
 				Create Dummy Bot(Hero(루시우), Team 1, 4, Vector(-11.213, 2.536, -105.545), Null);
@@ -4041,7 +4285,8 @@ rule("여름특집! : 부산+이스타지우 수영")
 		End;
 		Set Gravity(Event Player, 10);
 		Start Accelerating(Event Player, Vector(0, 1, 0), 5, 3, To World, Direction Rate and Max Speed);
-		Play Effect(All Players(All Teams), Ring Explosion, Color(Blue), Event Player, 1);
+		Play Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Ring Explosion, Color(Blue),
+			Event Player, 1);
 		Wait(0.100, Ignore Condition);
 		Loop If Condition Is True;
 		Stop Accelerating(Event Player);
@@ -4071,7 +4316,8 @@ rule("여름특집! : 시드니하버아레나 수영")
 		End;
 		Set Gravity(Event Player, 10);
 		Start Accelerating(Event Player, Vector(0, 1, 0), 5, 3, To World, Direction Rate and Max Speed);
-		Play Effect(All Players(All Teams), Ring Explosion, Color(Blue), Event Player, 1);
+		Play Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Ring Explosion, Color(Blue),
+			Event Player, 1);
 		Wait(0.100, Ignore Condition);
 		Loop If Condition Is True;
 		Stop Accelerating(Event Player);
@@ -4098,19 +4344,32 @@ rule("할로윈특집! : 무대세팅 - 아이헨발데 할로윈")
 		Global.DanceZoneVector = Vector(123.298, 9.895, -27.396);
 		Global.SpawnVector = Vector(122.857, 11.897, -63.352);
 		Global.BeamVector = Vector(123.517, 18.172, -26.526);
-		Create Effect(All Players(All Teams), Sparkles, Color(Blue), Global.DanceZoneVector, 20, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Sparkles, Color(Turquoise), Global.DanceZoneVector, 20, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Orb, Color(Turquoise), Vector(128.011, 19.147, -28.793), 18, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Bad Aura, Color(White), Vector(128.011, 19.147, -28.793), 1, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Orb, Color(Turquoise), Vector(118.586, 19.100, -26.078), 18, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Bad Aura, Color(White), Vector(118.586, 19.100, -26.078), 1, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Orb, Color(Turquoise), Vector(120.489, 18.414, -20.632), 18, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Bad Aura, Color(White), Vector(120.489, 18.414, -20.632), 1, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Orb, Color(Turquoise), Vector(129.136, 18.294, -22.689), 18, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Bad Aura, Color(White), Vector(129.136, 18.294, -22.689), 1, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Orb, Color(Turquoise), Global.BeamVector, 18, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Cloud, Color(Purple), Global.BeamVector, 1, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Bad Aura, Color(Yellow), Global.BeamVector, 1, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Blue),
+			Global.DanceZoneVector, 20, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Turquoise),
+			Global.DanceZoneVector, 20, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Orb, Color(Turquoise), Vector(128.011,
+			19.147, -28.793), 18, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Bad Aura, Color(White), Vector(128.011,
+			19.147, -28.793), 1, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Orb, Color(Turquoise), Vector(118.586,
+			19.100, -26.078), 18, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Bad Aura, Color(White), Vector(118.586,
+			19.100, -26.078), 1, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Orb, Color(Turquoise), Vector(120.489,
+			18.414, -20.632), 18, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Bad Aura, Color(White), Vector(120.489,
+			18.414, -20.632), 1, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Orb, Color(Turquoise), Vector(129.136,
+			18.294, -22.689), 18, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Bad Aura, Color(White), Vector(129.136,
+			18.294, -22.689), 1, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Orb, Color(Turquoise),
+			Global.BeamVector, 18, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Cloud, Color(Purple),
+			Global.BeamVector, 1, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Bad Aura, Color(Yellow),
+			Global.BeamVector, 1, Visible To Position and Radius);
 		While(True);
 			If(!Entity Exists(Players In Slot(4, Team 1)));
 				Create Dummy Bot(Hero(라인하르트), Team 1, 4, Vector(130.869, 11.676, -21.702), Null);
@@ -4153,11 +4412,16 @@ rule("할로윈특집! : 무대세팅 - 아이헨발데 할로윈 2")
 		Global.DanceZoneVector = Vector(138.363, 11.898, 1.759);
 		Global.SpawnVector = Vector(133.591, 11.898, 9.159);
 		Global.BeamVector = Vector(133.713, 13.219, -4.983);
-		Create Effect(All Players(All Teams), Sparkles, Color(Blue), Global.DanceZoneVector, 20, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Sparkles, Color(Turquoise), Global.DanceZoneVector, 20, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Orb, Color(Turquoise), Global.BeamVector, 18, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Cloud, Color(Purple), Global.BeamVector, 1, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Bad Aura, Color(Yellow), Global.BeamVector, 1, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Blue),
+			Global.DanceZoneVector, 20, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Turquoise),
+			Global.DanceZoneVector, 20, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Orb, Color(Turquoise),
+			Global.BeamVector, 18, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Cloud, Color(Purple),
+			Global.BeamVector, 1, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Bad Aura, Color(Yellow),
+			Global.BeamVector, 1, Visible To Position and Radius);
 		While(True);
 			If(!Entity Exists(Players In Slot(4, Team 1)));
 				Create Dummy Bot(Hero(라인하르트), Team 1, 4, Vector(125.985, 11.919, -1.079), Null);
@@ -4191,16 +4455,26 @@ rule("할로윈특집! : 무대세팅 - 아이헨발데 할로윈 3")
 		Global.DanceZoneVector = Vector(55.081, -4.250, -118.972);
 		Global.SpawnVector = Vector(53.174, -4.250, -129.180);
 		Global.BeamVector = Vector(50.158, 38.662, -150.202);
-		Create Effect(All Players(All Teams), Good Aura, Color(White), Global.BeamVector, 60, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(Purple), Global.BeamVector, 63, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(Orange), Global.BeamVector, 66, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(Red), Global.BeamVector, 69, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(Blue), Global.BeamVector, 72, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Sparkles, Color(Blue), Global.DanceZoneVector, 20, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Sparkles, Color(Turquoise), Global.DanceZoneVector, 20, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Orb, Color(Turquoise), Global.BeamVector, 18, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Cloud, Color(Purple), Global.BeamVector, 1, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Bad Aura, Color(Yellow), Global.BeamVector, 1, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(White),
+			Global.BeamVector, 60, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Purple),
+			Global.BeamVector, 63, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Orange),
+			Global.BeamVector, 66, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Red),
+			Global.BeamVector, 69, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Blue),
+			Global.BeamVector, 72, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Blue),
+			Global.DanceZoneVector, 20, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Turquoise),
+			Global.DanceZoneVector, 20, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Orb, Color(Turquoise),
+			Global.BeamVector, 18, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Cloud, Color(Purple),
+			Global.BeamVector, 1, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Bad Aura, Color(Yellow),
+			Global.BeamVector, 1, Visible To Position and Radius);
 		While(True);
 			If(!Entity Exists(Players In Slot(4, Team 1)));
 				Create Dummy Bot(Hero(라인하르트), Team 1, 4, Vector(41.068, -4.250, -132.183), Null);
@@ -4232,19 +4506,25 @@ rule("할로윈특집! : 무대세팅 - 할리우드 할로윈")
 		Global.HostSpawnVector = Vector(-12.069, 2.500, 72.277);
 		Global.DanceZoneVector = Vector(-12.265, 1.145, 56.534);
 		Global.SpawnVector = Vector(-12.496, 6.303, 45.175);
-		Create Effect(All Players(All Teams), Sparkles, Color(Blue), Global.DanceZoneVector, 20, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Sparkles, Color(Turquoise), Global.DanceZoneVector, 20, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(Red), Vector(-12.392, 39.016, 79.675), 40, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(Purple), Vector(-12.392, 39.016, 79.675), 50,
-			Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(Blue), Vector(-12.392, 39.016, 79.675), 60, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(Orange), Vector(-12.392, 39.016, 79.675), 70,
-			Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(White), Vector(-12.392, 39.016, 79.675), 100,
-			Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Blue),
+			Global.DanceZoneVector, 20, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Turquoise),
+			Global.DanceZoneVector, 20, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Red), Vector(-12.392,
+			39.016, 79.675), 40, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Purple), Vector(
+			-12.392, 39.016, 79.675), 50, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Blue), Vector(-12.392,
+			39.016, 79.675), 60, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Orange), Vector(
+			-12.392, 39.016, 79.675), 70, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(White), Vector(
+			-12.392, 39.016, 79.675), 100, Visible To Position and Radius);
 		Global.BeamVector = Vector(-12.069, 15.194, 72.277);
-		Create Effect(All Players(All Teams), Orb, Color(Red), Global.BeamVector, 18, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Cloud, Color(White), Global.BeamVector, 1, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Orb, Color(Red), Global.BeamVector, 18,
+			Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Cloud, Color(White), Global.BeamVector,
+			1, Visible To Position and Radius);
 		While(True);
 			If(!Entity Exists(Players In Slot(4, Team 1)));
 				Create Dummy Bot(Hero(리퍼), Team 1, 4, Vector(20.614, 1.175, 46.046), Local Vector Of(Vector(-39.149, 4.927, -155.505),
@@ -4278,18 +4558,21 @@ rule("할로윈특집! : 무대세팅 - 할리우드 할로윈 2")
 		Global.HostSpawnVector = Vector(-32.269, 34.661, -120.761);
 		Global.DanceZoneVector = Vector(-35.113, 2.923, -134.716);
 		Global.SpawnVector = Vector(-1.140, 34.654, -82.915);
-		Create Effect(All Players(All Teams), Good Aura, Color(Red), Vector(-71.329, 148.272, -351.004), 40,
-			Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(Purple), Vector(-71.329, 148.267, -351.004), 50,
-			Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(Blue), Vector(-71.329, 148.272, -351.004), 60,
-			Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(Orange), Vector(-71.329, 148.272, -351.004), 70,
-			Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(White), Global.HostSpawnVector, 100, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Red), Vector(-71.329,
+			148.272, -351.004), 40, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Purple), Vector(
+			-71.329, 148.267, -351.004), 50, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Blue), Vector(-71.329,
+			148.272, -351.004), 60, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Orange), Vector(
+			-71.329, 148.272, -351.004), 70, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(White),
+			Global.HostSpawnVector, 100, Visible To Position and Radius);
 		Global.BeamVector = Vector(-15.517, 47.194, -103.117);
-		Create Effect(All Players(All Teams), Orb, Color(Red), Global.BeamVector, 18, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Cloud, Color(White), Global.BeamVector, 1, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Orb, Color(Red), Global.BeamVector, 18,
+			Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Cloud, Color(White), Global.BeamVector,
+			1, Visible To Position and Radius);
 		While(True);
 			If(!Entity Exists(Players In Slot(4, Team 1)));
 				Create Dummy Bot(Hero(솔저: 76), Team 1, 4, Vector(15.137, 35.043, -110.348), Local Vector Of(Vector(-39.149, 4.927, -155.505),
@@ -4324,11 +4607,15 @@ rule("할로윈특집! : 무대세팅 - 할리우드 할로윈 3")
 		Global.HostSpawnVector = Vector(-27.131, 9.151, -156.348);
 		Global.DanceZoneVector = Vector(-29.317, 7.126, -165.249);
 		Global.SpawnVector = Vector(-31.880, 7.130, -175.804);
-		Create Effect(All Players(All Teams), Cloud, Color(Purple), Vector(-21.659, 5.089, -158.228), 4, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Cloud, Color(Purple), Vector(-32.197, 5.089, -155.257), 4, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Cloud, Color(Purple), Vector(-21.659,
+			5.089, -158.228), 4, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Cloud, Color(Purple), Vector(-32.197,
+			5.089, -155.257), 4, Visible To Position and Radius);
 		Global.BeamVector = Vector(-32.509, 10.495, -178.148);
-		Create Effect(All Players(All Teams), Orb, Color(Red), Global.BeamVector, 18, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Cloud, Color(Red), Global.BeamVector, 1, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Orb, Color(Red), Global.BeamVector, 18,
+			Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Cloud, Color(Red), Global.BeamVector,
+			1, Visible To Position and Radius);
 		While(True);
 			If(!Entity Exists(Players In Slot(4, Team 1)));
 				Create Dummy Bot(Hero(리퍼), Team 1, 4, Vector(-17.393, 4.927, -160.935), Local Vector Of(Vector(-39.149, 4.927, -155.505),
@@ -4360,22 +4647,26 @@ rule("할로윈특집! : 무대세팅 - 할리우드 할로윈 4")
 	{
 		Global.HiddenVector = Vector(-48.732, 21.179, -50.122);
 		Global.HiddenMap = True;
-		Create Effect(All Players(All Teams), Sphere, Color(White), Vector(7.912, -188.500, -49.318), 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sphere, Color(White), Vector(7.912,
+			-188.500, -49.318), 200, Visible To Position and Radius);
 		Global.HostSpawnVector = Vector(29.656, 17.267, -54.069);
 		Global.DanceZoneVector = Vector(7.921, 14.353, -48.814);
 		Global.SpawnVector = Vector(4.554, 12.200, -31.481);
-		Create Effect(All Players(All Teams), Good Aura, Color(Red), Vector(-71.329, 148.272, -351.004), 40,
-			Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(Purple), Vector(-71.329, 148.267, -351.004), 50,
-			Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(Blue), Vector(-71.329, 148.272, -351.004), 60,
-			Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(Orange), Vector(-71.329, 148.272, -351.004), 70,
-			Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(White), Global.HostSpawnVector, 100, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Red), Vector(-71.329,
+			148.272, -351.004), 40, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Purple), Vector(
+			-71.329, 148.267, -351.004), 50, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Blue), Vector(-71.329,
+			148.272, -351.004), 60, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Orange), Vector(
+			-71.329, 148.272, -351.004), 70, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(White),
+			Global.HostSpawnVector, 100, Visible To Position and Radius);
 		Global.BeamVector = Vector(7.921, 24.353, -48.814);
-		Create Effect(All Players(All Teams), Orb, Color(Red), Global.BeamVector, 18, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Cloud, Color(White), Global.BeamVector, 1, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Orb, Color(Red), Global.BeamVector, 18,
+			Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Cloud, Color(White), Global.BeamVector,
+			1, Visible To Position and Radius);
 		While(True);
 			If(!Entity Exists(Players In Slot(4, Team 1)));
 				Create Dummy Bot(Hero(리퍼), Team 1, 4, Vector(1.872, 14.250, -66.695), Local Vector Of(Vector(-39.149, 4.927, -155.505),
@@ -4410,20 +4701,24 @@ rule("설날 특집! : 무대세팅 - 리장정원 설날")
 		Global.DanceZoneVector = Vector(113.997, 95.348, 143.740);
 		Global.BeamVector = Vector(113.997, 105.348, 143.740);
 		Global.SpawnVector = Vector(128.228, 95.848, 143.487);
-		Create Effect(All Players(All Teams), Cloud, Color(Red), Global.BeamVector, 18, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Orb, Color(Red), Global.BeamVector, 18, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Sparkles, Color(Red), Global.BeamVector, 18, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(Red), Vector(113.997, 95.348, 143.740), 200,
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Cloud, Color(Red), Global.BeamVector,
+			18, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Orb, Color(Red), Global.BeamVector, 18,
 			Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(Purple), Vector(113.997, 95.348, 143.740), 200,
-			Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(Orange), Vector(113.997, 95.348, 143.740), 200,
-			Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(Sky Blue), Vector(113.997, 95.348, 143.740), 200,
-			Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(Turquoise), Vector(113.997, 95.348, 143.740), 200,
-			Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Cloud, Color(White), Global.BeamVector, 10, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Red),
+			Global.BeamVector, 18, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Red), Vector(113.997,
+			95.348, 143.740), 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Purple), Vector(
+			113.997, 95.348, 143.740), 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Orange), Vector(
+			113.997, 95.348, 143.740), 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Sky Blue), Vector(
+			113.997, 95.348, 143.740), 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Turquoise), Vector(
+			113.997, 95.348, 143.740), 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Cloud, Color(White), Global.BeamVector,
+			10, Visible To Position and Radius);
 		While(True);
 			If(!Entity Exists(Players In Slot(4, Team 1)));
 				Create Dummy Bot(Hero(메이), Team 1, 4, Vector(116.796, 96.764, 134.718), Null);
@@ -4465,24 +4760,32 @@ rule("설날 특집! : 무대세팅 - 리장정원 설날 2")
 		Global.SpawnVector = Vector(-0.067, 271.174, 261.014);
 		Create In-World Text(All Players(All Teams), Custom String("{0} 위쪽에 영웅 변경이 있습니다. 알아서 날아 가세요..", Icon String(Arrow: Up)), Vector(
 			0.447, 230.997, 255.774), 1, Clip Against Surfaces, Visible To Position and String, Color(White), Default Visibility);
-		Create Effect(All Players(All Teams), Sparkles, Color(Red), Global.DanceZoneVector, 100, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Sparkles, Color(Blue), Global.DanceZoneVector, 50, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Sparkles, Color(Red), Global.DanceZoneVector, 20, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Sparkles, Color(Orange), Global.DanceZoneVector, 10, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Cloud, Color(Red), Global.BeamVector, 18, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Orb, Color(Red), Global.BeamVector, 18, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Sparkles, Color(Red), Global.BeamVector, 18, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(Red), Vector(-0.087, 324.173, 239.066), 200,
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Red),
+			Global.DanceZoneVector, 100, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Blue),
+			Global.DanceZoneVector, 50, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Red),
+			Global.DanceZoneVector, 20, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Orange),
+			Global.DanceZoneVector, 10, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Cloud, Color(Red), Global.BeamVector,
+			18, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Orb, Color(Red), Global.BeamVector, 18,
 			Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(Purple), Vector(-0.087, 324.173, 239.066), 200,
-			Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(Orange), Vector(-0.087, 324.173, 239.066), 200,
-			Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(Sky Blue), Vector(-0.087, 324.173, 239.066), 200,
-			Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(Turquoise), Vector(-0.087, 324.173, 239.066), 200,
-			Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Cloud, Color(White), Global.BeamVector, 10, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Red),
+			Global.BeamVector, 18, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Red), Vector(-0.087,
+			324.173, 239.066), 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Purple), Vector(
+			-0.087, 324.173, 239.066), 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Orange), Vector(
+			-0.087, 324.173, 239.066), 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Sky Blue), Vector(
+			-0.087, 324.173, 239.066), 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Turquoise), Vector(
+			-0.087, 324.173, 239.066), 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Cloud, Color(White), Global.BeamVector,
+			10, Visible To Position and Radius);
 		While(True);
 			If(!Entity Exists(Players In Slot(4, Team 1)));
 				Create Dummy Bot(Hero(메이), Team 1, 4, Vector(-24.947, 226.173, 243.315), Null);
@@ -4520,19 +4823,24 @@ rule("설날 특집! : 무대세팅 - 리장야시장 설날")
 		Global.DanceZoneVector = Vector(1.019, 0.348, -61.155);
 		Global.BeamVector = Vector(1.019, 10, -61.155);
 		Global.SpawnVector = Vector(1.063, 1.348, -10.352);
-		Create Effect(All Players(All Teams), Cloud, Color(Red), Global.BeamVector, 18, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Orb, Color(Red), Global.BeamVector, 18, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Sparkles, Color(Red), Global.BeamVector, 18, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(Red), Vector(1.074, 25.848, -11.829), 200, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(Purple), Vector(1.074, 25.848, -11.829), 200,
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Cloud, Color(Red), Global.BeamVector,
+			18, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Orb, Color(Red), Global.BeamVector, 18,
 			Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(Orange), Vector(1.074, 25.848, -11.829), 200,
-			Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(Sky Blue), Vector(1.074, 25.848, -11.829), 200,
-			Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(Turquoise), Vector(1.074, 25.848, -11.829), 200,
-			Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Cloud, Color(White), Global.BeamVector, 10, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Red),
+			Global.BeamVector, 18, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Red), Vector(1.074,
+			25.848, -11.829), 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Purple), Vector(1.074,
+			25.848, -11.829), 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Orange), Vector(1.074,
+			25.848, -11.829), 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Sky Blue), Vector(
+			1.074, 25.848, -11.829), 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Turquoise), Vector(
+			1.074, 25.848, -11.829), 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Cloud, Color(White), Global.BeamVector,
+			10, Visible To Position and Radius);
 		While(True);
 			If(!Entity Exists(Players In Slot(4, Team 1)));
 			End;
@@ -4562,22 +4870,25 @@ rule("설날 특집! : 무대세팅 - 부산사찰 설날")
 		Global.SpawnVector = Vector(-411.714, 11.461, 164.239);
 		Global.DanceZoneVector = Vector(-421.019, 12.456, 165.206);
 		Global.HostSpawnVector = Vector(-434.832, 12.456, 166.427);
-		Create Effect(All Players(All Teams), Good Aura, Color(Yellow), Vector(-328.293, 16.414, 140.535), 200,
-			Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(Red), Vector(-328.293, 16.414, 140.535), 200,
-			Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(White), Vector(-328.293, 16.414, 140.535), 200,
-			Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(Sky Blue), Vector(-328.293, 16.414, 140.535), 200,
-			Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Sparkles, Color(Red), Vector(-427.426, 12.456, 165.606), 200,
-			Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Sparkles, Color(Sky Blue), Vector(-427.426, 12.456, 165.606), 200,
-			Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Yellow), Vector(
+			-328.293, 16.414, 140.535), 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Red), Vector(-328.293,
+			16.414, 140.535), 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(White), Vector(
+			-328.293, 16.414, 140.535), 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Sky Blue), Vector(
+			-328.293, 16.414, 140.535), 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Red), Vector(-427.426,
+			12.456, 165.606), 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Sky Blue), Vector(
+			-427.426, 12.456, 165.606), 200, Visible To Position and Radius);
 		Global.BeamVector = Vector(-421.019, 19, 165.206);
-		Create Effect(All Players(All Teams), Orb, Color(Red), Global.BeamVector, 18, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Cloud, Color(Sky Blue), Global.BeamVector, 18, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(Blue), Global.BeamVector, 1, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Orb, Color(Red), Global.BeamVector, 18,
+			Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Cloud, Color(Sky Blue),
+			Global.BeamVector, 18, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Blue),
+			Global.BeamVector, 1, Visible To Position and Radius);
 		While(True);
 			If(!Entity Exists(Players In Slot(4, Team 1)));
 				Create Dummy Bot(Hero(D.Va), Team 1, 4, Vector(-429.168, 12.456, 172.726), Null);
@@ -4618,20 +4929,25 @@ rule("설날 특집! : 무대세팅 - 부산시내 설날")
 		Global.SpawnVector = Vector(51.675, 6.176, -73.674);
 		Global.DanceZoneVector = Vector(51.903, 13.104, -100.780);
 		Global.HostSpawnVector = Vector(51.865, 22.573, -126.946);
-		Create Effect(All Players(All Teams), Good Aura, Color(Yellow), Vector(51.675, 36.176, -73.674), 200,
-			Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(Red), Vector(51.675, 36.176, -73.674), 200, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(White), Vector(51.675, 36.176, -73.674), 200,
-			Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(Sky Blue), Vector(51.675, 36.176, -73.674), 200,
-			Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Sparkles, Color(Red), Vector(51.675, 6.176, -73.674), 200, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Sparkles, Color(Sky Blue), Vector(51.675, 8.176, -73.674), 200,
-			Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Yellow), Vector(
+			51.675, 36.176, -73.674), 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Red), Vector(51.675,
+			36.176, -73.674), 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(White), Vector(51.675,
+			36.176, -73.674), 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Sky Blue), Vector(
+			51.675, 36.176, -73.674), 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Red), Vector(51.675,
+			6.176, -73.674), 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Sky Blue), Vector(
+			51.675, 8.176, -73.674), 200, Visible To Position and Radius);
 		Global.BeamVector = Vector(51.774, 30.497, -117.437);
-		Create Effect(All Players(All Teams), Orb, Color(Red), Global.BeamVector, 18, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Cloud, Color(Sky Blue), Global.BeamVector, 18, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(Blue), Global.BeamVector, 1, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Orb, Color(Red), Global.BeamVector, 18,
+			Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Cloud, Color(Sky Blue),
+			Global.BeamVector, 18, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Blue),
+			Global.BeamVector, 1, Visible To Position and Radius);
 		While(True);
 			If(!Entity Exists(Players In Slot(4, Team 1)));
 				Create Dummy Bot(Hero(D.Va), Team 1, 4, Vector(-25.136, 18.378, -125.487), Null);
@@ -4673,20 +4989,25 @@ rule("설날 특집! : 무대세팅 - 부산시내 설날 2")
 		Global.SpawnVector = Vector(120.730, 18.174, -125.116);
 		Global.DanceZoneVector = Vector(133.898, 17.349, -124.878);
 		Global.HostSpawnVector = Vector(127.612, 18.185, -124.946);
-		Create Effect(All Players(All Teams), Good Aura, Color(Yellow), Vector(51.675, 36.176, -73.674), 200,
-			Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(Red), Vector(51.675, 36.176, -73.674), 200, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(White), Vector(51.675, 36.176, -73.674), 200,
-			Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(Sky Blue), Vector(51.675, 36.176, -73.674), 200,
-			Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Sparkles, Color(Red), Vector(51.675, 6.176, -73.674), 200, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Sparkles, Color(Sky Blue), Vector(51.675, 8.176, -73.674), 200,
-			Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Yellow), Vector(
+			51.675, 36.176, -73.674), 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Red), Vector(51.675,
+			36.176, -73.674), 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(White), Vector(51.675,
+			36.176, -73.674), 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Sky Blue), Vector(
+			51.675, 36.176, -73.674), 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Red), Vector(51.675,
+			6.176, -73.674), 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Sky Blue), Vector(
+			51.675, 8.176, -73.674), 200, Visible To Position and Radius);
 		Global.BeamVector = Vector(133.885, 21.500, -124.918);
-		Create Effect(All Players(All Teams), Orb, Color(Red), Global.BeamVector, 18, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Cloud, Color(Sky Blue), Global.BeamVector, 18, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(Blue), Global.BeamVector, 1, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Orb, Color(Red), Global.BeamVector, 18,
+			Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Cloud, Color(Sky Blue),
+			Global.BeamVector, 18, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Blue),
+			Global.BeamVector, 1, Visible To Position and Radius);
 		While(True);
 			If(!Entity Exists(Players In Slot(4, Team 1)));
 				disabled Create Dummy Bot(Hero(D.Va), Team 1, 4, Vector(-25.136, 18.378, -125.487), Null);
@@ -4720,19 +5041,25 @@ rule("크리스마스 특집! : 무대세팅 - 블쟈월드 겨울")
 		Global.SpawnVector = Vector(-12.581, -3.270, -35.863);
 		Global.DanceZoneVector = Vector(2.778, -4.826, -70.141);
 		Global.HostSpawnVector = Vector(2.980, -3.826, -90.243);
-		Create Effect(All Players(All Teams), Good Aura, Color(Yellow), Vector(3.035, 33.583, -89.085), 200,
-			Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(Red), Vector(3.035, 33.583, -89.085), 200, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(White), Vector(3.035, 33.583, -89.085), 200,
-			Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(Orange), Vector(3.035, 33.583, -89.085), 200,
-			Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Sparkles, Color(Red), Vector(2.892, -4.433, -70.321), 200, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Sparkles, Color(Blue), Vector(2.892, -4.433, -70.321), 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Yellow), Vector(3.035,
+			33.583, -89.085), 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Red), Vector(3.035,
+			33.583, -89.085), 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(White), Vector(3.035,
+			33.583, -89.085), 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Orange), Vector(3.035,
+			33.583, -89.085), 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Red), Vector(2.892,
+			-4.433, -70.321), 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Blue), Vector(2.892,
+			-4.433, -70.321), 200, Visible To Position and Radius);
 		Global.BeamVector = Vector(3.068, -0.464, -91.069);
-		Create Effect(All Players(All Teams), Orb, Color(Blue), Global.BeamVector, 18, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Cloud, Color(Blue), Global.BeamVector, 18, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(Blue), Global.BeamVector, 30, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Orb, Color(Blue), Global.BeamVector,
+			18, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Cloud, Color(Blue), Global.BeamVector,
+			18, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Blue),
+			Global.BeamVector, 30, Visible To Position and Radius);
 		While(True);
 			If(!Entity Exists(Players In Slot(4, Team 1)));
 			End;
@@ -4764,16 +5091,25 @@ rule("크리스마스 특집! : 무대세팅 - 블쟈월드 겨울 2")
 		Global.SpawnVector = Vector(-32.112, 6.980, 99.509);
 		Global.DanceZoneVector = Vector(-77.275, 1.700, 66.126);
 		Global.HostSpawnVector = Vector(-77.275, 6.325, 66.126);
-		Create Effect(All Players(All Teams), Good Aura, Color(Yellow), Vector(-80.743, 70, 62.768), 200, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(Red), Vector(-80.743, 70, 62.768), 200, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(White), Vector(-80.743, 70, 62.768), 200, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(Orange), Vector(-80.743, 70, 62.768), 200, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Sparkles, Color(Red), Vector(-49.841, 7.031, 93.198), 200, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Sparkles, Color(Blue), Vector(-49.841, 7.031, 93.198), 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Yellow), Vector(
+			-80.743, 70, 62.768), 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Red), Vector(-80.743,
+			70, 62.768), 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(White), Vector(
+			-80.743, 70, 62.768), 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Orange), Vector(
+			-80.743, 70, 62.768), 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Red), Vector(-49.841,
+			7.031, 93.198), 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Blue), Vector(-49.841,
+			7.031, 93.198), 200, Visible To Position and Radius);
 		Global.BeamVector = Vector(-77.275, 10.474, 66.126);
-		Create Effect(All Players(All Teams), Orb, Color(Blue), Global.BeamVector, 18, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Cloud, Color(Blue), Global.BeamVector, 18, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(Blue), Global.BeamVector, 30, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Orb, Color(Blue), Global.BeamVector,
+			18, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Cloud, Color(Blue), Global.BeamVector,
+			18, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Blue),
+			Global.BeamVector, 30, Visible To Position and Radius);
 		While(True);
 			If(!Entity Exists(Players In Slot(4, Team 1)));
 			End;
@@ -4803,13 +5139,17 @@ rule("크리스마스 특집! : 무대세팅 - 왕의길 겨울")
 		Global.HostSpawnVector = Vector(3.596, 3.450, 55.409);
 		Global.DanceZoneVector = Vector(0.409, 2.174, 39.287);
 		Global.SpawnVector = Vector(-3.292, 2.324, 21.145);
-		Create Effect(All Players(All Teams), Cloud, Color(Yellow), Vector(-5.407, 3.201, 44.508), 4, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Cloud, Color(Yellow), Vector(7.825, 3.221, 41.782), 4, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Sparkles, Color(Lime Green), Vector(0.391, 2.174, 39.161), 10,
-			Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Good Aura, Color(Green), Vector(2.651, 11.039, 51.653), 5, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Cloud, Color(Yellow), Vector(-5.407,
+			3.201, 44.508), 4, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Cloud, Color(Yellow), Vector(7.825,
+			3.221, 41.782), 4, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Lime Green), Vector(
+			0.391, 2.174, 39.161), 10, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Green), Vector(2.651,
+			11.039, 51.653), 5, Visible To Position and Radius);
 		Global.BeamVector = Vector(2.677, 9.856, 51.900);
-		Create Effect(All Players(All Teams), Orb, Color(Green), Global.BeamVector, 18, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Orb, Color(Green), Global.BeamVector,
+			18, Visible To Position and Radius);
 		While(True);
 			If(!Entity Exists(Players In Slot(4, Team 1)));
 				Create Dummy Bot(Hero(트레이서), Team 1, 4, Vector(-20.182, 0.747, 28.307), Vector(2.815, 3.176, 50.844));
@@ -4843,10 +5183,14 @@ rule("크리스마스 특집! : 무대세팅 - 하나무바라 겨울")
 		Global.DanceZoneVector = Vector(-13.574, 10.173, -67.196);
 		Global.BeamVector = Vector(-17.559, 5.116, -91.430);
 		Global.SpawnVector = Vector(11.884, -0.510, -62.021);
-		Create Effect(All Players(All Teams), Cloud, Color(White), Global.BeamVector, 18, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Orb, Color(Purple), Global.BeamVector, 18, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Sparkles, Color(White), Global.BeamVector, 18, Visible To Position and Radius);
-		Create Effect(All Players(All Teams), Sparkles, Color(Purple), Vector(-8.647, 0.249, -82.316), 10, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Cloud, Color(White), Global.BeamVector,
+			18, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Orb, Color(Purple), Global.BeamVector,
+			18, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(White),
+			Global.BeamVector, 18, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Purple), Vector(-8.647,
+			0.249, -82.316), 10, Visible To Position and Radius);
 		Disallow Button(Players In Slot(4, Team 2), Button(Jump));
 		While(True);
 			If(!Entity Exists(Players In Slot(4, Team 1)));
@@ -4970,7 +5314,7 @@ rule("시네마틱 접속!")
 			Event Player.CinematicEnabled = True;
 			Disable Hero HUD(Event Player);
 			Stop Camera(Event Player);
-			Event Player.AchievePrefix = Custom String("{0}염탐하는 ", Icon String(Eye));
+			Event Player.AchievePrefix = Custom String("{0}옵청자 ", Icon String(Eye));
 			Event Player.NameColor = Color(Yellow);
 			Small Message(All Players(All Teams), Custom String("{0}{1} 님이 시네마틱에 참여!", Hero Icon String(Hero Of(Event Player)), Event Player));
 			Event Player.cameraZ = 1;
@@ -6335,6 +6679,9 @@ rule("커 져 라")
 		Else;
 			Enable Movement Collision With Environment(Event Player);
 		End;
+		If(Event Player.PlayerSize == 1);
+			Wait(1, Ignore Condition);
+		End;
 		Wait(0.050, Abort When False);
 		Loop If Condition Is True;
 	}
@@ -6387,6 +6734,9 @@ rule("작아져라...")
 			Disable Movement Collision With Environment(Event Player, False);
 		Else;
 			Enable Movement Collision With Environment(Event Player);
+		End;
+		If(Event Player.PlayerSize == 1);
+			Wait(1, Ignore Condition);
 		End;
 		Wait(0.050, Abort When False);
 		Loop If Condition Is True;
@@ -6814,7 +7164,8 @@ rule("모드별 조명 팔레트 - 일반")
 			Global.ThemeColor3 = Color(Orange);
 			Global.ThemeColor4 = Color(White);
 		End;
-		Create Effect(All Players(All Teams), Light Shaft, Global.ThemeColor1, Global.DJPlayer, 1, Visible To Position Radius and Color);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Light Shaft, Global.ThemeColor1,
+			Global.DJPlayer, 1, Visible To Position Radius and Color);
 		Global.LightEntity = Last Created Entity;
 	}
 }
@@ -6851,7 +7202,8 @@ rule("모드별 조명 팔레트 - 섬머파티!")
 			Global.ThemeColor3 = Color(Aqua);
 			Global.ThemeColor4 = Color(Blue);
 		End;
-		Create Effect(All Players(All Teams), Light Shaft, Global.ThemeColor1, Global.DJPlayer, 1, Visible To Position Radius and Color);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Light Shaft, Global.ThemeColor1,
+			Global.DJPlayer, 1, Visible To Position Radius and Color);
 		Global.LightEntity = Last Created Entity;
 	}
 }
@@ -6888,7 +7240,8 @@ rule("모드별 조명 팔레트 - 할로윈")
 			Global.ThemeColor3 = Color(Orange);
 			Global.ThemeColor4 = Color(Black);
 		End;
-		Create Effect(All Players(All Teams), Light Shaft, Global.ThemeColor1, Global.DJPlayer, 1, Visible To Position Radius and Color);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Light Shaft, Global.ThemeColor1,
+			Global.DJPlayer, 1, Visible To Position Radius and Color);
 		Global.LightEntity = Last Created Entity;
 	}
 }
@@ -6925,7 +7278,8 @@ rule("모드별 조명 팔레트 - 크리스마스")
 			Global.ThemeColor3 = Color(Orange);
 			Global.ThemeColor4 = Color(Green);
 		End;
-		Create Effect(All Players(All Teams), Light Shaft, Global.ThemeColor1, Global.DJPlayer, 1, Visible To Position Radius and Color);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Light Shaft, Global.ThemeColor1,
+			Global.DJPlayer, 1, Visible To Position Radius and Color);
 		Global.LightEntity = Last Created Entity;
 	}
 }
@@ -6954,7 +7308,8 @@ rule("모드별 조명 팔레트 - 랜덤!")
 		disabled Global.ThemeColor2 = Custom Color(Random Real(100, 255), Random Real(100, 255), Random Real(100, 255), 255);
 		disabled Global.ThemeColor3 = Custom Color(Random Real(0, 255), Random Real(0, 255), Random Real(0, 255), 255);
 		disabled Global.ThemeColor4 = Custom Color(Random Real(0, 255), Random Real(0, 255), Random Real(0, 255), 255);
-		Create Effect(All Players(All Teams), Light Shaft, Global.ThemeColor1, Global.DJPlayer, 1, Visible To Position Radius and Color);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Light Shaft, Global.ThemeColor1,
+			Global.DJPlayer, 1, Visible To Position Radius and Color);
 		Global.LightEntity = Last Created Entity;
 	}
 }
@@ -6991,7 +7346,8 @@ rule("모드별 조명 팔레트 - 새해복마니")
 			Global.ThemeColor3 = Color(Orange);
 			Global.ThemeColor4 = Color(Green);
 		End;
-		Create Effect(All Players(All Teams), Light Shaft, Global.ThemeColor1, Global.DJPlayer, 1, Visible To Position Radius and Color);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Light Shaft, Global.ThemeColor1,
+			Global.DJPlayer, 1, Visible To Position Radius and Color);
 		Global.LightEntity = Last Created Entity;
 	}
 }
@@ -7059,7 +7415,7 @@ rule("qmfforfltmxm")
 
 	action
 	{
-		Modify Global Variable(BlackList, Append To Array, Custom String(""));
+		Modify Global Variable(BlackList, Append To Array, Custom String("힐돕힐좀해라제발"));
 	}
 }
 
@@ -7185,9 +7541,9 @@ rule("슈퍼 회오리~~~")
 		If(Event Player.Light == 0);
 			Press Button(Event Player, Button(Melee));
 			Event Player.Light = 8;
-			Create Beam Effect(All Players(All Teams), Bad Beam, Eye Position(Event Player) + World Vector Of(Vector(-0.500, 0, 0),
-				Event Player, Rotation), Event Player + Facing Direction Of(Event Player) * 4, Custom Color(Random Real(0, 255), Random Real(0,
-				255), Random Real(0, 255), 255), Visible To Position and Radius);
+			Create Beam Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Bad Beam, Eye Position(
+				Event Player) + World Vector Of(Vector(-0.500, 0, 0), Event Player, Rotation), Event Player + Facing Direction Of(Event Player)
+				* 4, Custom Color(Random Real(0, 255), Random Real(0, 255), Random Real(0, 255), 255), Visible To Position and Radius);
 			Event Player.LightEntity = Last Created Entity;
 		End;
 		Event Player.AchievePrefix = Custom String("{0}마참내 돌아버린 ", Icon String(Dizzy));
@@ -7237,7 +7593,8 @@ rule("VIP 춤 조명")
 			Start Forcing Player Outlines(Filtered Array(All Players(All Teams), Array Contains(Global.VIPList, Custom String("{0}",
 				Current Array Element))), All Players(All Teams), True, Global.ThemeColor3, Always);
 		End;
-		Create Effect(All Players(All Teams), Good Aura, Global.ThemeColor3, Event Player, 1, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Global.ThemeColor3,
+			Event Player, 1, Visible To Position and Radius);
 		Event Player.DanceSparkle = Last Created Entity;
 		Play Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Explosion, Global.ThemeColor4,
 			Event Player, 0.700);
@@ -7501,10 +7858,10 @@ rule("미호환 맵 방폭")
 
 	action
 	{
-		Wait(10, Abort When False);
-		disabled Big Message(All Players(All Teams), Custom String("이 맵은 호환되지 않습니다.."));
+		Big Message(All Players(All Teams), Custom String("이 맵은 호환되지 않습니다.."));
 		disabled Set Match Time(4);
 		disabled Global.CTFTimer = 4;
+		Wait(31, Abort When False);
 		Restart Match;
 	}
 }
@@ -7533,7 +7890,7 @@ rule("짝짜꿍~~")
 		Wait Until(Is Communicating(Event Player.SelectPlayer, Hello) || Is Communicating(Event Player.SelectPlayer, No) || Is Button Held(
 			Event Player.SelectPlayer, Button(Melee)), 2);
 		If(Is Communicating(Event Player.SelectPlayer, Hello) && Distance Between(Event Player, Event Player.SelectPlayer) <= 10);
-			Event Player.AchievePrefix = Custom String("{0}인사 잘하는 ", Icon String(Club));
+			Event Player.AchievePrefix = Custom String("{0}안아줘요 ", Icon String(Club));
 			Event Player.NameColor = Color(Yellow);
 			Small Message(All Players(All Teams), Custom String("{0} 짝짜꿍~ +{2} {1}", Hero Icon String(Hero Of(Event Player)), Hero Icon String(
 				Hero Of(Event Player.SelectPlayer)), Icon String(Heart)));
@@ -7564,7 +7921,7 @@ rule("짝짜꿍~~")
 				Set Status(Event Player.SelectPlayer, Null, Unkillable, 9999);
 				Event Player.SelectPlayer.DeathCount += 1;
 			Else;
-				Event Player.SelectPlayer.AchievePrefix = Custom String("{0}인성 더러운 ", Icon String(Skull));
+				Event Player.SelectPlayer.AchievePrefix = Custom String("{0}임포스터 ", Icon String(Skull));
 				Event Player.SelectPlayer.NameColor = Color(Red);
 				Small Message(All Players(All Teams), Custom String("{1} 싫어!!! {2}{0}", Hero Icon String(Hero Of(Event Player)), Hero Icon String(
 					Hero Of(Event Player.SelectPlayer)), Icon String(Skull)));
@@ -7617,7 +7974,7 @@ rule("꼬마웡!")
 			100, 255), Random Real(100, 255), Random Real(100, 255), 255), Event Player, 5);
 		Event Player.ThanksCount += 1;
 		If(Event Player.ThanksCount == 10);
-			Event Player.AchievePrefix = Custom String("{0}아낌없이 주는 ", Icon String(Heart));
+			Event Player.AchievePrefix = Custom String("{0}사랑을 담아서 ", Icon String(Heart));
 			Event Player.NameColor = Color(Rose);
 			Small Message(All Players(All Teams), Custom String("{0}{1} 님이 꼬마웡 기부천사인가봐요! 상금 획득! {2}+50", Hero Icon String(Hero Of(
 				Event Player)), Event Player, Icon String(Heart)));
@@ -7969,8 +8326,8 @@ rule("테마맵 감지")
 
 	action
 	{
-		Wait(10, Ignore Condition);
 		Global.isDarkmode = Workshop Setting Toggle(Custom String("[2]시스템 설정"), Custom String("다크모드 - 밤 배경 맵이 아니면 공연 시간 감소"), False, 12);
+		Wait(10, Ignore Condition);
 		If(Global.ColorTheme == 0);
 		Else If(Global.ColorTheme == 1);
 			"할로윈"
