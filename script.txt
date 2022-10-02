@@ -7366,7 +7366,7 @@ rule("모드별 조명 팔레트 - 새해복마니")
 	}
 }
 
-disabled rule("qndldkdlvl")
+rule("qndldkdlvl")
 {
 	event
 	{
