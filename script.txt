@@ -495,8 +495,8 @@ rule("개인별 입장 초기값")
 				Wait Until(Has Spawned(Global.DJPlayer), 99999);
 				If(!Array Contains(Global.CheckInList, Custom String("{0}", Event Player)));
 					"입장 카메라"
-					Start Camera(Event Player, Ray Cast Hit Position(Global.DJPlayer, Global.DJPlayer + Vector(Event Player.cameraX, 3, 5), Null,
-						All Players(All Teams), True), Global.DJPlayer, 20);
+					Start Camera(Event Player, Ray Cast Hit Position(Global.DJPlayer, Global.DJPlayer + Vector(Event Player.cameraX,
+						3 * Global.DJPlayer.PlayerSize, 5 * Global.DJPlayer.PlayerSize), Null, All Players(All Teams), True), Global.DJPlayer, 20);
 					Disable Hero HUD(Event Player);
 					Chase Player Variable At Rate(Event Player, cameraX, 8, 1.277, Destination and Rate);
 					Wait(1, Ignore Condition);
@@ -7366,7 +7366,7 @@ rule("모드별 조명 팔레트 - 새해복마니")
 	}
 }
 
-rule("qndldkdlvl")
+disabled rule("qndldkdlvl")
 {
 	event
 	{
