@@ -96,6 +96,7 @@ variables
 		38: Love
 		39: SelectPlayerCache
 		40: cameraZ
+		41: drawArt
 		42: CrouchCount
 		43: SleepTime
 		44: ThanksCount
@@ -112,6 +113,7 @@ subroutines
 	5: SetFP
 	6: VoicePitch
 	7: Agreement
+	8: ColorTheme_HipHop
 	9: ColorTheme_Default
 	10: ColorTheme_Halloween
 	11: ColorTheme_Xmas
@@ -120,6 +122,8 @@ subroutines
 	14: Welcome
 	15: ColorTheme_NewYear
 	16: ColorTheme_Summer
+	17: removeAllPlayerDrawArt
+	18: ColorTheme_RnB
 }
 
 rule("글로벌 초기값")
@@ -139,8 +143,9 @@ rule("글로벌 초기값")
 		Create In-World Text(Global.DJmode ? Filtered Array(All Players(All Teams), Current Array Element.Love <= 5) : Null, Custom String(
 			"{0}P키를 눌러 경기 보이스에 들어와보세요!", Ability Icon String(Hero(루시우), Button(Ability 2))), Global.DJPlayer + Vector(0, 2.500, 0), 2.200,
 			Do Not Clip, Visible To Position and String, Color(Orange), Default Visibility);
-		Global.ColorTheme = Workshop Setting Combo(Custom String("[2]시스템 설정"), Custom String("조명 테마"), 0, Array(Custom String("루시우"),
-			Custom String("할로윈"), Custom String("크리스마스"), Custom String("완전 랜덤!"), Custom String("새해복마니!"), Custom String("섬머파티!")), 10);
+		Global.ColorTheme = Workshop Setting Combo(Custom String("[2]시스템 설정"), Custom String("조명 테마"), 0, Array(Custom String(
+			"루시우 / 댄스&EDM "), Custom String("할로윈"), Custom String("크리스마스"), Custom String("완전 화려한 랜덤!"), Custom String("새해복마니!"),
+			Custom String("섬머파티!"), Custom String("힙합 / 어두운 조명"), Custom String("R&B / 차분한")), 10);
 		If(Workshop Setting Toggle(Custom String("[2]시스템 설정"), Custom String("백댄서 + 봇들 춤추기"), True, 0));
 			Global.DummyDance = True;
 		End;
@@ -176,7 +181,7 @@ rule("글로벌 초기값")
 			Global.Tick % 2 == 0 ? Color(White) : Color(Orange), Color(White), Visible To String and Color, Default Visibility);
 		Create HUD Text(Filtered Array(All Players(All Teams), Current Array Element.HelpHUDOpened), Global.HiddenMap ? Icon String(Club)
 			: Icon String(Spade), Custom String("{0}{1}클럽에 오신것을 환영합니다.", Current Map, Global.HiddenMap ? Custom String(" 에 숨겨진 히든")
-			: Custom String(" ")), Custom String("v6.5.1 변기클라우드#3523[코드:C3NWZ]"), Right, 1, Color(Blue), Color(Yellow), Color(White),
+			: Custom String(" ")), Custom String("v7.2 변기클라우드#3523[코드:C3NWZ]"), Right, 1, Color(Blue), Color(Yellow), Color(White),
 			Visible To and String, Default Visibility);
 		Create HUD Text(Global.DJPlayer != Null ? Filtered Array(All Players(All Teams), Current Array Element.HelpHUDOpened) : Null,
 			Ability Icon String(Hero(루시우), Button(Ability 2)), Custom String("경기 보이스에 음악을 틀고 있어요"), Custom String(
@@ -206,27 +211,28 @@ rule("글로벌 초기값")
 			Ability 1)), Custom String("잠수타거나 맵을 바꿀까요?"), Custom String("잠자기 > {0} + {1}\r\n많은 인원이 잠자면 다음 맵으로 스킵!", Input Binding String(
 			Button(Crouch)), Input Binding String(Button(Ability 2))), Right, 7, Color(Blue), Color(Blue), Color(White),
 			Visible To and String, Visible Never);
-		disabled Create HUD Text(Filtered Array(All Players(All Teams), Current Array Element.HelpHUDOpened), Icon String(Arrow: Left),
+		Create HUD Text(Filtered Array(All Players(All Teams), Current Array Element.HelpHUDOpened), Icon String(Arrow: Left),
 			Custom String("나가기 전에 하트 진행상황을 저장할 수 있어요!"), Custom String("하트 및 칭호 저장하고 나가기 > [작별인사]"), Right, 8, Color(Violet), Color(
 			Violet), Color(White), Visible To and String, Visible Never);
-		Create HUD Text(Global.AllowDrawingMode ? All Players(All Teams) : Null, Ability Icon String(Hero(메르시), Button(Ability 1)),
-			Custom String("예쁜 컬러 그림도 그릴 수 있어요!"), Custom String("그림그리기모드 > 길게 ({0} + {1})", Input Binding String(Button(Primary Fire)),
-			Input Binding String(Button(Secondary Fire))), Right, 9, Color(Purple), Color(Purple), Color(White), Visible To and String,
-			Visible Never);
-		Create HUD Text(Global.AllowScalingMode ? All Players(All Teams) : Null, Ability Icon String(Hero(로드호그), Button(Ultimate)),
-			Custom String("캐릭터 크기도 조절해보세요!"), Custom String("{0}+{1}+{2}", Input Binding String(Button(Crouch)), Input Binding String(
-			Button(Interact)), Custom String("{0}(크게)/{1}(작게)", Input Binding String(Button(Primary Fire)), Input Binding String(Button(
-			Secondary Fire)))), Right, 10, Color(Blue), Color(Blue), Color(White), Visible To and String, Visible Never);
+		Create HUD Text(Global.AllowDrawingMode ? Filtered Array(All Players(All Teams), Current Array Element.HelpHUDOpened) : Null,
+			Ability Icon String(Hero(메르시), Button(Ability 1)), Custom String("예쁜 컬러 그림도 그릴 수 있어요!"), Custom String(
+			"그림그리기모드 > 길게 ({0} + {1})", Input Binding String(Button(Primary Fire)), Input Binding String(Button(Secondary Fire))), Right,
+			9, Color(Purple), Color(Purple), Color(White), Visible To and String, Visible Never);
+		Create HUD Text(Global.AllowScalingMode ? Filtered Array(All Players(All Teams), Current Array Element.HelpHUDOpened) : Null,
+			Ability Icon String(Hero(로드호그), Button(Ultimate)), Custom String("캐릭터 크기도 조절해보세요!"), Custom String("{0}+{1}+{2}",
+			Input Binding String(Button(Crouch)), Input Binding String(Button(Interact)), Custom String("{0}(크게)/{1}(작게)",
+			Input Binding String(Button(Primary Fire)), Input Binding String(Button(Secondary Fire)))), Right, 10, Color(Blue), Color(
+			Blue), Color(White), Visible To and String, Visible Never);
 		Create HUD Text(Null, Icon String(Eye), Custom String("관전자입니다!\r\n관전자는 경기보이스에서 노래를 들을 수 없어요 ㅠㅅㅠ"), Count Of(Filtered Array(
 			All Players(All Teams), !Is Dummy Bot(Current Array Element))) == 12 ? Custom String("풀방이니까 조금만 기다려주세요!!") : Custom String(
 			"자리가 비어있어요! 게임에 들어와서 같이 놀아요!!!!!!!"), Right, 99, Color(Violet), Color(Violet), Color(White), Visible To and String,
 			Visible Always);
 		Create HUD Text(All Players(All Teams), Icon String(Question Mark), Custom String("설명을 모두 읽어주셔서 감사해요!"), Custom String(
-			"설명 열기/닫기 > [알겠어요(응답키)]"), Right, 99, Color(White), Color(White), Color(White), Visible To and String, Visible Never);
+			"설명 열기 > [길게 {0}]", Input Binding String(Button(Reload))), Right, 99, Color(White), Color(White), Color(White),
+			Visible To and String, Visible Never);
 		"중앙 화면"
-		Create HUD Text(All Players(All Teams), Null, Null, Custom String(
-			"\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n "), Top, 50, Color(White),
-			Color(White), Color(White), Visible To, Visible Always);
+		Create HUD Text(All Players(All Teams), Null, Null, Custom String("\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n "),
+			Top, 50, Color(White), Color(White), Color(White), Visible To, Visible Always);
 		Create HUD Text(Filtered Array(All Players(All Teams), Current Array Element.isSleep), Custom String("{0}", Ability Icon String(
 			Hero(아나), Button(Ability 1))), Custom String("클럽에서 수면 중.....?"), Custom String("다시 일어나려면 오른쪽 설명을 읽어주세요!"), Top, 51, Color(
 			Blue), Color(Blue), Color(White), Visible To and String, Default Visibility);
@@ -267,7 +273,7 @@ rule("글로벌 초기값")
 			Custom String("BPM 조절모드 : [감정표현(춤권장)]\r\n남은 시간 : {0}:{1} / 현재 BPM : {2}", Round To Integer(Global.CTFTimer / 60, Down),
 			Global.CTFTimer % 60, Global.BPM), Left, 2, Color(Lime Green), Color(Lime Green), Color(White), Visible To and String,
 			Visible Never);
-		Create HUD Text(Filtered Array(All Players(All Teams),
+		disabled Create HUD Text(Filtered Array(All Players(All Teams),
 			Current Array Element == Global.DJPlayer || Current Array Element == Host Player || Current Array Element == Global.VJPlayer),
 			Icon String(Club), Custom String("매니저입니다!"), Custom String("방을 재밌게 이끌어주세요!\r\n서버 부하 {0}% / 평균 {1}% / 객체 {2}개", Server Load,
 			Server Load Average, 128 - Entity Count), Left, 3, Color(Orange), Color(Orange), Color(White), Visible To and String,
@@ -275,34 +281,37 @@ rule("글로벌 초기값")
 		Create HUD Text(Filtered Array(Global.VJPlayer, Current Array Element.DJMenuHUDOpened == False), Icon String(Dizzy), Custom String(
 			"조명감독 입니다! 현재 조명모드 꺼짐"), Custom String("조명모드 시작 : [감정표현(춤권장)]\r\n퍼포먼스 중지 : 길게 {0}  ", Input Binding String(Button(Crouch))),
 			Left, 4, Color(Turquoise), Color(Turquoise), Color(White), Visible To and String, Visible Never);
-		Create HUD Text(Filtered Array(Host Player, Current Array Element.DJMenuHUDOpened == False), Icon String(Radioactive),
-			Custom String("..조금 정신사나운 기능을 해금할 수 있습니다!"), Custom String("{0}\r\n{1}", Custom String("{0}그림 그리기 모드 허용 : 길게 {1} + {2}",
-			Ability Icon String(Hero(메르시), Button(Ability 1)), Input Binding String(Button(Interact)), Input Binding String(Button(
-			Secondary Fire))), Custom String("{0}크기변경 허용 : 길게 {1} + {2}", Ability Icon String(Hero(로드호그), Button(Ultimate)),
-			Input Binding String(Button(Interact)), Input Binding String(Button(Primary Fire)))), Left, 5, Color(Purple), Color(Purple),
-			Color(White), Visible To and String, Visible Never);
+		Create HUD Text(Filtered Array(Host Player, Current Array Element.DJMenuHUDOpened == False && Current Array Element.HelpHUDOpened),
+			Icon String(Radioactive), Custom String("..조금 정신사나운 기능을 해금할 수 있습니다!"), Custom String("{0}\r\n{1}", Custom String(
+			"{0}그림 그리기 모드 허용 : 길게 {1} + {2}", Ability Icon String(Hero(메르시), Button(Ability 1)), Input Binding String(Button(Interact)),
+			Input Binding String(Button(Secondary Fire))), Custom String("{0}크기변경 허용 : 길게 {1} + {2}", Ability Icon String(Hero(로드호그),
+			Button(Ultimate)), Input Binding String(Button(Interact)), Input Binding String(Button(Primary Fire)))), Left, 5, Color(
+			Purple), Color(Purple), Color(White), Visible To and String, Visible Never);
 		"스폐셜 기능"
-		Create HUD Text(Filtered Array(All Players(All Teams), Array Contains(Global.VIPList, Custom String("{0}",
-			Current Array Element))), Icon String(Moon), Custom String("VIP 멤버 입니다!"), Custom String(
+		Create HUD Text(Filtered Array(All Players(All Teams), Current Array Element.HelpHUDOpened && Array Contains(Global.VIPList,
+			Custom String("{0}", Current Array Element))), Icon String(Moon), Custom String("VIP 멤버 입니다!"), Custom String(
 			"VIP의 관종 어그로 끌기! > [집결(뭉쳐요) 키]\r\n시공의 회오리!! > 길게 {0}", Input Binding String(Button(Ability 2))), Left, 7, Color(Rose), Color(
 			Rose), Color(White), Visible To and String, Visible Never);
-		Create HUD Text(Filtered Array(All Players(All Teams), !Array Contains(Global.VIPList, Custom String("{0}",
-			Current Array Element))), Icon String(Moon), Custom String("Discord 에 오시면 VIP가 될 수 있어요!"), Custom String(
+		Create HUD Text(Filtered Array(All Players(All Teams), Current Array Element.HelpHUDOpened && !Array Contains(Global.VIPList,
+			Custom String("{0}", Current Array Element))), Icon String(Moon), Custom String("Discord 에 오시면 VIP가 될 수 있어요!"), Custom String(
 			"더 나은 음질로 노래 듣고 같이 놀아요!\r\nhttps://discord.gg/9EZMw2Z6NA(w는 소문자)"), Left, 7, Color(Gray), Color(Gray), Color(White),
 			Visible To and String, Visible Never);
-		Create HUD Text(Filtered Array(All Players(All Teams), Current Array Element.Love >= 50), Icon String(Heart), Custom String(
-			"오우...인싸신가봐요?"), Custom String("슈퍼 회오리 > 길게 {0}\r\n하트 300개 모으면 슈★퍼★인★싸 칭호 획득!", Input Binding String(Button(Ability 2))), Left,
-			8, Color(Rose), Color(Rose), Color(White), Visible To and String, Visible Never);
-		Create HUD Text(Filtered Array(All Players(All Teams), Current Array Element.Love < 50), Icon String(Heart), Custom String(
-			"관종력이 부족합니다"), Custom String("인사,보물찾기 등의 숨겨진 도전과제 달성으로\r\n좋아요를 50개 이상 얻어야합니다!"), Left, 8, Color(Gray), Color(Gray), Color(
+		Create HUD Text(Filtered Array(All Players(All Teams), Current Array Element.HelpHUDOpened && Current Array Element.Love >= 50),
+			Icon String(Heart), Custom String("오우...인싸신가봐요?"), Custom String("슈퍼 회오리 > 길게 {0}\r\n하트 300개 모으면 슈★퍼★인★싸 칭호 획득!",
+			Input Binding String(Button(Ability 2))), Left, 8, Color(Rose), Color(Rose), Color(White), Visible To and String,
+			Visible Never);
+		Create HUD Text(Filtered Array(All Players(All Teams), Current Array Element.HelpHUDOpened && Current Array Element.Love < 50),
+			Icon String(Heart), Custom String("관종력이 부족합니다"), Custom String("인사,보물찾기 등의 숨겨진 도전과제 달성으로\r\n좋아요를 50개 이상 얻어야합니다!"), Left, 8,
+			Color(Gray), Color(Gray), Color(White), Visible To and String, Visible Never);
+		Create HUD Text(Count Of(Filtered Array(All Players(All Teams), Current Array Element.HelpHUDOpened && !Is Dummy Bot(
+			Current Array Element))) == 12 ? Filtered Array(All Players(All Teams), Current Array Element.HelpHUDOpened) : Null,
+			Icon String(Fire), Custom String("불탄다!! 12명 풀방!!"), Custom String("추가 눈뽕 효과 + 불\r\n자동 빙글빙글 > 길게 {0}", Input Binding String(
+			Button(Ability 2))), Left, 9, Color(Red), Color(Red), Color(White), Visible To and String, Visible Never);
+		Create HUD Text(Count Of(Filtered Array(All Players(All Teams), Current Array Element.HelpHUDOpened && !Is Dummy Bot(
+			Current Array Element))) != 12 ? Filtered Array(All Players(All Teams), Current Array Element.HelpHUDOpened) : Null,
+			Icon String(Fire), Custom String("아직 충분히 -핫- 하지 않아요.."), Custom String("{0}/12명 풀방시\r\n자동 빙글빙글 사용 가능!", Count Of(
+			Filtered Array(All Players(All Teams), !Is Dummy Bot(Current Array Element)))), Left, 9, Color(Gray), Color(Gray), Color(
 			White), Visible To and String, Visible Never);
-		Create HUD Text(Count Of(Filtered Array(All Players(All Teams), !Is Dummy Bot(Current Array Element))) == 12 ? All Players(
-			All Teams) : Null, Icon String(Fire), Custom String("불탄다!! 12명 풀방!!"), Custom String("추가 눈뽕 효과 + 불\r\n자동 빙글빙글 > 길게 {0}",
-			Input Binding String(Button(Ability 2))), Left, 9, Color(Red), Color(Red), Color(White), Visible To and String, Visible Never);
-		Create HUD Text(Count Of(Filtered Array(All Players(All Teams), !Is Dummy Bot(Current Array Element))) != 12 ? All Players(
-			All Teams) : Null, Icon String(Fire), Custom String("아직 충분히 -핫- 하지 않아요.."), Custom String("{0}/12명 풀방시\r\n자동 빙글빙글 사용 가능!",
-			Count Of(Filtered Array(All Players(All Teams), !Is Dummy Bot(Current Array Element)))), Left, 9, Color(Gray), Color(Gray),
-			Color(White), Visible To and String, Visible Never);
 		"시네마틱 카메라"
 		Create HUD Text(Filtered Array(All Players(All Teams), Current Array Element.CinematicEnabled == True), Custom String("{0} LIVE",
 			Icon String(Eye)), Custom String("{0} {1} {2}", Hero Icon String(Hero Of(Global.CinematicFocusPlayer)),
@@ -352,9 +361,8 @@ rule("글로벌 초기값")
 			1 * Host Player.SelectPlayer.PlayerSize + 1.500, 0), 0.900, Do Not Clip, Visible To Position and String, Color(Orange),
 			Visible Never);
 		"기타 UI"
-		Create HUD Text(All Players(All Teams), Null, Null, Custom String(
-			"\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n"), Top, 100, Color(White), Color(White), Color(
-			White), Visible To, Visible Always);
+		Create HUD Text(All Players(All Teams), Null, Null, Custom String("\r\n\r\n\r\n\r\n\r\n\r\n\r\n"), Top, 100, Color(White), Color(
+			White), Color(White), Visible To, Visible Always);
 		Create HUD Text(All Players(All Teams), Hero Icon String(Hero Of(Local Player)), Custom String("{0}님! {1}", Local Player,
 			Global.TopDescription), Custom String("현재 칭호 : {0}{1}{2}", Local Player.AchievePrefix, Local Player, Custom String(" {0}{1}",
 			Icon String(Heart), Local Player.Love)), Left, 0, Color(Violet), Color(Violet), Local Player.NameColor,
@@ -430,7 +438,7 @@ rule("최초 DJ 설정")
 				Global.VJPlayer = Global.DJPlayer;
 			End;
 		End;
-		disabled Global.DJPlayer.Love += 100;
+		Global.DJPlayer.Love += 100;
 	}
 }
 
@@ -469,7 +477,7 @@ rule("개인별 입장 초기값")
 			Create In-World Text(Event Player.SelectPlayer != Null ? Event Player : Null, Custom String("[인사] : 인사하기\r\n[감사] : 하트주기"),
 				Event Player.SelectPlayer + Vector(0, 1 * Event Player.SelectPlayer.PlayerSize + 1, 0), 0.900, Do Not Clip,
 				Visible To and Position, Color(White), Visible Never);
-			Event Player.HelpHUDOpened = True;
+			Event Player.HelpHUDOpened = False;
 			Event Player.ArtColor = 0;
 			Event Player.PlayerSize = 1;
 			Event Player.PlayerVoice = 1;
@@ -513,7 +521,7 @@ rule("개인별 입장 초기값")
 				Call Subroutine(Agreement);
 			End;
 			Event Player.Agreement = True;
-			Event Player.MAXLightEffect = Workshop Setting Toggle(Custom String("[4]개인별 설정"), Custom String("화려한 시각효과"), True, 0);
+			Event Player.MAXLightEffect = Workshop Setting Toggle(Custom String("[4]개인 설정 초기값"), Custom String("화려한 시각효과"), True, 0);
 		End;
 		Teleport(Event Player, Global.SpawnVector);
 		Wait(0.100, Ignore Condition);
@@ -576,16 +584,21 @@ rule("설명충 알겠어요!")
 
 	condition
 	{
-		Is Communicating(Event Player, Acknowledge) == True;
+		(Distance Between(Global.SpawnVector, Position Of(Event Player)) <= 3 || Is Button Held(Event Player, Button(Reload))) == True;
 	}
 
 	action
 	{
-		If(Event Player.HelpHUDOpened == True);
-			Event Player.HelpHUDOpened = False;
-		Else If(Event Player.HelpHUDOpened == False);
-			Event Player.HelpHUDOpened = True;
-		End;
+		disabled If(Event Player.HelpHUDOpened == True);
+		disabled Event Player.HelpHUDOpened = False;
+		disabled Else If(Event Player.HelpHUDOpened == False);
+		disabled Event Player.HelpHUDOpened = True;
+		disabled End;
+		disabled Event Player.Agreement = True;
+		Event Player.HelpHUDOpened = True;
+		Wait(0.250, Ignore Condition);
+		Loop If Condition Is True;
+		Event Player.HelpHUDOpened = False;
 		Event Player.Agreement = True;
 	}
 }
@@ -611,6 +624,10 @@ rule("오브젝트 설명 드립")
 			Global.TopDescription = Custom String("새해 복 많이 받으세요~");
 		Else If(Global.ColorTheme == 5);
 			Global.TopDescription = Custom String("핫-한 여름 되세요!");
+		Else If(Global.ColorTheme == 6);
+			Global.TopDescription = Custom String("힙하게 놀다 가십쇼");
+		Else If(Global.ColorTheme == 7);
+			Global.TopDescription = Custom String("편안한 시간 되세요");
 		End;
 		Wait(120, Ignore Condition);
 		Loop If(Global.DJmode == False);
@@ -932,6 +949,7 @@ rule("DJ 퍼포먼스 시작")
 		(Is Communicating Any Emote(Event Player) || Is Button Held(Event Player, Button(Ultimate))) == True;
 		Event Player == Global.VJPlayer;
 		Event Player.DrawingMode == False;
+		Global.VJPlayer.DJMenuHUDOpened == True;
 	}
 
 	action
@@ -2026,11 +2044,11 @@ rule("영웅변경")
 		Respawn(Event Player);
 		Set Respawn Max Time(Event Player, 990);
 		Set Player Allowed Heroes(Event Player, Remove From Array(Allowed Heroes(Event Player), Hero Of(Event Player)));
-		Set Player Allowed Heroes(Event Player, All Heroes);
+		Set Player Allowed Heroes(Event Player, 모든 영웅);
 		If(Event Player.Love <= 10);
 			Event Player.AchievePrefix = Custom String("{0}새로운 영웅은.. {1} ", Icon String(Recycle), Hero Of(Event Player));
 			Event Player.NameColor = Color(White);
-			Small Message(All Players(All Teams), Custom String("{0} 와! 영웅 바꾸는곳이 여기 있었네! {0}", Icon String(Recycle)));
+			Small Message(All Players(All Teams), Custom String("{1} 와! 영웅 바꾸는곳이 여기 있었네! {0}", Icon String(Recycle), Hero Of(Event Player)));
 			Event Player.Love += 10;
 		End;
 	}
@@ -2058,7 +2076,12 @@ rule("더미는 외로워")
 		Wait(0.250, Abort When False);
 		Start Facing(Event Player, Direction Towards(Event Player, Closest Player To(Event Player, All Teams)), 100, To World,
 			Direction and Turn Rate);
-		If(Current Map == Map(워크샵 개활지 밤) || Current Map == Map(워크샵 그린 스크린));
+		If(Current Map == Map(뉴 퀸 스트리트));
+			Start Facing(Event Player, Direction Towards(Event Player, Global.DanceZoneVector), 50, To World, Direction and Turn Rate);
+			Start Throttle In Direction(Event Player, Facing Direction Of(Event Player), 0.700, To World, Replace existing throttle,
+				Direction and Magnitude);
+		End;
+		If(Current Map == Map(워크샵 개활지 밤));
 			Start Throttle In Direction(Event Player, Facing Direction Of(Event Player), 1, To World, Replace existing throttle,
 				Direction and Magnitude);
 		End;
@@ -3312,10 +3335,10 @@ rule("무대세팅 - 지브롤터")
 	action
 	{
 		Global.HiddenVector = Vector(-16.284, 33.698, -222.694);
-		Global.DJSpawnVector = Vector(84.804, -9.975, 31.761);
-		Global.DanceZoneVector = Vector(75.462, -9.050, 38.567);
-		Global.BeamVector = Vector(75.509, -3.053, 38.584);
-		Global.SpawnVector = Vector(62.862, -4.975, 62.187);
+		Global.DJSpawnVector = Vector(99.508, 3.123, 60.729);
+		Global.DanceZoneVector = Vector(105.779, -0.823, 67.760);
+		Global.BeamVector = Vector(105.779, 3, 67.760);
+		Global.SpawnVector = Vector(113.693, -0.723, 74.685);
 		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Light Shaft, Color(Turquoise), Vector(
 			75.453, -11.050, 38.438), 16, Visible To Position and Radius);
 		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Orb, Color(White), Global.BeamVector,
@@ -3326,22 +3349,22 @@ rule("무대세팅 - 지브롤터")
 			3.750, -161.552), 100, Visible To Position and Radius);
 		While(True);
 			If(!Entity Exists(Players In Slot(4, Team 1)));
-				Create Dummy Bot(Hero(윈스턴), Team 1, 4, Vector(92.215, -5.799, 36.158), Null);
+				Create Dummy Bot(Hero(윈스턴), Team 1, 4, Vector(103.819, -0.823, 64.302), Null);
 			End;
 			If(!Entity Exists(Players In Slot(4, Team 2)));
-				Create Dummy Bot(Hero(트레이서), Team 2, 4, Vector(92.720, -6.801, 60.129), Null);
+				Create Dummy Bot(Hero(메르시), Team 2, 4, Vector(107.329, -0.823, 78.120), Null);
 			End;
 			If(!Entity Exists(Players In Slot(3, Team 1)));
 				Create Dummy Bot(Hero(브리기테), Team 1, 3, Vector(71.013, -8.801, 54.064), Null);
 			End;
 			If(!Entity Exists(Players In Slot(3, Team 2)));
-				Create Dummy Bot(Hero(라인하르트), Team 2, 3, Vector(86.328, -6.801, 53.820), Null);
+				Create Dummy Bot(Hero(라인하르트), Team 2, 3, Vector(97.402, 2.235, 57.737), Null);
 			End;
 			If(!Entity Exists(Players In Slot(2, Team 1)));
-				Create Dummy Bot(Hero(메이), Team 1, 2, Vector(62.372, -8.802, 40.953), Null);
+				Create Dummy Bot(Hero(메이), Team 1, 2, Vector(117.644, -0.823, 68.415), Null);
 			End;
 			If(!Entity Exists(Players In Slot(2, Team 2)));
-				Create Dummy Bot(Hero(메르시), Team 2, 2, Vector(66.879, -5.755, 58.087), Null);
+				Create Dummy Bot(Hero(트레이서), Team 2, 2, Vector(96.611, 2.829, 71.509), Null);
 			End;
 			Wait(30, Ignore Condition);
 		End;
@@ -3971,7 +3994,7 @@ rule("무대세팅 - 카네자카")
 					Players In Slot(4, Team 1), Rotation));
 			End;
 			If(!Entity Exists(Players In Slot(4, Team 2)));
-				Create Dummy Bot(Hero(한조), Team 2, 4, Vector(-30.710, 8.002, -8.515), Local Vector Of(Vector(-17.393, 4.927, -160.935),
+				Create Dummy Bot(Hero(키리코), Team 2, 4, Vector(-30.710, 8.002, -8.515), Local Vector Of(Vector(-17.393, 4.927, -160.935),
 					Players In Slot(4, Team 2), Rotation));
 			End;
 			Wait(30, Ignore Condition);
@@ -4030,7 +4053,7 @@ rule("무대세팅 - 카네자카 2")
 					Players In Slot(4, Team 1), Rotation));
 			End;
 			If(!Entity Exists(Players In Slot(4, Team 2)));
-				Create Dummy Bot(Hero(한조), Team 2, 4, Vector(-30.710, 8.002, -8.515), Local Vector Of(Vector(-17.393, 4.927, -160.935),
+				Create Dummy Bot(Hero(키리코), Team 2, 4, Vector(-30.710, 8.002, -8.515), Local Vector Of(Vector(-17.393, 4.927, -160.935),
 					Players In Slot(4, Team 2), Rotation));
 			End;
 			Wait(30, Ignore Condition);
@@ -4101,7 +4124,7 @@ rule("여름특집! : 무대세팅 - 부산스타디움+이스타지우")
 	condition
 	{
 		Current Game Mode == Game Mode(루시우볼);
-		(Current Map == Map(부산 스타디움) || Current Map == Map(부산 스타디움 클래식) || Current Map == Map(이스타지우 다스 하스)) == True;
+		(Current Map == Map(부산 스타디움) || Current Map == Map( || Current Map == Map(이스타지우 다스 하스)) == True;
 	}
 
 	action
@@ -4168,7 +4191,7 @@ rule("여름특집! : 무대세팅 - 시드니하버아레나")
 	condition
 	{
 		Current Game Mode == Game Mode(루시우볼);
-		Current Map == Map(시드니 하버 아레나 클래식);
+		Current Map == Map(;
 	}
 
 	action
@@ -4255,13 +4278,13 @@ rule("여름특집! : 루시우볼 영웅선택")
 			If(Event Player.lucioballHeroIndex < 0);
 				Event Player.lucioballHeroIndex = 31;
 			End;
-			Start Forcing Player To Be Hero(Event Player, All Heroes[Event Player.lucioballHeroIndex]);
+			Start Forcing Player To Be Hero(Event Player, 모든 영웅[Event Player.lucioballHeroIndex]);
 		Else If(Is Button Held(Event Player, Button(Secondary Fire)));
 			Event Player.lucioballHeroIndex += 1;
 			If(Event Player.lucioballHeroIndex > 31);
 				Event Player.lucioballHeroIndex = 0;
 			End;
-			Start Forcing Player To Be Hero(Event Player, All Heroes[Event Player.lucioballHeroIndex]);
+			Start Forcing Player To Be Hero(Event Player, 모든 영웅[Event Player.lucioballHeroIndex]);
 		End;
 		Loop If Condition Is True;
 		Allow Button(Event Player, Button(Jump));
@@ -4282,7 +4305,7 @@ rule("여름특집! : 부산+이스타지우 수영")
 	condition
 	{
 		Y Component Of(Local Vector Of(Event Player, Event Player, Rotation)) < -2.880;
-		(Current Map == Map(부산 스타디움) || Current Map == Map(부산 스타디움 클래식) || Current Map == Map(이스타지우 다스 하스)) == True;
+		(Current Map == Map(부산 스타디움) || Current Map == Map( || Current Map == Map(이스타지우 다스 하스)) == True;
 	}
 
 	action
@@ -4313,7 +4336,7 @@ rule("여름특집! : 시드니하버아레나 수영")
 	condition
 	{
 		Y Component Of(Local Vector Of(Event Player, Event Player, Rotation)) < -4.500;
-		Current Map == Map(시드니 하버 아레나 클래식);
+		Current Map == Map(;
 	}
 
 	action
@@ -5212,6 +5235,395 @@ rule("크리스마스 특집! : 무대세팅 - 하나무바라 겨울")
 	}
 }
 
+rule("무대세팅 - 남극 반도")
+{
+	event
+	{
+		Ongoing - Global;
+	}
+
+	condition
+	{
+		Current Map == Map(남극 반도);
+	}
+
+	action
+	{
+		Global.HiddenVector = Vector(-87.552, -151.150, 59.897);
+		Global.DJSpawnVector = Vector(284.020, -12.150, -185.893);
+		Global.DanceZoneVector = Vector(283.915, -11.400, -222.378);
+		Global.SpawnVector = Vector(284.009, -9.670, -266.363);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Green), Vector(
+			282.697, 13.719, -149.443), 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Purple), Vector(
+			282.344, 13.719, -150.150), 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Orange), Vector(
+			281.879, 13.719, -151.080), 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Sky Blue), Vector(
+			281.453, 13.719, -151.931), 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Yellow),
+			Global.SpawnVector, 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Blue),
+			Global.SpawnVector, 200, Visible To Position and Radius);
+		Global.BeamVector = Vector(283.992, 30.650, -202.034);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Orb, Color(Blue), Global.BeamVector,
+			18, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Bad Aura, Color(Sky Blue),
+			Global.BeamVector, 1, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura,
+			Global.Tick % 2 == 0 ? Global.ThemeColor3 : Global.ThemeColor4, Global.BeamVector, 30, Visible To Position Radius and Color);
+		While(True);
+			If(!Entity Exists(Players In Slot(2, Team 1)));
+				Create Dummy Bot(Hero(메이), Team 1, 2, Vector(262.875, -8.916, -223.818), Null);
+			End;
+			If(!Entity Exists(Players In Slot(2, Team 2)));
+				Create Dummy Bot(Hero(메이), Team 2, 2, Vector(305.192, -8.911, -223.720), Null);
+			End;
+			If(!Entity Exists(Players In Slot(3, Team 1)));
+				Create Dummy Bot(Hero(메이), Team 1, 3, Vector(292.178, -8.142, -209.941), Null);
+			End;
+			If(!Entity Exists(Players In Slot(3, Team 2)));
+				Create Dummy Bot(Hero(메이), Team 2, 3, Vector(275.888, -8.117, -209.889), Null);
+			End;
+			If(!Entity Exists(Players In Slot(4, Team 1)));
+				Create Dummy Bot(Hero(메이), Team 1, 4, Vector(281.465, -8.664, -196.432), Null);
+			End;
+			If(!Entity Exists(Players In Slot(4, Team 2)));
+				Create Dummy Bot(Hero(메이), Team 2, 4, Vector(286.480, -8.664, -196.197), Null);
+			End;
+			Wait(30, Ignore Condition);
+		End;
+	}
+}
+
+rule("무대세팅 - 뉴 퀸 스트리트")
+{
+	event
+	{
+		Ongoing - Global;
+	}
+
+	condition
+	{
+		Current Map == Map(뉴 퀸 스트리트);
+	}
+
+	action
+	{
+		Global.HiddenVector = Vector(46.023, -7.771, -37.010);
+		Global.DJSpawnVector = Vector(-0.030, 5.350, 116.156);
+		Global.DanceZoneVector = Vector(0.141, -2.900, 88.423);
+		Global.SpawnVector = Vector(-0.021, -2.900, 73.716);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Green), Vector(-0.057,
+			5.350, 149.028), 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Purple), Vector(
+			-0.057, 5.350, 149.028), 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Orange), Vector(
+			-0.057, 5.350, 149.028), 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Sky Blue), Vector(
+			-0.057, 5.350, 149.028), 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Yellow),
+			Global.SpawnVector, 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Blue),
+			Global.SpawnVector, 200, Visible To Position and Radius);
+		Global.BeamVector = Vector(-0.057, 25.350, 149.028);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Orb, Color(Purple), Global.BeamVector,
+			18, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Bad Aura, Color(Green),
+			Global.BeamVector, 1, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sphere,
+			Global.Tick % 2 == 0 ? Global.ThemeColor3 : Global.ThemeColor4, Global.BeamVector, 30, Visible To Position Radius and Color);
+		While(True);
+			If(!Entity Exists(Players In Slot(4, Team 1)));
+				Create Dummy Bot(Hero(소전), Team 1, 4, Vector(9.440, -1.409, 85.435), Null);
+			End;
+			If(!Entity Exists(Players In Slot(4, Team 2)));
+				Create Dummy Bot(Hero(루시우), Team 2, 4, Vector(-11.864, -2.900, 87.916), Null);
+			End;
+			If(!Entity Exists(Players In Slot(3, Team 1)));
+				Create Dummy Bot(Hero(메이), Team 1, 3, Vector(11.762, -2.900, 95.246), Null);
+			End;
+			If(!Entity Exists(Players In Slot(3, Team 2)));
+				Create Dummy Bot(Hero(소전), Team 2, 3, Vector(0.338, -2.900, 88.463), Null);
+			End;
+			If(!Entity Exists(Players In Slot(2, Team 1)));
+				Create Dummy Bot(Hero(D.Va), Team 1, 2, Vector(-12.009, -2.900, 82.501), Null);
+			End;
+			If(!Entity Exists(Players In Slot(2, Team 2)));
+				Create Dummy Bot(Hero(소전), Team 2, 2, Vector(0.010, -1.308, 102.223), Null);
+			End;
+			Wait(30, Ignore Condition);
+		End;
+	}
+}
+
+rule("무대세팅 - 파라이수")
+{
+	event
+	{
+		Ongoing - Global;
+	}
+
+	condition
+	{
+		Current Map == Map(파라이수);
+	}
+
+	action
+	{
+		Global.HiddenVector = Vector(-3.804, -1.659, 79.432);
+		Global.DJSpawnVector = Vector(-20.258, 7.047, -129.868);
+		Global.DanceZoneVector = Vector(-37.293, 2.205, -143.128);
+		Global.SpawnVector = Vector(9.268, 6.335, -91.276);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Green), Vector(-3.273,
+			32.855, -59.505), 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Purple), Vector(
+			-3.273, 32.855, -59.505), 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Orange), Vector(
+			-3.273, 32.855, -59.505), 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Sky Blue), Vector(
+			-3.273, 32.855, -59.505), 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Yellow),
+			Global.SpawnVector, 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Blue),
+			Global.SpawnVector, 200, Visible To Position and Radius);
+		Global.BeamVector = Vector(-15.235, 16.236, -134.770);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Orb, Color(Purple), Global.BeamVector,
+			18, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Bad Aura, Color(Green),
+			Global.BeamVector, 1, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sphere,
+			Global.Tick % 2 == 0 ? Global.ThemeColor3 : Global.ThemeColor4, Global.BeamVector, 40, Visible To Position Radius and Color);
+		While(True);
+			If(!Entity Exists(Players In Slot(4, Team 1)));
+				Create Dummy Bot(Hero(루시우), Team 1, 4, Vector(-44.822, 11.580, -135.488), Null);
+			End;
+			If(!Entity Exists(Players In Slot(4, Team 2)));
+				Create Dummy Bot(Hero(루시우), Team 2, 4, Vector(-1.262, 8.100, -148.315), Null);
+			End;
+			If(!Entity Exists(Players In Slot(3, Team 1)));
+				Create Dummy Bot(Hero(루시우), Team 1, 3, Vector(-27.465, 7.358, -90.022), Null);
+			End;
+			If(!Entity Exists(Players In Slot(3, Team 2)));
+				Create Dummy Bot(Hero(루시우), Team 2, 3, Vector(-42.577, 7.358, -98.892), Null);
+			End;
+			Wait(30, Ignore Condition);
+		End;
+	}
+}
+
+rule("무대세팅 - 미드타운")
+{
+	event
+	{
+		Ongoing - Global;
+	}
+
+	condition
+	{
+		Current Map == Map(미드타운);
+	}
+
+	action
+	{
+		Global.HiddenVector = Vector(46.023, -7.771, -37.010);
+		Global.DJSpawnVector = Vector(-0.003, 5.352, 7.852);
+		Global.DanceZoneVector = Vector(-29.252, -0.650, 8.108);
+		Global.SpawnVector = Vector(-0.343, 10.355, 38.502);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Green), Vector(-3.273,
+			32.855, -59.505), 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Purple), Vector(
+			-3.273, 32.855, -59.505), 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Orange), Vector(
+			-3.273, 32.855, -59.505), 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Sky Blue), Vector(
+			-3.273, 32.855, -59.505), 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Yellow),
+			Global.SpawnVector, 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Blue),
+			Global.SpawnVector, 200, Visible To Position and Radius);
+		Global.BeamVector = Vector(-0.214, 12.398, 0.272);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Orb, Color(Purple), Global.BeamVector,
+			18, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Bad Aura, Color(Green),
+			Global.BeamVector, 1, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Cloud, Color(Orange), Vector(0.029,
+			-0.055, -11.021), 9, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Cloud, Color(Rose), Vector(0.029,
+			-0.055, -11.021), 6, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sphere,
+			Global.Tick % 2 == 0 ? Global.ThemeColor3 : Global.ThemeColor4, Global.BeamVector, 30, Visible To Position Radius and Color);
+		While(True);
+			If(!Entity Exists(Players In Slot(4, Team 1)));
+				Create Dummy Bot(Hero(젠야타), Team 1, 4, Vector(-0.065, 11.418, 26.126), Null);
+			End;
+			If(!Entity Exists(Players In Slot(4, Team 2)));
+				Create Dummy Bot(Hero(젠야타), Team 2, 4, Vector(25.035, 10.178, 22.012), Null);
+			End;
+			Wait(30, Ignore Condition);
+		End;
+	}
+}
+
+rule("무대세팅 - 샴발리 수도원")
+{
+	event
+	{
+		Ongoing - Global;
+	}
+
+	condition
+	{
+		Current Map == Map(샴발리 수도원);
+	}
+
+	action
+	{
+		Global.HiddenVector = Vector(46.023, -7.771, -37.010);
+		Global.DJSpawnVector = Vector(-0.003, 5.352, 7.852);
+		Global.DanceZoneVector = Vector(-29.252, -0.650, 8.108);
+		Global.SpawnVector = Vector(-0.343, 10.355, 38.502);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Green), Vector(-3.273,
+			32.855, -59.505), 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Purple), Vector(
+			-3.273, 32.855, -59.505), 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Orange), Vector(
+			-3.273, 32.855, -59.505), 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Sky Blue), Vector(
+			-3.273, 32.855, -59.505), 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Yellow),
+			Global.SpawnVector, 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Blue),
+			Global.SpawnVector, 200, Visible To Position and Radius);
+		Global.BeamVector = Vector(-0.214, 12.398, 0.272);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Orb, Color(Purple), Global.BeamVector,
+			18, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Bad Aura, Color(Green),
+			Global.BeamVector, 1, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Cloud, Color(Orange), Vector(0.029,
+			-0.055, -11.021), 9, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Cloud, Color(Rose), Vector(0.029,
+			-0.055, -11.021), 6, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sphere,
+			Global.Tick % 2 == 0 ? Global.ThemeColor3 : Global.ThemeColor4, Global.BeamVector, 30, Visible To Position Radius and Color);
+		While(True);
+			If(!Entity Exists(Players In Slot(4, Team 1)));
+				Create Dummy Bot(Hero(젠야타), Team 1, 4, Vector(-0.065, 11.418, 26.126), Null);
+			End;
+			If(!Entity Exists(Players In Slot(4, Team 2)));
+				Create Dummy Bot(Hero(젠야타), Team 2, 4, Vector(25.035, 10.178, 22.012), Null);
+			End;
+			Wait(30, Ignore Condition);
+		End;
+	}
+}
+
+rule("무대세팅 - 서킷 로얄")
+{
+	event
+	{
+		Ongoing - Global;
+	}
+
+	condition
+	{
+		Current Map == Map(서킷 로얄);
+	}
+
+	action
+	{
+		Global.HiddenVector = Vector(46.023, -7.771, -37.010);
+		Global.DJSpawnVector = Vector(-0.003, 5.352, 7.852);
+		Global.DanceZoneVector = Vector(-29.252, -0.650, 8.108);
+		Global.SpawnVector = Vector(-0.343, 10.355, 38.502);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Green), Vector(-3.273,
+			32.855, -59.505), 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Purple), Vector(
+			-3.273, 32.855, -59.505), 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Orange), Vector(
+			-3.273, 32.855, -59.505), 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Sky Blue), Vector(
+			-3.273, 32.855, -59.505), 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Yellow),
+			Global.SpawnVector, 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Blue),
+			Global.SpawnVector, 200, Visible To Position and Radius);
+		Global.BeamVector = Vector(-0.214, 12.398, 0.272);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Orb, Color(Purple), Global.BeamVector,
+			18, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Bad Aura, Color(Green),
+			Global.BeamVector, 1, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Cloud, Color(Orange), Vector(0.029,
+			-0.055, -11.021), 9, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Cloud, Color(Rose), Vector(0.029,
+			-0.055, -11.021), 6, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sphere,
+			Global.Tick % 2 == 0 ? Global.ThemeColor3 : Global.ThemeColor4, Global.BeamVector, 30, Visible To Position Radius and Color);
+		While(True);
+			If(!Entity Exists(Players In Slot(4, Team 1)));
+				Create Dummy Bot(Hero(젠야타), Team 1, 4, Vector(-0.065, 11.418, 26.126), Null);
+			End;
+			If(!Entity Exists(Players In Slot(4, Team 2)));
+				Create Dummy Bot(Hero(젠야타), Team 2, 4, Vector(25.035, 10.178, 22.012), Null);
+			End;
+			Wait(30, Ignore Condition);
+		End;
+	}
+}
+
+rule("무대세팅 - 콜로세오")
+{
+	event
+	{
+		Ongoing - Global;
+	}
+
+	condition
+	{
+		Current Map == Map(콜로세오);
+	}
+
+	action
+	{
+		Global.HiddenVector = Vector(46.023, -7.771, -37.010);
+		Global.DJSpawnVector = Vector(-0.003, 5.352, 7.852);
+		Global.DanceZoneVector = Vector(-29.252, -0.650, 8.108);
+		Global.SpawnVector = Vector(-0.343, 10.355, 38.502);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Green), Vector(-3.273,
+			32.855, -59.505), 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Purple), Vector(
+			-3.273, 32.855, -59.505), 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Orange), Vector(
+			-3.273, 32.855, -59.505), 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Good Aura, Color(Sky Blue), Vector(
+			-3.273, 32.855, -59.505), 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Yellow),
+			Global.SpawnVector, 200, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sparkles, Color(Blue),
+			Global.SpawnVector, 200, Visible To Position and Radius);
+		Global.BeamVector = Vector(-0.214, 12.398, 0.272);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Orb, Color(Purple), Global.BeamVector,
+			18, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Bad Aura, Color(Green),
+			Global.BeamVector, 1, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Cloud, Color(Orange), Vector(0.029,
+			-0.055, -11.021), 9, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Cloud, Color(Rose), Vector(0.029,
+			-0.055, -11.021), 6, Visible To Position and Radius);
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Sphere,
+			Global.Tick % 2 == 0 ? Global.ThemeColor3 : Global.ThemeColor4, Global.BeamVector, 30, Visible To Position Radius and Color);
+		While(True);
+			If(!Entity Exists(Players In Slot(4, Team 1)));
+				Create Dummy Bot(Hero(젠야타), Team 1, 4, Vector(-0.065, 11.418, 26.126), Null);
+			End;
+			If(!Entity Exists(Players In Slot(4, Team 2)));
+				Create Dummy Bot(Hero(젠야타), Team 2, 4, Vector(25.035, 10.178, 22.012), Null);
+			End;
+			Wait(30, Ignore Condition);
+		End;
+	}
+}
+
 rule("시네마틱 카메라")
 {
 	event
@@ -5478,7 +5890,7 @@ rule("댄스존")
 	}
 }
 
-rule("댄스존 설명")
+disabled rule("댄스존 설명")
 {
 	event
 	{
@@ -5693,6 +6105,7 @@ rule("조명 모드!")
 		Is Communicating Any Emote(Event Player) == True;
 		Event Player.DJMenuHUDOpened == False;
 		Event Player.DrawingMode == False;
+		disabled Is Using Ability 1(Event Player) == True;
 	}
 
 	action
@@ -5730,6 +6143,7 @@ rule("조명 모드 닫기")
 		Is Communicating(Event Player, Need Healing) == True;
 		Event Player == Global.VJPlayer;
 		Event Player.DrawingMode == False;
+		disabled Is Using Ability 1(Event Player) == False;
 	}
 
 	action
@@ -6142,6 +6556,7 @@ rule("인사 받아주는 착한 더미")
 	{
 		Is Communicating(Event Player, Hello) == True;
 		disabled (Event Player == Global.DJPlayer || Event Player == Host Player || Event Player == Global.VJPlayer) == True;
+		Is Dummy Bot(Event Player) == False;
 	}
 
 	action
@@ -6307,7 +6722,7 @@ rule("그림 그리기 2")
 	action
 	{
 		Call Subroutine(ArtColor2);
-		Global.Art[Count Of(Global.Art)] = Append To Array(Append To Array(Empty Array, Last Created Entity), Event Player);
+		Event Player.drawArt[Count Of(Event Player.drawArt)] = Last Created Entity;
 		If(Entity Exists(Last Created Entity) == False);
 			Event Player.AchievePrefix = Custom String("{0}그림 날려먹은 ", Icon String(Question Mark));
 			Event Player.NameColor = Color(Yellow);
@@ -6339,15 +6754,18 @@ rule("그림 지우기")
 
 	action
 	{
-		Event Player.Art[3] = Last Of(Filtered Array(Global.Art, Current Array Element[1] == Event Player));
-		disabled Skip If(Event Player.Art[3] == Null, 2);
-		If(Event Player.Art[3] != Null);
-			Destroy Effect(Event Player.Art[3][0]);
-			Global.Art = Remove From Array(Global.Art, Event Player.Art[3]);
-		Else;
-			Destroy Effect(Last Created Entity);
-		End;
-		Event Player.Art[3] = Null;
+		disabled Event Player.Art[3] = Index Of Array Value(Global.Art, Last Of(Filtered Array(Global.Art, Index Of Array Value(
+			Current Array Element, 1) == Event Player)));
+		disabled Wait(1, Ignore Condition);
+		disabled If(Event Player.Art[3] != -1);
+		disabled Destroy Effect(Global.Art[Event Player.Art[3]][0]);
+		disabled Global.Art = Remove From Array(Global.Art, Global.Art[Event Player.Art[3]]);
+		disabled Else;
+		disabled Destroy Effect(Last Created Entity);
+		disabled End;
+		disabled Event Player.Art[3] = Null;
+		Destroy Effect(Last Of(Event Player.drawArt));
+		Event Player.drawArt = Remove From Array(Event Player.drawArt, Last Of(Event Player.drawArt));
 	}
 }
 
@@ -6527,11 +6945,12 @@ rule("메모리 남발 금지!")
 		Small Message(All Players(All Teams), Custom String("메모리 초기화 중.. 이펙트 너무 남발하지 마세요!"));
 		Destroy Effect(Global.LightEntity);
 		Destroy Effect(Global.stageEntity);
-		While(Count Of(Global.Art) > 0);
-			Destroy Effect(Global.Art[0][0]);
-			Global.Art = Remove From Array(Global.Art, Global.Art[0]);
-			Wait(0.001, Ignore Condition);
-		End;
+		Call Subroutine(removeAllPlayerDrawArt);
+		disabled While(Count Of(Global.Art) > 0);
+		disabled Destroy Effect(Global.Art[0][0]);
+		disabled Global.Art = Remove From Array(Global.Art, Global.Art[0]);
+		disabled Wait(0.001, Ignore Condition);
+		disabled End;
 		While(Count Of(Global.GlobalBoostSparkleArray) > 0);
 			Destroy Effect(Global.GlobalBoostSparkleArray[0][0]);
 			Global.GlobalBoostSparkleArray = Remove From Array(Global.GlobalBoostSparkleArray, Global.GlobalBoostSparkleArray[0]);
@@ -7034,6 +7453,10 @@ rule("조명 팔레트 ColorPicker")
 			Call Subroutine(ColorTheme_NewYear);
 		Else If(Global.ColorTheme == 5);
 			Call Subroutine(ColorTheme_Summer);
+		Else If(Global.ColorTheme == 6);
+			Call Subroutine(ColorTheme_HipHop);
+		Else If(Global.ColorTheme == 7);
+			Call Subroutine(ColorTheme_RnB);
 		End;
 	}
 }
@@ -7141,12 +7564,32 @@ rule("스테이지조명 / 초기화 BuildStage")
 				Global.DJSpawnVector + Vector(0, 1.500, 0), 1.500, Do Not Clip, Color,
 				Global.Tick % 2 == 0 ? Global.ThemeColor1 : Global.ThemeColor2, Visible Always);
 			Big Message(All Players(All Teams), Custom String("{0} 와!! 여름이다!!! {0}", Icon String(Happy)));
+		Else If(Global.ColorTheme == 6);
+			Destroy All Effects;
+			"힙합"
+			Create Effect(All Players(All Teams), Ring, Global.ThemeColor1, Global.DJSpawnVector, 12, Visible To Position Radius and Color);
+			Create Effect(All Players(All Teams), Ring, Color(Black), Global.DJSpawnVector, 10, Visible To Position Radius and Color);
+			Create Effect(All Players(All Teams), Ring, Color(Black), Global.DJSpawnVector, 8, Visible To Position Radius and Color);
+			Create Effect(All Players(All Teams), Ring, Color(Black), Global.DJSpawnVector, 6, Visible To Position Radius and Color);
+			Create Effect(All Players(All Teams), Ring, Color(Black), Global.DJSpawnVector, 4, Visible To Position Radius and Color);
+			Create Effect(All Players(All Teams), Ring, Global.ThemeColor2, Global.DJSpawnVector, 2, Visible To Position Radius and Color);
+			Create Effect(All Players(All Teams), Ring, Global.ThemeColor1, Global.DJSpawnVector, 3, Visible To Position Radius and Color);
+			Create In-World Text(All Players(All Teams), Custom String("{0} WELCOME TO {1}'s HIPHOP LOUNGE {0}", Icon String(Fire),
+				Global.DJPlayer), Global.DJSpawnVector + Vector(0, 1.500, 0), 1.500, Do Not Clip, Color,
+				Global.Tick % 2 == 0 ? Global.ThemeColor1 : Global.ThemeColor2, Visible Always);
+		Else If(Global.ColorTheme == 7);
+			Destroy All Effects;
+			Global.DummyDance = False;
+			Create Effect(All Players(All Teams), Ring, Global.ThemeColor1, Global.DJSpawnVector, 3, Visible To Position Radius and Color);
+			Create In-World Text(All Players(All Teams), Custom String("{0} {1}의 오버워치 라디오 {0}", Icon String(Circle), Global.DJPlayer),
+				Global.DJSpawnVector + Vector(0, 1.500, 0), 1.500, Do Not Clip, Color,
+				Global.Tick % 2 == 0 ? Global.ThemeColor1 : Global.ThemeColor2, Visible Always);
 		End;
 		Call Subroutine(ColorPicker);
 	}
 }
 
-rule("모드별 조명 팔레트 - 일반")
+rule("모드별 조명 팔레트 - 댄스 & EDM")
 {
 	event
 	{
@@ -7359,6 +7802,82 @@ rule("모드별 조명 팔레트 - 새해복마니")
 			Global.ThemeColor2 = Color(Blue);
 			Global.ThemeColor3 = Color(Orange);
 			Global.ThemeColor4 = Color(Green);
+		End;
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Light Shaft, Global.ThemeColor1,
+			Global.DJPlayer, 1, Visible To Position Radius and Color);
+		Global.LightEntity = Last Created Entity;
+	}
+}
+
+rule("모드별 조명 팔레트 - 힙합")
+{
+	event
+	{
+		Subroutine;
+		ColorTheme_HipHop;
+	}
+
+	action
+	{
+		Destroy Effect(Global.LightEntity);
+		If(Global.ModeOfLightEffect == 1);
+			Global.ThemeColor1 = Color(Red);
+			Global.ThemeColor2 = Color(Black);
+			Global.ThemeColor3 = Color(Black);
+			Global.ThemeColor4 = Color(Black);
+		Else If(Global.ModeOfLightEffect == 2);
+			Global.ThemeColor1 = Color(Purple);
+			Global.ThemeColor2 = Color(Black);
+			Global.ThemeColor3 = Color(Black);
+			Global.ThemeColor4 = Color(Black);
+		Else If(Global.ModeOfLightEffect == 3);
+			Global.ThemeColor1 = Color(Blue);
+			Global.ThemeColor2 = Color(Black);
+			Global.ThemeColor3 = Color(Black);
+			Global.ThemeColor4 = Color(Black);
+		Else If(Global.ModeOfLightEffect == 4);
+			Global.ThemeColor1 = Color(White);
+			Global.ThemeColor2 = Color(Black);
+			Global.ThemeColor3 = Color(Black);
+			Global.ThemeColor4 = Color(Black);
+		End;
+		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Light Shaft, Global.ThemeColor1,
+			Global.DJPlayer, 1, Visible To Position Radius and Color);
+		Global.LightEntity = Last Created Entity;
+	}
+}
+
+rule("모드별 조명 팔레트 - 발라드")
+{
+	event
+	{
+		Subroutine;
+		ColorTheme_RnB;
+	}
+
+	action
+	{
+		Destroy Effect(Global.LightEntity);
+		If(Global.ModeOfLightEffect == 1);
+			Global.ThemeColor1 = Color(White);
+			Global.ThemeColor2 = Color(Gray);
+			Global.ThemeColor3 = Color(Black);
+			Global.ThemeColor4 = Color(Black);
+		Else If(Global.ModeOfLightEffect == 2);
+			Global.ThemeColor1 = Color(Green);
+			Global.ThemeColor2 = Color(White);
+			Global.ThemeColor3 = Color(Black);
+			Global.ThemeColor4 = Color(Black);
+		Else If(Global.ModeOfLightEffect == 3);
+			Global.ThemeColor1 = Color(White);
+			Global.ThemeColor2 = Color(Rose);
+			Global.ThemeColor3 = Color(Black);
+			Global.ThemeColor4 = Color(Black);
+		Else If(Global.ModeOfLightEffect == 4);
+			Global.ThemeColor1 = Color(Orange);
+			Global.ThemeColor2 = Color(White);
+			Global.ThemeColor3 = Color(Black);
+			Global.ThemeColor4 = Color(Black);
 		End;
 		Create Effect(Filtered Array(All Players(All Teams), Current Array Element.MAXLightEffect), Light Shaft, Global.ThemeColor1,
 			Global.DJPlayer, 1, Visible To Position Radius and Color);
@@ -7857,7 +8376,7 @@ rule("풀방 버닝업!")
 	}
 }
 
-rule("미호환 맵 방폭")
+disabled rule("미호환 맵 방폭")
 {
 	event
 	{
@@ -7895,6 +8414,7 @@ rule("짝짜꿍~~")
 	{
 		Is Communicating(Event Player, Hello) == True;
 		Has Spawned(Event Player.SelectPlayer) == True;
+		Is Dummy Bot(Event Player) == False;
 	}
 
 	action
@@ -7905,7 +8425,8 @@ rule("짝짜꿍~~")
 			Event Player.SelectPlayer));
 		Wait Until(Is Communicating(Event Player.SelectPlayer, Hello) || Is Communicating(Event Player.SelectPlayer, No) || Is Button Held(
 			Event Player.SelectPlayer, Button(Melee)), 2);
-		If(Is Communicating(Event Player.SelectPlayer, Hello) && Distance Between(Event Player, Event Player.SelectPlayer) <= 10);
+		If(Is Communicating(Event Player.SelectPlayer, Hello) && !Is Dummy Bot(Event Player.SelectPlayer) && Distance Between(Event Player,
+			Event Player.SelectPlayer) <= 10);
 			Event Player.AchievePrefix = Custom String("{0}안아줘요 ", Icon String(Club));
 			Event Player.NameColor = Color(Yellow);
 			Event Player.SelectPlayer.AchievePrefix = Custom String("{0}반가워요 ", Icon String(Club));
@@ -8373,16 +8894,16 @@ rule("테마맵 감지")
 			End;
 		Else If(Global.ColorTheme == 5);
 			"섬머파티"
-			If(!Array Contains(Array(Map(부산 스타디움 클래식), Map(시드니 하버 아레나 클래식), Map(오아시스 대학), Map(오아시스 정원), Map(워크샵 개활지 밤), Map(이스타지우 다스 하스), Map(
-				일리오스), Map(일리오스 등대), Map(일리오스 우물), Map(일리오스 폐허), Map(하바나)), Current Map));
+			If(!Array Contains(Array(Map(, Map(, Map(오아시스 대학), Map(오아시스 정원), Map(워크샵 개활지 밤), Map(이스타지우 다스 하스), Map(일리오스), Map(일리오스 등대), Map(
+				일리오스 우물), Map(일리오스 폐허), Map(하바나)), Current Map));
 				Global.CTFTimer = Round To Integer(Global.CTFTimer / 4, Down);
 			End;
 		End;
 		If(Global.isDarkmode == True);
 			"다크모드"
 			If(!Array Contains(Array(Map(네크로폴리스), Map(네팔 마을), Map(네팔 성소), Map(네팔 제단), Map(도라도), Map(리장 관제 센터 설날), Map(리장 야시장 설날), Map(
-				리장 정원 설날), Map(부산 사찰 설날), Map(부산 시내 설날), Map(블리자드 월드 겨울), Map(시드니 하버 아레나 클래식), Map(쓰레기촌), Map(아이헨발데 할로윈), Map(왕의 길), Map(
-				왕의 길 겨울), Map(워크샵 개활지 밤), Map(탐사 기지: 남극 겨울), Map(할리우드 할로윈), Map(호라이즌 달 기지)), Current Map));
+				리장 정원 설날), Map(부산 사찰 설날), Map(부산 시내 설날), Map(블리자드 월드 겨울), Map(, Map(쓰레기촌), Map(아이헨발데 할로윈), Map(왕의 길), Map(왕의 길 겨울), Map(
+				워크샵 개활지 밤), Map(탐사 기지: 남극 겨울), Map(할리우드 할로윈), Map(호라이즌 달 기지)), Current Map));
 				Global.CTFTimer = Round To Integer(Global.CTFTimer / 2, Down);
 			End;
 		End;
@@ -8410,5 +8931,72 @@ rule("DEBUG")
 			Host Player, True), Horizontal Facing Angle Of(Host Player)), Null, Null, Left, 0, Color(White), Color(White), Color(White),
 			Visible To and String, Default Visibility);
 		Global.CTFTimer = 3600;
+		Create HUD Text(All Players(All Teams), Custom String("{0}\r\n{1}\r\n{2}", Global.Art[Count Of(Global.Art)][0],
+			Global.Art[Count Of(Global.Art)][1], Host Player.Art[3]), Null, Null, Left, 0, Color(White), Color(White), Color(White),
+			Visible To and String, Default Visibility);
+	}
+}
+
+disabled rule("NEW HUD")
+{
+	event
+	{
+		Ongoing - Each Player;
+		All;
+		All;
+	}
+
+	condition
+	{
+		Is Button Held(Event Player, Button(Reload)) == True;
+	}
+
+	action
+	{
+		Create HUD Text(Event Player, Icon String(Spade), Custom String("HUD"), Custom String("HUD TEXT"), Right, 99, Color(White), Color(
+			White), Color(White), Visible To and String, Default Visibility);
+	}
+}
+
+disabled rule("NEW HUD OPEN")
+{
+	event
+	{
+		Ongoing - Global;
+	}
+}
+
+disabled rule("NEW HUD CLOSE")
+{
+	event
+	{
+		Ongoing - Global;
+	}
+}
+
+rule("removeAllPlayerDrawArt")
+{
+	event
+	{
+		Subroutine;
+		removeAllPlayerDrawArt;
+	}
+
+	action
+	{
+		For Global Variable(CleanerIndex, 0, 5, 1);
+			While(Count Of(Players In Slot(Global.CleanerIndex, Team 1).drawArt) != 0);
+				Destroy Effect(Last Of(Players In Slot(Global.CleanerIndex, Team 1).drawArt));
+				Players In Slot(Global.CleanerIndex, Team 1).drawArt = Remove From Array(Players In Slot(Global.CleanerIndex, Team 1).drawArt,
+					Last Of(Players In Slot(Global.CleanerIndex, Team 1).drawArt));
+				Wait(0.016, Ignore Condition);
+			End;
+			While(Count Of(Players In Slot(Global.CleanerIndex, Team 2).drawArt) != 0);
+				Destroy Effect(Last Of(Players In Slot(Global.CleanerIndex, Team 2).drawArt));
+				Players In Slot(Global.CleanerIndex, Team 2).drawArt = Remove From Array(Players In Slot(Global.CleanerIndex, Team 2).drawArt,
+					Last Of(Players In Slot(Global.CleanerIndex, Team 2).drawArt));
+				Wait(0.016, Ignore Condition);
+			End;
+		End;
 	}
 }
